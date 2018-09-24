@@ -70,8 +70,8 @@
    mounted: function () {
      // console.log(this.$device)
      this.getPunchData()
-     let punchStatus = this.punchStatus()
-     if (punchStatus === 'true') {
+     this.getPunchStatus()
+     if (this.hasPunchedIn === 'true') {
        this.navTitle = 'Fin de service'
      } else {
        this.navTitle = 'Prise de service'
@@ -85,8 +85,8 @@
    methods: {
      onSend: function () {
        const self = this
-       let punchStatus = this.punchStatus()
-       if (punchStatus === 'true') {
+       this.getPunchStatus()
+       if (this.hasPunchedIn === 'true') {
          self.punchOut()
        } else {
          self.punchIn()
@@ -144,64 +144,62 @@
      },
      punchOut: function () {
        const self = this
-       let urlToken = self.baseUrl + '/rest/session/token'
-       let uuid = window.sessionStorage.getItem('uid')
-       let pass = window.sessionStorage.getItem('password')
-       let name = window.localStorage.getItem('username')
-       let enc = window.btoa(name + ':' + pass)
+       // let urlToken = self.baseUrl + '/rest/session/token'
+       let logoutToken = window.localStorage.getItem('logoutToken')
+       let enc = window.btoa(this.username + ':' + this.password)
        let encString = 'Basic ' + enc
-       let urlPunchOut = self.baseUrl + '/jsonapi/node/daybook_punch_card/' + uuid
-       window.fetch(urlToken)
-      .then((response) => response.text())
-      .then((token) => {
-        let patchNode = {
-          'data': {
-            'type': 'node--daybook_punch_card',
-            'id': uuid,
-            'attributes': {
-              'field_dbk_punch_end': self.punchDate,
-              'field_dbk_punch_geo_end': {
-                'lat': self.lat,
-                'lng': self.lng
-              }
-            }
-          }
-        }
-        let fetchPunchOut = {
-          method: 'PATCH',
-          body: JSON.stringify(patchNode),
-          headers: {
-            'Authorization': encString,
-            'Content-Type': 'application/vnd.api+json',
-            'Accept': 'application/vnd.api+json',
-            'X-CSRF-Token': token,
-            'Cache-Control': 'no-cache, no-store, must-revalidate',
-            'Pragma': 'no-cache',
-            'Expires': 0
-          }
-        }
-        debugger
-        window.fetch(urlPunchOut, fetchPunchOut)
-          .then((response) => response.json())
-          .then((data) => {
-            window.localStorage.setItem('hasPunchedIn', 'false')
-            // window.sessionStorage.setItem('id', '')
-            // window.sessionStorage.setItem('uuid', '')
-            // window.sessionStorage.setItem('nid', '')
-            console.log(data)
-          })
-      })
-      .catch(function (error) {
-        console.debug(error)
-      })
+       let urlPunchOut = self.baseUrl + '/jsonapi/node/daybook_punch_card/' + this.uid
+      // window.fetch(urlToken)
+      // .then((response) => response.text())
+      // .then((token) => {
+       let punchOutData = {
+         'data': {
+           'type': 'node--daybook_punch_card',
+           'id': this.uid,
+           'attributes': {
+             'field_dbk_punch_end': self.punchDate,
+             'field_dbk_punch_geo_end': {
+               'lat': self.lat,
+               'lng': self.lng
+             }
+           }
+         }
+       }
+       let fetchPunchOut = {
+         method: 'PATCH',
+         body: JSON.stringify(punchOutData),
+         headers: {
+           'Authorization': encString,
+           'Content-Type': 'application/vnd.api+json',
+           'Accept': 'application/vnd.api+json',
+           'Cache-Control': 'no-cache, no-store, must-revalidate',
+           'Pragma': 'no-cache',
+           'Expires': 0,
+           'X-CSRF-Token': logoutToken
+         }
+       }
+       debugger
+       window.fetch(urlPunchOut, fetchPunchOut)
+        .then((response) => response.json())
+        .then((data) => {
+          window.localStorage.setItem('hasPunchedIn', 'false')
+          // window.sessionStorage.setItem('id', '')
+          // window.sessionStorage.setItem('uuid', '')
+          // window.sessionStorage.setItem('nid', '')
+          console.log(data)
+        })
+    // })
+     .catch(function (error) {
+       console.debug(error)
+     })
      },
      punchIn: function () {
        const self = this
        // self.getCsrfToken()
        let token = window.localStorage.getItem('csrfToken')
-       debugger
+       // debugger
        // self.baseUrl + '/rest/session/token'
-       let uid = window.localStorage.getItem('uid')
+       // let uid = window.localStorage.getItem('uid')
        // let pass = window.sessionStorage.getItem('password')
        // let name = window.localStorage.getItem('username')
        let enc = window.btoa(self.username + ':' + self.password)
@@ -210,13 +208,13 @@
       //  window.fetch(urlToken)
       // .then((response) => response.text())
       // .then((token) => {
-       let newNode = {
+       let punchInData = {
          'data': {
            'type': 'node--daybook_punch_card',
            'attributes': {
-             'status': true,
+             'status': false,
              'title': self.username,
-             'field_dbk_punch_agent': uid,
+             'field_dbk_punch_agent': self.uid,
              'field_dbk_punch_site': 4,
              'field_dbk_punch_start': self.punchDate,
              'field_dbk_punch_geo_start': {
@@ -239,7 +237,7 @@
 */
        let fetchPunchIn = {
          method: 'POST',
-         body: JSON.stringify(newNode),
+         body: JSON.stringify(punchInData),
          headers: {
            'Authorization': encString,
            'Content-Type': 'application/vnd.api+json',
@@ -292,7 +290,7 @@
        }
        self.username = window.localStorage.getItem('username')
      },
-     punchStatus: function () {
+     getPunchStatus: function () {
        this.hasPunchedIn = window.localStorage.getItem('hasPunchedIn')
        return this.hasPunchedIn
      },

@@ -103,20 +103,24 @@ export default {
     }
   },
   created () {
+    // debugger
     this.baseUrl = window.localStorage.getItem('baseUrl')
     this.username = window.localStorage.getItem('username')
     // this.setTitles()
   },
   mounted () {
+    // debugger
     // this.setTitles()
   },
   computed: {
+    // debugger
     isiOS () {
       return window.isiOS
     }
   },
   methods: {
     setTitles: function (isLoggedIn) {
+      debugger
       const self = this
       // console.log(isLoggedIn)
       if (isLoggedIn === false) {
@@ -130,6 +134,7 @@ export default {
       }
     },
     signInOut: function () {
+      debugger
       const self = this
       if (self.isLoggedIn === true) {
         return self.signOut()
