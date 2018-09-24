@@ -1,0 +1,21 @@
+{
+    "presets": ["es2015", "stage-2"],
+    "plugins": [
+        "transform-runtime", ["transform-es2015-modules-commonjs", {
+            "noMangle": true
+        }],
+        [
+            "babel-plugin-webpack-alias",
+            {
+                "config": "build/webpack.dev.conf.js"
+            }
+        ]
+    ],
+    "comments": false,
+    "sourceMaps": true,
+    "env": {
+        "test": {
+            "plugins": ["istanbul"]
+        }
+    }
+}

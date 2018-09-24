@@ -1,0 +1,243 @@
+<template>
+  <!-- App -->
+  <div id="app">
+
+    <!-- Statusbar -->
+    <f7-statusbar></f7-statusbar>
+    <!-- Main Views -->
+    <f7-views>
+      <f7-view id="main-view" navbar-through :dynamic-navbar="true" main>
+        <!-- Navbar -->
+        <f7-navbar>
+          <f7-nav-left>
+            <f7-link icon="icon-bars" open-panel="left"></f7-link>
+          </f7-nav-left>
+          <f7-nav-center sliding>Mobile Daybook</f7-nav-center>
+          <f7-nav-right>
+            <f7-link icon="icon-bars" open-panel="right"></f7-link>
+          </f7-nav-right>
+        </f7-navbar>
+        <!-- Pages -->
+        <f7-pages>
+          <f7-page>
+            <f7-block-title>Navigation</f7-block-title>
+            <f7-list>
+              <f7-list-item link="/about/" title="About"></f7-list-item>
+              <f7-list-item link="/form/" title="Form"></f7-list-item>
+              <f7-list-item link="/dynamic-route/blog/45/post/125/?foo=bar#about" title="Dynamic Route"></f7-list-item>
+            </f7-list>
+            <f7-block-title></f7-block-title>
+            <f7-block>
+              <f7-grid>
+                <f7-col width="50">
+                  <f7-button open-login-screen="#login-screen">Login</f7-button>
+                </f7-col>
+              </f7-grid>
+            </f7-block>
+          </f7-page>
+        </f7-pages>
+      </f7-view>
+    </f7-views>
+
+    <!-- Login Screen -->
+    <f7-login-screen id="login-screen">
+      <f7-view>
+        <f7-pages>
+          <f7-page login-screen>
+            <f7-login-screen-title>Login</f7-login-screen-title>
+            <f7-list form>
+              <f7-list-item>
+                <f7-input name="username" placeholder="Username" type="text" v-model="username" value="bricreb"></f7-input>
+              </f7-list-item>
+              <f7-list-item>
+                <f7-input name="password" type="password" placeholder="Password" v-model="password" value="agent"></f7-input>
+              </f7-list-item>
+            </f7-list>
+            <f7-list>
+              <f7-list-button  @click="signIn" title="Sign In" close-login-screen></f7-list-button>
+              <f7-list-label>
+                <p>Click Sign In to close Login Screen</p>
+              </f7-list-label>
+            </f7-list>
+          </f7-page>
+        </f7-pages>
+      </f7-view>
+    </f7-login-screen>
+
+  </div>
+</template>
+
+<script>
+import fetch from 'node-fetch'
+// import Base64 from 'base64'
+export default {
+  data () {
+    return {
+      loginScreenOpened: false,
+      username: '',
+      password: '',
+      uid: '',
+      todos: []
+    }
+  },
+  methods: {
+    signIn: function () {
+      try {
+        const self = this
+        const app = self.$f7
+        let url = 'http://localhost/user/login?_format=json'
+        let fetchData = {
+          method: 'POST',
+          // dataType: 'json',
+          // async: false,
+          // headers: {
+            // 'Access-Control-Allow-Origin': '*',
+            // 'Access-Control-Allow-Headers': 'Content-Type',
+            // 'Authorization': JSON.stringify(encString)
+            // 'Content-Type': 'application/json',
+            // 'Accept': 'application/json'
+            // 'X-CSRF-Token': csrfToken
+          // },
+          // mode: 'no-cors',
+          body: JSON.stringify({name: this.username, pass: this.password})
+        }
+        fetch(url, fetchData)
+        .then((response) => response.json())
+        .then((data) => {
+          let uid = data.current_user.uid
+          window.localStorage.setItem('uid', JSON.stringify(data.current_user.uid))
+          window.localStorage.setItem('username', JSON.stringify(data.current_user.name))
+          window.sessionStorage.setItem('csrf_token', JSON.stringify(data.csrf_token))
+          window.sessionStorage.setItem('logout_token', JSON.stringify(data.logout_token))
+          return uid
+        })
+      .then(function (uid) {
+        // let headers = new fetch.Headers()
+        let enc = window.btoa(app.username + ':' + app.password)
+        let encString = 'Basic ' + enc
+        // headers.set('Authorization', encString)
+        // Base64.encode(this.username + ':' + this.password))
+        // headers.append('Content-Type', 'application/json')
+        // let csrfToken = JSON.parse(window.sessionStorage.getItem('csrf_token'))
+        // headers.append('X-CSRF-Token', csrfToken)
+        // console.log(headers)
+        // headers.set('Access-Control-Allow-Origin', '*')
+        let url0 = 'http://localhost/api/activities/' + uid + '?_format=json'
+        let fetchData0 = {
+          method: 'GET',
+          dataType: 'json',
+          // async: false,
+          headers: {
+            // 'Access-Control-Allow-Origin': '*',
+            'Authorization': JSON.stringify(encString)
+            // 'Content-Type': 'application/hal_json',
+            // 'Accept': 'application/hal_json'
+            // 'X-CSRF-Token': csrfToken
+          }
+          // mode: 'no-cors'
+        }
+        // console.log(url0)
+        fetch(url0, fetchData0)
+        .then((response) => {
+          // console.log(response0.formData())
+          // let todos = response.clone()
+          // window.sessionStorage.setItem('todos', response.text())
+          return response.text()
+        })
+        .then((todos) => {
+          let todoss = JSON.stringify(todos)
+          // console.log(todoss)
+          // window.sessionStorage.setItem('todos', todoss)
+          let todoList = JSON.parse(todoss)
+          // window.sessionStorage.getItem(todos)
+          console.log(todoList)
+          console.log(todoList.title)
+          console.log(todoList.site)
+          // each(app.todos, function (key, value) {
+          // })
+        })
+        .catch(function (error) {
+          console.debug(error)
+        })
+      })
+      } catch (error) {
+        window.alert('failed with', error.message)
+      }
+    }
+  }
+}
+</script>
+    // punchIn: function () {
+      // const self = this
+      // // const app = self.$f7
+      // // let coords = ''
+      // self.getCoordinates()
+       //.then(
+       //   function onCoordinatesResolved (coords) {
+        //    // let punchDate = new Date()
+        //    // console.info('coordinates', coords)
+        //    return coords
+        //  },
+        //  function onCoordinatesRejected (err) {
+        //    console.warn('failed to obtain coordinates - ', err)
+        //    return { lat: null, long: null }
+        //  }
+        )
+       .then(function loadData (coords) {
+         self.showData(coords)
+       })
+       .catch(function (err) {
+         console.error('error: ', err)
+       })
+    },
+    getCoordinates: function () {
+      return new Promise(function (resolve, reject) {
+        if (
+          !('geolocation' in navigator) ||
+          !('getCurrentPosition' in navigator.geolocation)
+        ) {
+          return Promise.reject(new Error('geolocation API not available'))
+        }
+        let options = {
+          timeout: 10000
+        }
+       // browser prompts for permission
+        navigator.geolocation.getCurrentPosition(
+          getPositionCallBack,
+          reject,
+          options
+        )
+        function getPositionCallBack (position) {
+          var coords = ''
+          try {
+            coords = {
+              lat: position.coords.latitude,
+              lng: position.coords.longitude
+            }
+          } catch (err) {
+            return reject(err)
+          }
+          return resolve(coords)
+        }
+      })
+    },
+    punchOut: function () {},
+    showData: function (coords) {
+      console.info('coordinates', coords)
+      const self = this
+      self.punchDate = new Date()
+      console.log(self.punchDate)
+      self.lat = coords.lat
+      self.lng = coords.lng
+      // let punchDate = moment(new Date(), 'YYYY-MM-DD')
+      /* for (let todo in this.todos) {
+        if (this.todos.hasOwnProperty(todo)) {
+          // console.log(todos0[todo].site)
+          let startDate = moment(this.todos[todo].start_date, 'YYYY-MM-DD')
+          if (startDate.diff(punchDate, 'days') !== 0) {
+            this.site = this.todos[todo].site
+          }
+        }
+      } */
+      self.username = window.localStorage.getItem('username')
+    }
