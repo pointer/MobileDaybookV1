@@ -38,7 +38,9 @@
                                       <section aria-labelledby="todos-label">
                                        <h4 id="todos-label">Taches</h4>
                                        <ul>
-                                      <li v-for="task of todo.assign_tasks" :key="task" v-if="task.length"> &#x95; {{task}} </li>
+                                        <!-- <li v-for="task of todo.assign_tasks" :key="task.key" v-if="task.length"> &#x95; {{task}} </li> -->
+                                       <li v-for="(key, value) in todo.assign_tasks" :key="key" v-if="value.length"> &#x95; {{value}} </li>
+ 
                                        </ul>
                                       </section>
                                       <section aria-labelledby="obs-label">
