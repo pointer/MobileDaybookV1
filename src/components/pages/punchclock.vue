@@ -64,7 +64,8 @@
        baseUrl: '',
        token: '',
        uid: '',
-       password: ''
+       password: '',
+       siteId: ''
      }
    },
    mounted: function () {
@@ -148,13 +149,13 @@
        let logoutToken = window.localStorage.getItem('logoutToken')
        let enc = window.btoa(this.username + ':' + this.password)
        let encString = 'Basic ' + enc
-       let urlPunchOut = self.baseUrl + '/jsonapi/node/daybook_punch_card/' + this.uid
+       let urlPunchOut = self.baseUrl + '/jsonapi/daybook_punch_card/' + this.uid
       // window.fetch(urlToken)
       // .then((response) => response.text())
       // .then((token) => {
        let punchOutData = {
          'data': {
-           'type': 'node--daybook_punch_card',
+           'type': 'daybook_punch_card',
            'id': this.uid,
            'attributes': {
              'field_dbk_punch_end': self.punchDate,
@@ -172,13 +173,13 @@
            'Authorization': encString,
            'Content-Type': 'application/vnd.api+json',
            'Accept': 'application/vnd.api+json',
-           'Cache-Control': 'no-cache, no-store, must-revalidate',
+           'Cache-Control': 'no-cache, no-store',
            'Pragma': 'no-cache',
            'Expires': 0,
            'X-CSRF-Token': logoutToken
          }
        }
-       debugger
+       // debugger
        window.fetch(urlPunchOut, fetchPunchOut)
         .then((response) => response.json())
         .then((data) => {
@@ -204,48 +205,54 @@
        // let name = window.localStorage.getItem('username')
        let enc = window.btoa(self.username + ':' + self.password)
        let encString = 'Basic ' + enc
-       let urlPunchIn = self.baseUrl + '/jsonapi/node/daybook_punch_card?_format=api_json'
-      //  window.fetch(urlToken)
-      // .then((response) => response.text())
-      // .then((token) => {
+       let urlPunchIn = self.baseUrl + '/jsonapi/daybook_punch_card?_format=api_json'
+       //  window.fetch(urlToken)
+       // .then((response) => response.text())
+       // .then((token) => {
+       // debugger
        let punchInData = {
          'data': {
-           'type': 'node--daybook_punch_card',
+           'type': 'daybook_punch_card',
            'attributes': {
              'status': false,
              'title': self.username,
              'field_dbk_punch_agent': self.uid,
-             'field_dbk_punch_site': 4,
+             'field_dbk_punch_site': self.site,
              'field_dbk_punch_start': self.punchDate,
              'field_dbk_punch_geo_start': {
                'lat': self.lat,
                'lng': self.lng
              }
-           }
-         }
-       }
-/*
-,
+           },
            'relationships': {
              'uid': {
                'data': {
                  'type': 'user--user',
-                 'id': uid
+                 'id': self.uid
                }
              }
            }
-*/
+         }
+       }
+// ,
+//              'nid': {
+//                'data': {
+//                  'type': 'daybook_site_node',
+//                  'nid': self.siteId
+//                }
+//              }
+          //  'Cache-Control': 'no-cache, no-store',
+          //  'Pragma': 'no-cache',
+          //  'Expires': 0
        let fetchPunchIn = {
          method: 'POST',
+         // body: punchInData,
          body: JSON.stringify(punchInData),
          headers: {
            'Authorization': encString,
            'Content-Type': 'application/vnd.api+json',
            'Accept': 'application/vnd.api+json',
-           'X-CSRF-Token': token,
-           'Cache-Control': 'no-cache, no-store, must-revalidate',
-           'Pragma': 'no-cache',
-           'Expires': 0
+           'X-CSRF-Token': token
          }
        }
        // debugger
@@ -285,6 +292,7 @@
            // debugger
            if (duration === 0) {
              self.site = todos[todo].assign_site
+             // self.siteId = todos[todo].assign_site_nid
            }
          }
        }

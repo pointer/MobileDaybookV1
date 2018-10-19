@@ -217,10 +217,10 @@ export default {
        .then((todos) => {
          // todos = JSON.stringify(todos)
          // self.formatTodos(JSON.stringify(todos))
-         // console.log(todos)
          return todos
        })
        .then((todos) => {
+         console.log(todos)
          self.formatTodos(todos)
          self.setTitles(true)
          // self.$router.push('activities')
@@ -273,24 +273,26 @@ export default {
       // let todoList = JSON.parse(todos)
       for (let todo in todos) {
         if (todos.hasOwnProperty(todo)) {
-          let startDateTime = todos[todo].assign_start_shift.split('-')
+          let startDateTime = todos[todo].assign_start_shift.split('T')
           let startDate = startDateTime[0]
           let startTime = startDateTime[1]
-          todos[todo].assign_start_shift_date = startDate.substring(3, 5) + '/' + startDate.substring(0, 2) + '/' + startDate.substring(6, 10)
+          todos[todo].assign_start_shift_date = startDate.substring(8, 10) + '/' + startDate.substring(5, 7) + '/' + startDate.substring(0, 4)
           todos[todo].assign_start_shift_time = startTime
           // todos[todo].assign_start_time = startDateTime[1].replace(/,/g, '')
-          todos[todo].assign_start_shift = todos[todo].assign_start_shift_date + ' -' + startTime
-          let endDateTime = todos[todo].assign_end_shift.split('-')
+          todos[todo].assign_start_shift = todos[todo].assign_start_shift_date + '-' + startTime
+          let endDateTime = todos[todo].assign_end_shift.split('T')
           let endDate = endDateTime[0]
           let endTime = endDateTime[1]
-          todos[todo].assign_end_shift_date = endDate.substring(3, 5) + '/' + endDate.substring(0, 2) + '/' + endDate.substring(6, 10)
+          todos[todo].assign_end_shift_date = endDate.substring(8, 10) + '/' + endDate.substring(5, 7) + '/' + endDate.substring(0, 4)
           todos[todo].assign_end_shift_time = endTime
-          todos[todo].assign_end_shift = todos[todo].assign_end_shift_date + ' -' + endTime
+          todos[todo].assign_end_shift = todos[todo].assign_end_shift_date + '-' + endTime
           // todos[todo].assign_tasks = todos[todo].assign_tasks.replace(/\\n\\t/g, '')
           let tasks = todos[todo].assign_tasks.split('\n\t')
           for (let task in tasks) {
             if (tasks.hasOwnProperty(task)) {
               tasks[task] = tasks[task].replace(/[^\x20-\x7E]/gmi, '')
+              tasks[task] = tasks[task].replace(/<\/?[^>]+(>|$)/g, '')
+              tasks[task] = tasks[task].replace(/&nbsp;/gi, '')
             }
           }
           todos[todo].assign_tasks = tasks

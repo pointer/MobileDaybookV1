@@ -16,31 +16,20 @@
                                  <div class="content-block">
                                     <h3> <strong><em>{{todo.assign_site}}</em></strong>  </h3>
                                     <p>
-                                      <span>{{todo.assign_start_shift}}</span>
-                                    <!--  <span>   </span>
-                                      <span><em><strong> {{todo.assign_start_time}}</strong></em></span> -->
-                                      <span><em><strong>    </strong></em></span>
-                                      <span>{{todo.assign_end_shift}}</span>
-                                    <!--  <span>   </span>
-                                      <span ><em><strong>{{todo.assign_end_time}}</strong></em></span> -->
+                                      <span v-bind:class="{ alert: showAlert}"><strong><em>Début: </em></strong>{{todo.assign_start_shift}}</span>
+                                      <!--<span><em><strong>&nbsp;&nbsp;</strong></em></span>-->
+                                      </br>
+                                      <span v-bind:class="{ alert: showAlert}"><strong><em>Fin : </em></strong>{{todo.assign_end_shift}}</span>
                                     </p>
-                                     {{todo.assign_address}}</br>
+                                    <p>
+                                     {{todo.assign_site_address}}</br>
                                      {{todo.assign_locality}} </br>
                                      {{todo.assign_postal_code}} </br>
                                      </p>
-                                      
-                                     <!-- <div>
-                                      <p>Taches: </p>
-                                      <ul>                             
-                                      <li v-for="task of todo.assign_tasks" :key="task" v-if="task.length"> <span>   </span> &#x95; {{task}} </li>
-                                      </ul>
-                                     </div>  -->
-                                      <section aria-labelledby="todos-label">
+                                        <section aria-labelledby="todos-label">
                                        <h4 id="todos-label">Taches</h4>
                                        <ul>
-                                        <!-- <li v-for="task of todo.assign_tasks" :key="task.key" v-if="task.length"> &#x95; {{task}} </li> -->
-                                       <li v-for="(key, value) in todo.assign_tasks" :key="key" v-if="value.length"> &#x95; {{value}} </li>
- 
+                                       <li v-for="task of todo.assign_tasks" v-if="task.length"> <span>   </span> &#x95; {{task}} </li>
                                        </ul>
                                       </section>
                                       <section aria-labelledby="obs-label">
@@ -64,8 +53,8 @@
   export default {
     data () {
       return {
-        todos: []
-        // site: ''
+        todos: [],
+        showAlert: true
       }
     },
     mounted () {
@@ -83,6 +72,11 @@
   }
 </script>
 <style scoped>
+  .alert {
+    background-color: lightgreen;
+    width:100%;
+    height: 30px;
+  }
   .site-block {
     color: red;
   }
@@ -110,3 +104,51 @@
   }  
   
 </style>
+
+
+<!--
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, target-densitydpi=device-dpi" />
+  <title>My Calendar Plugin</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+<script src="assets/Scripts/jquery-1.9.1.min.js"></script>
+<script src="assets/Scripts/cordova-2.3.0.js"></script>
+<script type="text/javascript" src="assets/Scripts/calendar.js"></script> 
+<script type="text/javascript" src="assets/Scripts/index.js"></script> 
+<script type="text/javascript">
+-->
+/*
+function addEvent()
+{
+// var cal = new calendarPlugin();
+let cal = window.plugins.calendarPlugin
+console.log("creating event");
+let title= "My Sample Appt";
+let location = "Los Angeles";
+let notes = "This is a sample note";
+let startDate = "2012-04-16 09:30:00";
+let endDate = "2012-04-16 12:30:00";
+let errCall = function(theerror) {
+ console.log("Error occurred - " + theerror);
+ }
+let succCall = function(themessage) {
+console.log("Success - " + themessage);
+ }
+cal.createEvent(title,location,notes,startDate,endDate, succCall, errCall);
+return false;
+}
+</script>
+</head>
+<body>
+<input type="button" id="btnAddEvent" onclick="return addEvent();"/>
+
+</body>
+</html>
+
+ */

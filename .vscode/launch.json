@@ -11,6 +11,8 @@
             "url": "http://localhost:8080",
             "webRoot": "${workspaceFolder}/src",
             "breakOnLoad": true,
+            "internalConsoleOptions": "neverOpen",
+            "trace": true,
             "sourceMapPathOverrides": {
                 "webpack:///./*": "${webRoot}/*",
                 "webpack:///src/*": "${webRoot}/*",
