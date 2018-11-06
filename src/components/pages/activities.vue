@@ -5,7 +5,7 @@
                      <div class="content-block-title">Liste des Affectations</div>
                      <div class="list-block accordion-list" >
                         <ul>
-                           <li class="accordion-item" v-for="todo in todos" :key="todo.title">
+                           <li class="accordion-item" v-for="todo in todos" :key="todo.assign_title">
                               <a href="#" class="item-content item-link">
                                   <div class="item-inner">
                                     <div class="item-title">{{todo.assign_start_shift_date}} </div>
@@ -22,15 +22,19 @@
                                       <span v-bind:class="{ alert: showAlert}"><strong><em>Fin : </em></strong>{{todo.assign_end_shift}}</span>
                                     </p>
                                     <p>
-                                     {{todo.assign_site_address}}</br>
-                                     {{todo.assign_locality}} </br>
-                                     {{todo.assign_postal_code}} </br>
+                                     {{todo.assign_site_address}} &nbsp; {{todo.assign_site_locality}} &nbsp; {{todo.assign_site_postal_code}} </br>
+                                     <!-- odo.assign_locality}} </br>
+                                     {{todo.assign_postal_code}} </br> -->
                                      </p>
-                                        <section aria-labelledby="todos-label">
-                                       <h4 id="todos-label">Taches</h4>
-                                       <ul>
-                                       <li v-for="task of todo.assign_tasks" v-if="task.length"> <span>   </span> &#x95; {{task}} </li>
-                                       </ul>
+                                      <section aria-labelledby="todos-label">
+                                       <h4 id="todos-label"> {{todo.assign_tasks}} </h4>
+                                      <!--  <span> {{todo.assign_tasks}} </span> </br>
+                                        <span> {{todo.assign_tasks_description}} </span>-->
+                                      
+                                       <ol>
+                                        <li v-for="task of todo.assign_tasks_description" v-if="task.length"> <span>   </span> &#x95; {{task}} </li>
+                                       </ol>
+                                       
                                       </section>
                                       <section aria-labelledby="obs-label">
                                        <h4 id="obs-label">Observations</h4>

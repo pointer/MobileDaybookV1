@@ -1,6 +1,6 @@
 export default [{
-  path: '/about/',
-  component: require('./components/pages/About.vue'),
+  path: '/parameters/',
+  component: require('./components/pages/Parameters.vue'),
   name: 'about'
 },
 {
@@ -17,6 +17,11 @@ export default [{
   path: '/incident/',
   component: require('./components/pages/incident.vue'),
   name: 'incident'
+},
+{
+  path: '/daybook/',
+  component: require('./components/pages/daybook.vue'),
+  name: 'daybook'
 }
 ]
 

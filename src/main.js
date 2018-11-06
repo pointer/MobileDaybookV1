@@ -9,6 +9,7 @@ import Framework7Vue from 'framework7-vue'
 // Import Routes
 import Routes from './routes.js'
 import App from './App'
+
 // Import App Custom Styles
 // import AppStyles from './css/app.css'
 // Import F7 iOS Theme Styles

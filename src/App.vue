@@ -29,27 +29,30 @@
           <f7-page>
             <f7-block-title>Navigation</f7-block-title>
             <f7-list>
-              <f7-list-item link="/about/" title="About"></f7-list-item>
-              <f7-list-item link="/activities/" title="Activités"></f7-list-item>
-              <f7-list-item link="/punchclock/" title="Service"></f7-list-item>
+              <f7-list-item link="/activities/" title="Affectations"></f7-list-item>
+              <f7-list-item link="/punchclock/" title="Badge"></f7-list-item>
+              <f7-list-item link="/daybook/" title="Main courante"></f7-list-item>              
               <f7-list-item link="/incident/" title="Incident"></f7-list-item>
+              <f7-list-item link="/parameters/" title="Parametres"></f7-list-item>
             </f7-list>
-            <f7-block-title>Themes</f7-block-title>
+            <!--
+              <f7-block-title>Themes</f7-block-title>
                 <f7-list>
                     <f7-list-item title="iOS Theme" external link="./index.html?theme=ios"></f7-list-item>
                     <f7-list-item title="Material (MD) Theme" external link="./index.html?theme=md"></f7-list-item>
                 </f7-list>
-            <f7-block>
+            <f7-block> 
+            -->
               <f7-grid>
                 <f7-col width="50">
                     <f7-button  open-login-screen="#login-screen" :class="[ isLoggedIn ? 'col button color-red' : 'col button color-green' ]" v-model="loginTitle" v-bind:title="loginTitle">{{loginTitle}}</f7-button>
                 </f7-col>
               </f7-grid>
-            </f7-block>
+           <!-- </f7-block> -->
           </f7-page>
         </f7-pages>
       </f7-view>
-    </f7-views>
+    <!-- </f7-views> -->
     <!-- Login Screen -->
     <f7-login-screen id="login-screen">
       <f7-view>
@@ -57,23 +60,15 @@
           <f7-page login-screen>
             <f7-login-screen-title v-model="loginScreenTitle">{{loginScreenTitle}}</f7-login-screen-title>
             <f7-list form>
-            <f7-list-item class="control">
-              <!-- <f7-icon icon="demo-list-icon" slot="media"></f7-icon> -->
-              <f7-label>Entrer https:// URL:</f7-label>
-              <f7-input type="url" name="baseurl" id="baseurl" v-model="baseUrl"
-              placeholder="https://example.com" pattern="https://.*" size="20" required clear-button >
-              </f7-input>
-            </f7-list-item>
-                      <f7-list-item>
-                <f7-input name="name" placeholder="Username" type="text" v-model="username"></f7-input>
-                <span class="input-clear-button"></span>
-              </f7-list-item>
               <f7-list-item>
-                <f7-input name="pass" type="password" placeholder="Password" v-model="password"></f7-input>
-                <span class="input-clear-button"></span>
-              </f7-list-item>
+                  <f7-input name="name" placeholder="Username" type="text" v-model="username"></f7-input>
+                  <span class="input-clear-button"></span>
+                </f7-list-item>
+                <f7-list-item>
+                  <f7-input name="pass" type="password" placeholder="Password" v-model="password"></f7-input>
+                  <span class="input-clear-button"></span>
+                </f7-list-item>
             </f7-list>
-            <!-- </f7-list> -->
             <f7-list>
               <f7-list-button @click="signInOut" v-model="signInOutTitle" close-login-screen>{{signInOutTitle}}</f7-list-button>
             </f7-list>
@@ -81,6 +76,7 @@
         </f7-pages>
       </f7-view>
     </f7-login-screen>
+        </f7-views>
   </div>
 </template>
 
@@ -108,6 +104,7 @@ export default {
     this.username = window.localStorage.getItem('username')
     this.uid = window.localStorage.getItem('uid')
     this.password = window.sessionStorage.getItem('password')
+    // console.log(this.state)
     // this.setTitles()
   },
   mounted () {
@@ -146,16 +143,6 @@ export default {
     signIn: function () {
       // debugger
       const self = this
-      // ProgressIndicator.*
-      // window.plugins.ProgressIndicator.showSimple(true)
-      // console.log(self.baseUrl)
-      if (!window.localStorage.getItem('baseUrl')) {
-        window.localStorage.setItem('baseUrl', this.baseUrl)
-      }
-      if (!self.baseUrl) {
-        self.errors.push('Ajouter Adresse du site')
-        return false
-      }
       let urlLogin = self.baseUrl + '/user/login?_format=json'
       // let urlLogin = 'http://localhost/user/login?_format=json'
       // console.log(self.username)
@@ -195,7 +182,8 @@ export default {
         let encString = 'Basic ' + enc
         let token = window.sessionStorage.getItem('csrfToken')
         // let urlActivities = 'http://localhost/api/todos/9?_format=json'
-        let urlActivities = self.baseUrl + '/api/todos/' + self.uid + '?_format=json'
+        // console.log(self.baseUrl)
+        let urlActivities = self.baseUrl + '/api/assign/' + self.uid + '?_format=json'
         // console.log(urlActivities)
         let fetchActivities = {
           method: 'GET',
@@ -220,7 +208,7 @@ export default {
          return todos
        })
        .then((todos) => {
-         console.log(todos)
+         // console.log(todos)
          self.formatTodos(todos)
          self.setTitles(true)
          // self.$router.push('activities')
@@ -271,6 +259,7 @@ export default {
       // const self = this
       // debugger
       // let todoList = JSON.parse(todos)
+      // console.log(todos)
       for (let todo in todos) {
         if (todos.hasOwnProperty(todo)) {
           let startDateTime = todos[todo].assign_start_shift.split('T')
@@ -286,8 +275,9 @@ export default {
           todos[todo].assign_end_shift_date = endDate.substring(8, 10) + '/' + endDate.substring(5, 7) + '/' + endDate.substring(0, 4)
           todos[todo].assign_end_shift_time = endTime
           todos[todo].assign_end_shift = todos[todo].assign_end_shift_date + '-' + endTime
-          // todos[todo].assign_tasks = todos[todo].assign_tasks.replace(/\\n\\t/g, '')
-          let tasks = todos[todo].assign_tasks.split('\n\t')
+          // todos[todo].assign_tasks = todos[todo].assign_tasks_description.replace(/\\r\\n\\t/g, '')
+          let tasks = todos[todo].assign_tasks_description.split('\n\t')
+          // console.log(tasks)
           for (let task in tasks) {
             if (tasks.hasOwnProperty(task)) {
               tasks[task] = tasks[task].replace(/[^\x20-\x7E]/gmi, '')
@@ -295,7 +285,7 @@ export default {
               tasks[task] = tasks[task].replace(/&nbsp;/gi, '')
             }
           }
-          todos[todo].assign_tasks = tasks
+          todos[todo].assign_tasks_description = tasks
         }
       }
       todos = JSON.stringify(todos)

@@ -86,7 +86,7 @@
    methods: {
      onSend: function () {
        const self = this
-       this.getPunchStatus()
+       // this.getPunchStatus()
        if (this.hasPunchedIn === 'true') {
          self.punchOut()
        } else {
@@ -146,18 +146,21 @@
      punchOut: function () {
        const self = this
        // let urlToken = self.baseUrl + '/rest/session/token'
-       let logoutToken = window.localStorage.getItem('logoutToken')
+       let token = window.localStorage.getItem('csrfToken')
        let enc = window.btoa(this.username + ':' + this.password)
        let encString = 'Basic ' + enc
-       let urlPunchOut = self.baseUrl + '/jsonapi/daybook_punch_card/' + this.uid
+       let uuid = window.sessionStorage.getItem('uuid')
+       let nid = window.sessionStorage.getItem('nid')
+       let urlPunchOut = self.baseUrl + '/jsonapi/node/daybook_punch_card_node/' + uuid
       // window.fetch(urlToken)
       // .then((response) => response.text())
       // .then((token) => {
        let punchOutData = {
          'data': {
-           'type': 'daybook_punch_card',
-           'id': this.uid,
+           'type': 'daybook_punch_card_node',
+           'id': uuid,
            'attributes': {
+             'nid': nid,
              'field_dbk_punch_end': self.punchDate,
              'field_dbk_punch_geo_end': {
                'lat': self.lat,
@@ -173,21 +176,20 @@
            'Authorization': encString,
            'Content-Type': 'application/vnd.api+json',
            'Accept': 'application/vnd.api+json',
-           'Cache-Control': 'no-cache, no-store',
-           'Pragma': 'no-cache',
-           'Expires': 0,
-           'X-CSRF-Token': logoutToken
+           'mode': 'no-cors',
+           'X-CSRF-Token': token
          }
        }
-       // debugger
+        // 'Cache-Control': 'no-cache, no-store',
+       debugger
        window.fetch(urlPunchOut, fetchPunchOut)
         .then((response) => response.json())
         .then((data) => {
           window.localStorage.setItem('hasPunchedIn', 'false')
-          // window.sessionStorage.setItem('id', '')
-          // window.sessionStorage.setItem('uuid', '')
-          // window.sessionStorage.setItem('nid', '')
-          console.log(data)
+          window.sessionStorage.setItem('id', '')
+          window.sessionStorage.setItem('uuid', '')
+          window.sessionStorage.setItem('nid', '')
+          // console.log(data)
         })
     // })
      .catch(function (error) {
@@ -198,23 +200,22 @@
        const self = this
        // self.getCsrfToken()
        let token = window.localStorage.getItem('csrfToken')
-       // debugger
        // self.baseUrl + '/rest/session/token'
        // let uid = window.localStorage.getItem('uid')
        // let pass = window.sessionStorage.getItem('password')
        // let name = window.localStorage.getItem('username')
        let enc = window.btoa(self.username + ':' + self.password)
        let encString = 'Basic ' + enc
-       let urlPunchIn = self.baseUrl + '/jsonapi/daybook_punch_card?_format=api_json'
+       let urlPunchIn = self.baseUrl + '/jsonapi/node/daybook_punch_card_node?_format=api_json'
        //  window.fetch(urlToken)
        // .then((response) => response.text())
        // .then((token) => {
        // debugger
        let punchInData = {
          'data': {
-           'type': 'daybook_punch_card',
+           'type': 'daybook_punch_card_node',
            'attributes': {
-             'status': false,
+             'status': true,
              'title': self.username,
              'field_dbk_punch_agent': self.uid,
              'field_dbk_punch_site': self.site,
@@ -252,6 +253,7 @@
            'Authorization': encString,
            'Content-Type': 'application/vnd.api+json',
            'Accept': 'application/vnd.api+json',
+           'Access-Control-Allow-Origin': 'http://localhost:8080',
            'X-CSRF-Token': token
          }
        }
@@ -259,11 +261,11 @@
        window.fetch(urlPunchIn, fetchPunchIn)
           .then((response) => response.json())
           .then((data) => {
-            // window.localStorage.setItem('hasPunchedIn', 'true')
-            // window.sessionStorage.setItem('id', data.data.id)
-            // window.sessionStorage.setItem('uuid', data.data.attributes.uuid)
-            // window.sessionStorage.setItem('nid', data.data.attributes.nid)
-            console.log(data)
+            window.localStorage.setItem('hasPunchedIn', 'true')
+            window.sessionStorage.setItem('id', data.data.id)
+            window.sessionStorage.setItem('uuid', data.data.attributes.uuid)
+            window.sessionStorage.setItem('nid', data.data.attributes.nid)
+            // console.log(data)
           })
      // })
       .catch(function (error) {
