@@ -210,7 +210,7 @@
        //  window.fetch(urlToken)
        // .then((response) => response.text())
        // .then((token) => {
-       // debugger
+       debugger
        let punchInData = {
          'data': {
            'type': 'daybook_punch_card_node',

@@ -145,14 +145,14 @@ export default {
       // let enc = window.btoa(username + ':' + password)
       // let basicAuth = 'Basic ' + enc
       // debugger
+      // {
+      //  'href': JSON.stringify(baseUrl + '/jsonapi/media/image')
+      // }
       // http://smartstreamzryubnfhac.devcloud.acquia-sites.com/sites/default/files/2018-11/DXSAHDYUQAAGShw.jpg
       self.dataToPost = {
         '_links':
         {
-          'type':
-          {
-            'href': JSON.stringify(baseUrl + '/jsonapi/media/image')
-          }
+          'type': 'file--file'
         },
         'filename':
         [
@@ -160,11 +160,11 @@ export default {
             'value': this.selectedFile.name
           }
         ],
-        'uri': 
+        'uri':
         [
           {
             'value': 'public://pictures/2018-11/' + this.selectedFile.name,
-            'url':  JSON.stringify(baseUrl + '/sites/default/files/2018-11/' + this.selectedFile.name)
+            'url': JSON.stringify(baseUrl + '/sites/default/files/2018-11/' + this.selectedFile.name)
           }
         ],
         'filemime':
@@ -228,8 +228,7 @@ export default {
               'value': self.incidentDescr
             },
             'field_dbk_incident_date': self.incidentDate,
-            'field_dbk_incident_photos': self.dataToPost,
-            'field_dbk_incident_media': self.dataToPost
+            'field_dbk_incident_photos': self.dataToPost
           }
         }
       }
