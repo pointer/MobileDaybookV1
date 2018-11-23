@@ -125,32 +125,49 @@ export default {
           }
         }
       }
-      reader.readAsDataURL(file)
+      reader.readAsArrayBuffer(file)
+      // reader.readAsDataURL(file)
     },
     uploadDrupalImage (bace64) {
       // Could only get hal_json to work.
       const self = this
-      // let formData = new window.FormData()
-      // formData.append('fileToUpload', this.selectedFile)
-      // let today = new Date()
-      // today.setSeconds(0)
-      // today.setMilliseconds(0)
-      // self.incidentDate = today.toISOString().split('.')[0]
       let baseUrl = window.localStorage.getItem('baseUrl')
-      // let username = window.localStorage.getItem('username')
-      // let csrfToken = window.localStorage.getItem('csrfToken')
-      // // let uid = window.localStorage.getItem('uid')
-      // let password = window.sessionStorage.getItem('password')
-      // // let urlIncident = baseUrl + '/jsonapi/node/daybook_incident_node?_format=api_json'
-      // let enc = window.btoa(username + ':' + password)
-      // let basicAuth = 'Basic ' + enc
-      // debugger
-      // {
-      //  'href': JSON.stringify(baseUrl + '/jsonapi/media/image')
-      // }
-      // http://smartstreamzryubnfhac.devcloud.acquia-sites.com/sites/default/files/2018-11/DXSAHDYUQAAGShw.jpg
+      /* self.dataToPost = {
+        'data':
+        {
+          'type': 'file--file',
+          'attributes': {
+            'filename':
+            [
+              {
+                'value': this.selectedFile.name
+              }
+            ],
+            'uri':
+            [
+              {
+                'value': 'public://pictures/2018-11/' + this.selectedFile.name,
+                'url': JSON.stringify(baseUrl + '/sites/default/files/2018-11/' + this.selectedFile.name)
+              }
+            ],
+            'filemime':
+            [
+              {
+                'value': this.selectedFile.type
+              }
+            ],
+            'data':
+            [
+              {
+                'value': bace64
+              }
+            ]
+          }
+        }
+      }
+      */
       self.dataToPost = {
-        '_links':
+        'links':
         {
           'type': 'file--file'
         },
@@ -180,31 +197,9 @@ export default {
           }
         ]
       }
-      // let bodyToPost = JSON.stringify(dataToPost)
-      // let url = baseUrl + '/entity/file?_format=hal_json'
-      // window.fetch(url, {
-      //   method: 'POST',
-      //   headers: {
-      //     'Content-Type': 'application/hal+json',
-      //     'X-CSRF-Token': csrfToken,
-      //     'Authorization': basicAuth
-      //   },
-      //   body: dataToPost
-      // }).then(response => response.json()).then(data => {
-      //   if (data) {
-      //     this.setState({uploadedFile: data})
-      //     if (data.fid) {
-      //       console.log(data.fid[0].value)
-      //       this.setState({fid: data.fid[0].value})
-      //     }
-      //   }
-      // }).catch(err => console.error(err.toString()))
-      // return false
     },
     onUpload () {
       const self = this
-      // let formData = new window.FormData()
-      // formData.append('fileToUpload', this.selectedFile)
       let today = new Date()
       today.setSeconds(0)
       today.setMilliseconds(0)
@@ -232,28 +227,6 @@ export default {
           }
         }
       }
-      /*
-      'mode': 'no-cors',
-      'Access-Control-Allow-Origin': 'http://localhost:8080',
-
-      {
-        "_links": {
-          "type": {
-            "href": "{{Domain}}/rest/type/file/image"
-          }
-        },
-        "filename": [
-          {
-            "value": "imagename.jpg"
-          }
-        ],
-        "data": [
-          {
-            "value": "base64encoded image string"
-          }
-        ]
-      }
-      */
       let bodyToPost = JSON.stringify(incidentData)
       console.log(bodyToPost)
       debugger
@@ -271,7 +244,11 @@ export default {
           .then((response) => response.json())
           .then((data) => {
             console.log(data)
+            self.$router.back()
           })
+      .catch(function (error) {
+        console.debug(error)
+      })
     },
     loadImage (url) {
       return new Promise((resolve, reject) => {
@@ -373,7 +350,3 @@ export default {
   }
 }
 </script>
-/*
-POST /photos HTTP/1.1
-
-*/

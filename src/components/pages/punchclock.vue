@@ -59,7 +59,7 @@
        lng: '',
        punchDate: '',
        site: '',
-       hasPunchedIn: 'false',
+       hasPunchedIn: false,
        navTitle: 'Prise de service',
        baseUrl: '',
        token: '',
@@ -71,12 +71,8 @@
    mounted: function () {
      // console.log(this.$device)
      this.getPunchData()
-     this.getPunchStatus()
-     if (this.hasPunchedIn === 'true') {
-       this.navTitle = 'Fin de service'
-     } else {
-       this.navTitle = 'Prise de service'
-     }
+     let punchStatus = window.localStorage.getItem('hasPunchedIn')
+     this.navTitle = (punchStatus === true) ? 'Fin de service' : 'Prise de service'
      this.baseUrl = window.localStorage.getItem('baseUrl')
      this.username = window.localStorage.getItem('username')
      this.token = window.localStorage.getItem('csrfToken')
@@ -86,11 +82,15 @@
    methods: {
      onSend: function () {
        const self = this
-       // this.getPunchStatus()
-       if (this.hasPunchedIn === 'true') {
+       // console.log(this.navTitle)
+       let punchStatus = window.localStorage.getItem('hasPunchedIn')
+       // punchStatus === true ? self.punchOut() : self.punchIn()
+       if (punchStatus === 'true') {
          self.punchOut()
        } else {
+        // if (punchStatus === 'false') {
          self.punchIn()
+        // }
        }
      },
      getPunchData: function () {
@@ -146,21 +146,19 @@
      punchOut: function () {
        const self = this
        // let urlToken = self.baseUrl + '/rest/session/token'
+       self.getCsrfToken()
        let token = window.localStorage.getItem('csrfToken')
        let enc = window.btoa(this.username + ':' + this.password)
        let encString = 'Basic ' + enc
        let uuid = window.sessionStorage.getItem('uuid')
        let nid = window.sessionStorage.getItem('nid')
-       let urlPunchOut = self.baseUrl + '/jsonapi/node/daybook_punch_card_node/' + uuid
-      // window.fetch(urlToken)
-      // .then((response) => response.text())
-      // .then((token) => {
+       if (nid === null) nid = 881
+       let urlPunchOut = self.baseUrl + '/jsonapi/node/daybook_punch_card_node/' + uuid + '?_format=api_json'
        let punchOutData = {
          'data': {
-           'type': 'daybook_punch_card_node',
+           'type': 'node--daybook_punch_card_node',
            'id': uuid,
            'attributes': {
-             'nid': nid,
              'field_dbk_punch_end': self.punchDate,
              'field_dbk_punch_geo_end': {
                'lat': self.lat,
@@ -172,45 +170,54 @@
        let fetchPunchOut = {
          method: 'PATCH',
          body: JSON.stringify(punchOutData),
-         headers: {
+         // credentials: 'include',
+         header: {
            'Authorization': encString,
            'Content-Type': 'application/vnd.api+json',
            'Accept': 'application/vnd.api+json',
-           'mode': 'no-cors',
-           'X-CSRF-Token': token
+           'X-CSRF-Token': token,
+           'Access-Control-Allow-Credentials': 'http://localhost:8080'
          }
        }
         // 'Cache-Control': 'no-cache, no-store',
        debugger
-       window.fetch(urlPunchOut, fetchPunchOut)
-        .then((response) => response.json())
-        .then((data) => {
-          window.localStorage.setItem('hasPunchedIn', 'false')
-          window.sessionStorage.setItem('id', '')
-          window.sessionStorage.setItem('uuid', '')
-          window.sessionStorage.setItem('nid', '')
-          // console.log(data)
-        })
-    // })
-     .catch(function (error) {
-       console.debug(error)
-     })
+       return new Promise((resolve, reject) => {
+         window.fetch(urlPunchOut, fetchPunchOut)
+           .then(response => response.json())
+           .then(responseText => {
+             debugger
+             let resp = typeof responseText === 'string' ? JSON.parse(responseText) : responseText
+             console.log(resp)
+             window.localStorage.setItem('hasPunchedIn', false)
+             window.sessionStorage.setItem('id', '')
+             window.sessionStorage.setItem('uuid', '')
+             window.sessionStorage.setItem('nid', '')
+             self.$router.back()
+             resolve(resp)
+           })
+           .catch(function (error) {
+             debugger
+             console.debug(error)
+             reject(error)
+           })
+       }).catch(error => {
+         debugger
+         console.debug(error)
+       })
      },
      punchIn: function () {
+       debugger
        const self = this
        // self.getCsrfToken()
        let token = window.localStorage.getItem('csrfToken')
-       // self.baseUrl + '/rest/session/token'
-       // let uid = window.localStorage.getItem('uid')
-       // let pass = window.sessionStorage.getItem('password')
-       // let name = window.localStorage.getItem('username')
-       let enc = window.btoa(self.username + ':' + self.password)
+       // let baseUrl + '/rest/session/token'
+       let baseUrl = window.localStorage.getItem('baseUrl')
+       let pass = window.sessionStorage.getItem('password')
+       let name = window.localStorage.getItem('username')
+       let enc = window.btoa(name + ':' + pass)
        let encString = 'Basic ' + enc
-       let urlPunchIn = self.baseUrl + '/jsonapi/node/daybook_punch_card_node?_format=api_json'
-       //  window.fetch(urlToken)
-       // .then((response) => response.text())
-       // .then((token) => {
-       debugger
+       // console.log(encString)
+       let urlPunchIn = baseUrl + '/jsonapi/node/daybook_punch_card_node?_format=api_json'
        let punchInData = {
          'data': {
            'type': 'daybook_punch_card_node',
@@ -235,39 +242,27 @@
            }
          }
        }
-// ,
-//              'nid': {
-//                'data': {
-//                  'type': 'daybook_site_node',
-//                  'nid': self.siteId
-//                }
-//              }
-          //  'Cache-Control': 'no-cache, no-store',
-          //  'Pragma': 'no-cache',
-          //  'Expires': 0
        let fetchPunchIn = {
          method: 'POST',
-         // body: punchInData,
-         body: JSON.stringify(punchInData),
          headers: {
            'Authorization': encString,
            'Content-Type': 'application/vnd.api+json',
            'Accept': 'application/vnd.api+json',
-           'Access-Control-Allow-Origin': 'http://localhost:8080',
            'X-CSRF-Token': token
-         }
+         },
+         body: JSON.stringify(punchInData)
        }
-       // debugger
        window.fetch(urlPunchIn, fetchPunchIn)
           .then((response) => response.json())
           .then((data) => {
-            window.localStorage.setItem('hasPunchedIn', 'true')
+            window.localStorage.setItem('hasPunchedIn', true)
             window.sessionStorage.setItem('id', data.data.id)
             window.sessionStorage.setItem('uuid', data.data.attributes.uuid)
             window.sessionStorage.setItem('nid', data.data.attributes.nid)
-            // console.log(data)
+            debugger
+            console.log(data)
+            self.$router.back()
           })
-     // })
       .catch(function (error) {
         console.debug(error)
       })
@@ -302,34 +297,42 @@
      },
      getPunchStatus: function () {
        this.hasPunchedIn = window.localStorage.getItem('hasPunchedIn')
-       return this.hasPunchedIn
+       // return this.hasPunchedIn
      },
      getCsrfToken: function () {
        const self = this
        // let baseUrl = window.localStorage.getItem('baseUrl')
        let urlToken = self.baseUrl + '/rest/session/token'
        window.fetch(urlToken)
-       .then(function (response) {
-         if (!response.ok) {
-           throw Error(response.statusText)
-         }
-       // Read the response as json.
-         return response.text()
-       })
-        .then((data) => {
-          // debugger
-          // let token = data
-          window.sessionStorage.setItem('csrfToken', data)
-          // console.log(token)
-          // return data
-        })
-        .then((data) => {
-          // debugger
-          self.onSend()
-        })
-       .catch(function (error) {
-         console.debug(error)
-       })
+          .then((response) => response.json())
+          .then((data) => {
+            window.sessionStorage.setItem('csrfToken', data)
+          })
+      .catch(function (error) {
+        console.debug(error)
+      })
+      //  window.fetch(urlToken)
+      //  .then(function (response) {
+      //    if (!response.ok) {
+      //      throw Error(response.statusText)
+      //    }
+      //  // Read the response as json.
+      //    return response.text()
+      //  })
+      //   .then((data) => {
+      //     // debugger
+      //     // let token = data
+      //     window.sessionStorage.setItem('csrfToken', data)
+      //     // console.log(token)
+      //     // return data
+      //   })
+      //   // .then((data) => {
+      //   //   // debugger
+      //   //   self.onSend()
+      //   // })
+      //  .catch(function (error) {
+      //    console.debug(error)
+      //  })
      }
    }
  }
