@@ -1,6 +1,6 @@
 <template>
   <f7-page>
-    <vue-pull-refresh :on-refresh="onRefresh"></vue-pull-refresh>
+    <!-- <vue-pull-refresh :on-refresh="onRefresh"></vue-pull-refresh> -->
     <f7-navbar title="Activités" back-link="Back"></f7-navbar>
                  <div class="page-content">
                      <div class="content-block-title">Liste des Affectations</div>
@@ -19,14 +19,15 @@
                                     <p>
                                       <span v-bind:class="{ alert: showAlert}"><strong><em>Début: </em></strong>{{todo.assign_start_shift}}</span>
                                       <!--<span><em><strong>&nbsp;&nbsp;</strong></em></span>-->
-                                      </br>
-                                      <span v-bind:class="{ alert: showAlert}"><strong><em>Fin : </em></strong>{{todo.assign_end_shift}}</span>
+                                      </p>
+                                     <p> <span v-bind:class="{ alert: showAlert}"><strong><em>Fin : </em></strong>{{todo.assign_end_shift}}</span>
                                     </p>
                                     <p>
-                                     {{todo.assign_site_address}} &nbsp; {{todo.assign_site_locality}} &nbsp; {{todo.assign_site_postal_code}} </br>
-                                     <!-- odo.assign_locality}} </br>
-                                     {{todo.assign_postal_code}} </br> -->
+                                     {{todo.assign_site_address}} &nbsp; {{todo.assign_site_locality}} &nbsp; {{todo.assign_site_postal_code}}
                                      </p>
+                                     <p>{{todo.assign_locality}} </p>
+                                     <p>{{todo.assign_postal_code}} </p>
+                                     
                                       <!--  <section aria-labelledby="todos-label">
                                        <h4 id="todos-label"> {{todo.assign_tasks}} </h4>
                                       <span> {{todo.assign_tasks}} </span> </br>
@@ -81,7 +82,7 @@
       displayData: function () {
         this.todos = JSON.parse(window.sessionStorage.getItem('todos'))
         // if (this.todos.length === 0) {
-        if (this.todos.length === undefined || this.todos.length === 0) {
+        if (this.todos === null) {
           this.onRefresh()
         }
       },
@@ -119,14 +120,6 @@
          self.formatTodos(todos)
          // return todos
        })
-      //  .then((todos) => {
-      //    // console.log(todos)
-      //    self.removeDuplicate(todos)
-      //    // self.formatTodos(todos)
-      //    // self.setTitles(true)
-      //    // self.$router.push('activities')
-      //    // window.plugins.ProgressIndicator.hide()
-      //  })
         .catch(function (error) {
           console.debug(error)
         })
@@ -134,8 +127,6 @@
       formatTodos: function (todos) {
         const self = this
         debugger
-        // let todoList = JSON.parse(todos)
-        // console.log(todos)
         todos = self.removeDuplicates(todos, 'assign_title')
         for (let todo in todos) {
           if (todos.hasOwnProperty(todo)) {
@@ -170,7 +161,7 @@
         }
         self.todos = JSON.stringify(todos)
         window.sessionStorage.setItem('todos', self.todos)
-        console.log(self.todos)
+        // console.log(self.todos)
       },
     /*
     beep: function () {
@@ -178,61 +169,14 @@
       snd.play()
     }
     */
-      removeDuplicate: function (todos) {
-        const self = this
-        // debugger
-        self.todos = self.removeDuplicates(todos, 'assign_title')
-        // let todoList = todos.reduce(function (a, b) {
-        //   if (a.indexOf(b) < 0) {
-        //     a.push(b)
-        //   }
-        //   return a
-        // },
-        //   [])
-        // let result = todos.sort().reduce((accumulator, current) => {
-        //   const length = accumulator.length
-        //   if (length === 0 || accumulator[length - 1] !== current) {
-        //     accumulator.push(current)
-        //   }
-        //   return accumulator
-        // }, [])
-        // console.log(result)
-        //  todos.filter(function (item, pos) {
-        //   debugger
-        //   return todos.indexOf(item) === pos
-        // })
-         // self.uniqBy(todos, JSON.stringify)
-        console.log(self.todos)
-        // let site = ''
-        // let title = ''
-        // let shiftStart = new Date()
-        // let shiftEnd = new Date()
-        // // console.log(todos)
-        // for (let i = 0; i < todos.length; i++) {
-        //   // for (let todo in todos) {
-        //   // if (todos.hasOwnProperty(todo)) {
-        //   if ((site === todos[i].assign_site) && (title === todos[i].assign_title) && (shiftStart === todos[i].assign_start_shift) && (shiftEnd === todos[i].assign_end_shift)) {
-        //     todos[i].assign_tasks_description += todoList.assign_tasks_description
-        //     todos.splice(i - 1, 1)
-        //   }
-        //   // }
-        //   shiftStart = todos[i].assign_start_shift
-        //   shiftEnd = todos[i].assign_end_shift
-        //   site = todos[i].assign_site
-        //   debugger
-        //   title = todos[i].assign_title
-        //   todoList = todos[i]
-        // }
-        // self.formatTodos(todos)
-      },
       removeDuplicates (originalArray, prop) {
         let newArray = []
         let lookupObject = {}
         for (var i in originalArray) {
-          if ((i - 1 >= 0) && (originalArray[i][prop] === originalArray[i - 1][prop])) {
-            // debugger
-            originalArray[i]['assign_tasks_description'] += originalArray[i - 1]['assign_tasks_description']
-          }
+          // if ((i - 1 >= 0) && (originalArray[i][prop] === originalArray[i - 1][prop])) {
+          //   // debugger
+          //   originalArray[i]['assign_tasks_description'] += originalArray[i - 1]['assign_tasks_description']
+          // }
           // debugger
           lookupObject[originalArray[i][prop]] = originalArray[i]
           // console.log(lookupObject)
@@ -242,13 +186,6 @@
           // console.log(newArray)
         }
         return newArray
-      },
-      uniqBy: function (a, key) {
-        return [
-          ...new Map(
-              a.map(x => [key(x), x])
-          ).values()
-        ]
       }
     }
   }

@@ -107,12 +107,8 @@ export default {
     this.loginTitle = (this.isLoggedIn === 'true') ? 'Deconnecter' : 'Connecter'
     this.signInOutTitle = (this.isLoggedIn === 'true') ? 'Sign Out' : 'Sign In'
     this.loginScreenTitle = (this.isLoggedIn === 'true') ? 'Deconnection' : 'Connection'
-    // console.log(this.state)
-    // this.setTitles()
   },
   mounted () {
-    // debugger
-    // this.setTitles()
   },
   computed: {
     // debugger
@@ -129,15 +125,6 @@ export default {
       self.loginTitle = (this.isLoggedIn === true) ? 'Deconnecter' : 'Connecter'
       self.signInOutTitle = (this.isLoggedIn === true) ? 'Sign Out' : 'Sign In'
       self.loginScreenTitle = (this.isLoggedIn === true) ? 'Deconnection' : 'Connection'
-       // if (isLoggedIn === false) {
-      //   self.loginTitle = 'Connecter'
-      //   self.signInOutTitle = 'Sign In'
-      //   self.loginScreenTitle = 'Connection'
-      // } else {
-      //   self.loginTitle = 'Deconnecter'
-      //   self.signInOutTitle = 'Sign Out'
-      //   self.loginScreenTitle = 'Deconnection'
-      // }
     },
     signInOut: function () {
       // debugger
@@ -175,53 +162,7 @@ export default {
         self.signInOutTitle = 'Sign Out'
         self.loginScreenTitle = 'Deconnection'
         self.setTitles(true)
-        // navigator.notification.beep(1)
-        // debugger
-        // self.beep()
-        // window.alert('')
-        // return uid
       })
-      // .then(function () {
-      //   self.username = window.localStorage.getItem('username')
-      //   self.uid = window.localStorage.getItem('uid')
-      //   self.password = window.sessionStorage.getItem('password')
-      //   let enc = window.btoa(self.username + ':' + self.password)
-      //   let encString = 'Basic ' + enc
-      //   let token = window.sessionStorage.getItem('csrfToken')
-      //   // let urlActivities = 'http://localhost/api/todos/9?_format=json'
-      //   // console.log(self.baseUrl)
-      //   let urlActivities = self.baseUrl + '/api/assign/' + self.uid + '?_format=json'
-      //   // console.log(urlActivities)
-      //   let fetchActivities = {
-      //     method: 'GET',
-      //     dataType: 'json',
-      //     // mode: 'no-cors',
-      //     headers: {
-      //       // 'Authorization': JSON.stringify(encString),
-      //       'Authorization': encString,
-      //       'X-CSRF-Token': token,
-      //       'Accept': 'application/json',
-      //       'Content-Type': 'application/json'
-      //     }
-      //   }
-      //   return window.fetch(urlActivities, fetchActivities)
-      // })
-      //  .then((response) => {
-      //    return response.json()
-      //  })
-      //  .then((todos) => {
-      //    // todos = JSON.stringify(todos)
-      //    // self.formatTodos(JSON.stringify(todos))
-      //    return todos
-      //  })
-      //  .then((todos) => {
-      //    // console.log(todos)
-      //    // self.removeDuplicate(todos)
-      //    // self.formatTodos(todos)
-      //    self.setTitles(true)
-      //    // self.$router.push('activities')
-      //    // window.plugins.ProgressIndicator.hide()
-      //  })
         .catch(function (error) {
           console.debug(error)
         })
