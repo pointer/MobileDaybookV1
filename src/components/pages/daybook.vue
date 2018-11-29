@@ -218,14 +218,13 @@
         // self.tasks = self.updateJSON(item, value)
         // console.log(tasks)
         // for (var i = 0; i < self.tasks.length; i++) {
-        if (i === value) {
-          delete self.tasks[i]
-          self.tasks = Object.values(self.tasks)
-          // debugger
-          window.localStorage.setItem('tasks', JSON.stringify(self.tasks))
-        }
-        //}
-
+        // if (i === value) {
+        delete self.tasks[value]
+        self.tasks = Object.values(self.tasks)
+         // debugger
+        window.localStorage.setItem('tasks', JSON.stringify(self.tasks))
+        // }
+        // }
       },
       updateDaybook (item, value) {
         debugger
