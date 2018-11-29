@@ -1,104 +1,99 @@
 <template>
   <f7-page>
-    <f7-navbar title="Main courante" back-link="Back"></f7-navbar>
+    <f7-navbar title="" back-link=""></f7-navbar>
                  <div class="page-content">
-                <!-- <f7-list-item  > -->
-                   <!-- <div class="content-block-title">Main courante</div> -->
-                      <div class="list media-list">
+                    <div class="content-block-title">Main courante</div>
                         <ul >
-                          <li  v-for="(key, value) of tasks" :key="value" v-if="value > 0" >
-                                <!-- <label class="item-checkbox item-content"> -->
-                                <div class = "item-inner"> 
-                                <div class="item-title">{{value}}
-                                  <div class="item-after">{{key}}</div>
-                                </div>
-                              </div> 
-                              <label class = "label-switch">
-                                                          
-                              <input type="checkbox" name="media-checkbox" :value="value"/>
-                              <!-- <div class="icon icon-checkbox"></div> -->
-                              <div class="checkbox"></div>
-                             </label>
-                          </li>
+                          <li class="swipeout deleted-callback" v-for="(node,index) in tasks" :key="index" v-hammer:swipe.left="(event)=> onSwipeLeft(event, node, index)" >
+                            <!--  -->
+                            <div class="item-content swipeout-content">
+                            <div class = "item-inner">
+                              <div class="item-title" > {{index + 1}}
+                                <div class="item-after" >{{node.instruction}}</div>
+                              </div>
+                            </div> 
+                            </div>
+                            <div class="swipeout-actions-right" >
+                              <a href="#" class="swipeout-delete"></a>
+                            </div>
+                          </li> 
                         </ul>
-                      </div>
-                <!-- </f7-list-item>   -->
-                  </div>
+                </div>
   </f7-page>
 </template>
-
-
+<!-- <li  v-for="(node,index) in tasks" :key="index"  >
+  <div class = "item-inner">
+    <div class="item-title" > {{index + 1}}
+      <div class="item-after" v-hammer:swipe.left="(event)=> onSwipeLeft(event, item, i)">{{node.instruction}}</div>
+    </div>
+  </div> 
+</li> -->
+  <!-- <div v-hammer:swipe.left="(event)=> onSwipeLeft(event, item, i)">Complete</div> -->
+    <!-- <label class = "label-switch">
+    <input type="checkbox" v-on:input="onChecked(node, index,$event)" name="media-checkbox" :value="node.checked"/>
+    <div class="checkbox"></div>
+    </label> -->  
+  <!-- <div id="app">
+    <SwipeButton
+      ref="swipeButton"
+      class="swipe-button"
+      @actionConfirmed="onActionConfirmed"
+    /> -->
 <script>
   // import moment from 'moment'
+  // import SwipeButton from './SwipeButton.vue';
   import VuePullRefresh from 'vue-pull-refresh'
+  import { VueHammer } from 'vue2-hammer'
+  // this.Vue.use(VueHammer)
+  // this.$$(.deleted-callback).on('swipeout:deleted', function () {
+  //   window.alert('Thanks, item removed!')
+  // })
   export default {
     data () {
       return {
-        task: '',
-        tasks: [],
-        matches: []
+        tasks: [{
+          title: '',
+          task: {
+            instruction: '',
+            checked: ''
+          }
+        }],
+        hasOwnProperty: Object.prototype.hasOwnProperty
       }
+    },
+    swipeout: {
+      noFollow: true,
+      removeElements: true
+    },
+    computed: {
     },
     created () {
       // console.log(this.$device)
       // this.displayData()
-      // this.tasks = JSON.parse(window.sessionStorage.getItem('tasks'))
-      this.onRefresh()
-      this.tasks = JSON.parse(JSON.stringify(window.localStorage.getItem('tasks')))
-      console.log(this.tasks)
-      // window.localStorage.getItem('tasks')
-      // for (let task in this.tasks) {
-      //   if (this.tasks.hasOwnProperty(task)) {
-      //     this.tasks[task] = this.tasks[task].replace(/[^\x20-\x7E]/gmi, '')
-      //     this.tasks[task] = this.tasks[task].replace(/<\/?[^>]+(>|$)/g, '')
-      //     this.tasks[task] = this.tasks[task].replace(/&nbsp;/gi, '')
-      //   }
-      // }
-      // console.log(this.tasks)
-      // for (let task in this.tasks) {
-      debugger
-      // for (let i = 0; i < this.tasks.length; i++) {
-      //   // if (this.tasks.hasOwnProperty(task)) {
-      //   // console.log(this.tasks[i])
-      //   this.matches[i] = this.tasks[i].list.split('<li>')
-      //     .filter(function (v) { return v.indexOf('</li>') > -1 })
-      //       .map(function (value) {
-      //         return value.split('</li>')[0]
-      //       })
-      // }
-      // this.tasks = []
-      // for (let ii = 0; ii < this.matches.length; ii++) {
-      //   for (let j = 0; j < this.matches[ii].length; j++) {
-      //     this.tasks[j] = this.matches[ii][j].replace(/(<|&lt;)br\s*\/*(>|&gt;)/g, ' ')
-      //   }
-      // }
-      // this.tasks.push(array)
-      // window.localStorage.setItem('tasks', this.tasks)
-      // console.log(this.tasks)
+      // this.tasks = JSON.parse(this.sessionStorage.getItem('tasks'))
+      // debugger
+      // if (!Array.isArray(this.tasks) || !this.tasks.length) {
+      if (!this.isEmpty(this.tasks)) {
+        this.tasks = JSON.parse(window.localStorage.getItem('tasks'))
+      } else {
+        this.onRefresh()
+      }
     },
     mounted () {
-      // console.log(this.$device)
-      // this.onRefresh()
-      // this.tasks = JSON.parse(window.localStorage.getItem('tasks'))
-      // this.displayData()
-      // this.tasks = JSON.parse(window.sessionStorage.getItem('tasks'))
       // debugger
-      // this.onRefresh()
-      // this.tasks = window.localStorage.getItem('tasks')
-      // console.log(this.tasks)
-      // for (let task in this.tasks) {
-      //   if (this.tasks.hasOwnProperty(task)) {
-      //     this.tasks[task] = this.tasks[task].replace(/[^\x20-\x7E]/gmi, '')
-      //     this.tasks[task] = this.tasks[task].replace(/<\/?[^>]+(>|$)/g, '')
-      //     this.tasks[task] = this.tasks[task].replace(/&nbsp;/gi, '')
-      //   }
-      // }
+      if (!this.isEmpty(this.tasks)) {
+        this.tasks = JSON.parse(window.localStorage.getItem('tasks'))
+      } else {
+        this.onRefresh()
+      }
     },
     components: {
       // f7Navbar,
       // f7Page,
       // f7BlockTitle
-      'vue-pull-refresh': VuePullRefresh
+      'vue-pull-refresh': VuePullRefresh,
+      'vueHammer': VueHammer
+      // SwipeButton,
     },
     methods: {
       // saveChange: function (){
@@ -118,7 +113,7 @@
         let password = window.sessionStorage.getItem('password')
         let enc = window.btoa(username + ':' + password)
         let encString = 'Basic ' + enc
-        let token = window.sessionStorage.getItem('csrfToken')
+        let token = window.localStorage.getItem('csrfToken')
         let urlTasks = baseUrl + '/api/tasks/' + uid + '?_format=hal_json'
         let fetchTasks = {
           method: 'GET',
@@ -129,65 +124,172 @@
             'Content-Type': 'application/hal+json'
           }
         }
-        // return new Promise((resolve, reject) => {
         window.fetch(urlTasks, fetchTasks)
           .then(response => response.json())
-          .then(tasks => {
-          // .then(responseText => {
-          //  let resp = typeof responseText === 'string' ? JSON.parse(responseText) : responseText
-            debugger
-            self.formatTodos(tasks)
-            // resolve(tasks)
+          .then(data => {
+            return self.saveDaybookData(data)
+          .then(err => Promise.reject(err))
           }).catch(function (error) {
             console.debug(error)
-            // reject(error)
           })
-        // }).catch(error => {
-        //   console.debug(error)
-        // })
       },
-      formatTodos (tasks) {
-        const self = this
+      saveDaybookData (tasks) {
+        // const self = this
+        // this.localStorage.setItem('tempTasks', tasks)
+        // console.log(JSON.stringify(tasks))
         let i = 0
+        // let taskChecked = false
+        // let taskItem = ''
         let matches = []
-        for (let task in tasks) {
-          if (tasks.hasOwnProperty(task)) {
-            tasks[task].title = tasks[task].title[0]
-            tasks[task].list = tasks[task].list.replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&')
-            matches[i] = tasks[i].list.split('<li>')
-              .filter(function (v) { return v.indexOf('</li>') > -1 })
-                .map(function (value) {
-                  return value.split('</li>')[0]
-                })
-            i++
-          }
-        }
-        self.tasks = []
-        for (let j = 0; j < matches.length; j++) {
-          for (let k = 0; k < matches[j].length; k++) {
-            self.tasks[k + 1] = matches[j][k].replace(/(<|&lt;)br\s*\/*(>|&gt;)/g, ' ')
-          }
-        }
-        // for (let i = 0; i < tasks.length; i++) {
-        //   // if (this.tasks.hasOwnProperty(task)) {
-        //   // console.log(this.tasks[i])
-        //   matches[i] = tasks[i].list.split('<li>')
-        //     .filter(function (v) { return v.indexOf('</li>') > -1 })
-        //       .map(function (value) {
-        //         return value.split('</li>')[0]
-        //       })
-        // }
-        // tasks = []
-        // for (let ii = 0; ii < matches.length; ii++) {
-        //   for (let j = 0; j < matches[ii].length; j++) {
-        //     tasks[j] = matches[ii][j].replace(/(<|&lt;)br\s*\/*(>|&gt;)/g, ' ')
-        //   }
-        // }
+        // let taskMap = new Map()
         debugger
-        console.log(tasks)
-        // self.tasks = JSON.stringify(tasks)
-        window.localStorage.setItem('tasks', self.tasks)
+        let taskTitle = []
+        let tempTasks = []
+        try {
+          for (let item in tasks) {
+            if (tasks.hasOwnProperty(item)) {
+              taskTitle[item] = tasks[item].title[0]
+              tasks[item].list = tasks[item].list.replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&')
+              matches[i] = tasks[i].list.split('<li>')
+                .filter(function (v) { return v.indexOf('</li>') > -1 })
+                  .map(function (value) {
+                    return value.split('</li>')[0]
+                  })
+              i++
+            }
+          }
+          for (let j = 0; j < matches.length; j++) {
+            tempTasks['title'] = taskTitle[j]
+            for (let k = 0; k < matches[j].length; k++) {
+              let task = {}
+              // debugger
+              task['instruction'] = matches[j][k].replace(/(<|&lt;)br\s*\/*(>|&gt;)/g, ' ')
+              task['checked'] = false
+              tempTasks.push(task)
+              // console.log(self.tasks)
+            }
+          }
+          debugger
+          // console.log(JSON.stringify(tempTasks))
+          // JSON.stringify(tasks)
+          window.localStorage.setItem('tasks', JSON.stringify(tempTasks))
+        } catch (error) {
+          console.debug(error.message)
+        }
+      },
+      // Speed up calls to hasOwnProperty
+      isEmpty (obj) {
+        // null and undefined are "empty"
+        if (obj == null) {
+          return true
+        }
+        // Assume if it has a length property with a non-zero value
+        // that that property is correct.
+        if (obj.length > 0) {
+          return false
+        }
+        if (obj.length === 0) {
+          return true
+        }
+        // If it isn't an object at this point
+        // it is empty, but it can't be anything *but* empty
+        // Is it empty?  Depends on your application.
+        if (typeof obj !== 'object') {
+          return true
+        }
+        // Otherwise, does it have any properties of its own?
+        // Note that this doesn't handle
+        // toString and valueOf enumeration bugs in IE < 9
+        for (var key in obj) {
+          if (hasOwnProperty.call(obj, key)) {
+            return false
+          }
+        }
+        return true
+      },
+      // onSwipeoutDeleted (item, value, $event) {
+      onSwipeLeft (event, item, value) {
+        const self = this
+        // console.log(value)
+        debugger
+        // console.log(item)
+        // console.log($event.target.checked)
+        // self.$emit('input', event.target.checked)
+        // self.tasks = self.updateJSON(item, value)
+        // console.log(tasks)
+        // for (var i = 0; i < self.tasks.length; i++) {
+        if (i === value) {
+          delete self.tasks[i]
+          self.tasks = Object.values(self.tasks)
+          // debugger
+          window.localStorage.setItem('tasks', JSON.stringify(self.tasks))
+        }
+        //}
+
+      },
+      updateDaybook (item, value) {
+        debugger
+        const self = this
+        // self.getCsrfToken()
+        let token = window.localStorage.getItem('csrfToken')
+        // let baseUrl + '/rest/session/token'
+        let baseUrl = window.localStorage.getItem('baseUrl')
+        let pass = window.sessionStorage.getItem('password')
+        let name = window.localStorage.getItem('username')
+        let enc = window.btoa(name + ':' + pass)
+        let encString = 'Basic ' + enc
+        // console.log(encString)
+        let urlPunchIn = baseUrl + '/jsonapi/node/daybook_daybook_node?_format=api_json'
+        let punchInData = {
+          'data': {
+            'type': 'node--daybook_daybook_node',
+            'attributes': {
+              'status': true,
+              'title': name,
+              'body': ''
+            },
+            'relationships': {
+              'uid': {
+                'data': {
+                  'type': 'user--user',
+                  'id': self.uid
+                }
+              }
+            }
+          }
+        }
+        let fetchPunchIn = {
+          method: 'POST',
+          headers: {
+            'Authorization': encString,
+            'Content-Type': 'application/vnd.api+json',
+            'Accept': 'application/vnd.api+json',
+            'X-CSRF-Token': token
+          },
+          body: JSON.stringify(punchInData)
+        }
+        window.fetch(urlPunchIn, fetchPunchIn)
+          .then((response) => response.json())
+          .then((data) => {
+            window.localStorage.setItem('hasPunchedIn', true)
+            window.sessionStorage.setItem('id', data.data.id)
+            window.sessionStorage.setItem('uuid', data.data.attributes.uuid)
+            window.sessionStorage.setItem('nid', data.data.attributes.nid)
+            debugger
+            console.log(data)
+            self.$router.back()
+          })
+      .catch(function (error) {
+        console.debug(error)
+      })
       }
+    //   onActionConfirmed() {
+    //     setTimeout(() => {
+    //       this.$refs.swipeButton.reset();
+    //     }, 1000)
+    // },
+      // var mySwiper = new Swiper('.swiper-container');
+      // mySwiper.on('slideChangeEnd',function(){ alert('sample alert');})
       // var coldDrinks = drinks.map(function(drink) {
       //   return ‘iced ’ + drink;
       // });
@@ -225,5 +327,17 @@
   .row {
     margin-bottom: 10px;
   }  
-  
+  #app {
+  font-family: 'Avenir', Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-align: center;
+  margin-top: 60px;
+}
+.swipe-button {
+  width: 400px;
+  margin: 0 auto;
+  background-color: #17255A;
+  border: 1px solid #17255A;
+}
 </style>

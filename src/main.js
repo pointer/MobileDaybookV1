@@ -9,6 +9,7 @@ import Framework7Vue from 'framework7-vue'
 // Import Routes
 import Routes from './routes.js'
 import App from './App'
+import { VueHammer } from 'vue2-hammer'
 
 // Import App Custom Styles
 // import AppStyles from './css/app.css'
@@ -25,7 +26,12 @@ Vue.config.productionTip = false
 
 // Init F7 Vue Plugin
 Vue.use(Framework7Vue)
-
+Vue.use(VueHammer)
+let $$ = window.Dom7
+Vue.prototype.Dom7 = $$
+Vue.prototype.$$ = $$
+Vue.prototype.Template7 = window.Template7
+Vue.prototype.$t7 = window.Template7
 /* eslint-disable no-new */
 // Init App
 const baseApp = new Vue({

@@ -2,58 +2,36 @@
   <f7-page>
     <!-- <vue-pull-refresh :on-refresh="onRefresh"></vue-pull-refresh> -->
     <f7-navbar title="Activités" back-link="Back"></f7-navbar>
-                 <div class="page-content">
-                     <div class="content-block-title">Liste des Affectations</div>
-                     <div class="list-block accordion-list" >
-                        <ul>
-                           <li class="accordion-item" v-for="todo in todos" :key="todo.assign_title">
-                              <a href="#" class="item-content item-link">
-                                  <div class="item-inner">
-                                    <div class="item-title">{{todo.assign_start_shift_date}} </div>
-                                    <div class="item-after"><span class="badge color-blue">{{todo.assign_start_shift_time}}</span></div>
-                                  </div>
-                              </a>
-                              <div class="accordion-item-content">
-                                 <div class="content-block">
-                                    <h3> <strong><em>{{todo.assign_site}}</em></strong>  </h3>
-                                    <p>
-                                      <span v-bind:class="{ alert: showAlert}"><strong><em>Début: </em></strong>{{todo.assign_start_shift}}</span>
-                                      <!--<span><em><strong>&nbsp;&nbsp;</strong></em></span>-->
-                                      </p>
-                                     <p> <span v-bind:class="{ alert: showAlert}"><strong><em>Fin : </em></strong>{{todo.assign_end_shift}}</span>
-                                    </p>
-                                    <p>
-                                     {{todo.assign_site_address}} &nbsp; {{todo.assign_site_locality}} &nbsp; {{todo.assign_site_postal_code}}
-                                     </p>
-                                     <p>{{todo.assign_locality}} </p>
-                                     <p>{{todo.assign_postal_code}} </p>
-                                     
-                                      <!--  <section aria-labelledby="todos-label">
-                                       <h4 id="todos-label"> {{todo.assign_tasks}} </h4>
-                                      <span> {{todo.assign_tasks}} </span> </br>
-                                        <span> {{todo.assign_tasks_description}} </span>
-                                      
-                                       <ol>
-                                        <li v-for="task of todo.assign_tasks_description" v-if="task.length"> <span>   </span> &#x95; {{task}} </li>
-                                       </ol>
-                                       
-                                      </section>
-                                      -->
-                                      <section aria-labelledby="obs-label">
-                                       <h4 id="obs-label">Observations</h4>
-                                             <p>{{todo.assign_observations}}</p>
-                                      </section>                                      
-                                    
-                                 </div>
-                              </div>
-                           </li>
-                        </ul>
-                     </div>
-                  </div>
-               <!-- </div>
+      <div class="page-content">
+          <div class="content-block-title">Liste des Affectations</div>
+            <div class="list-block accordion-list" >
+                <ul>
+                  <li class="accordion-item" v-for="todo in todos" :key="todo.assign_title">
+                      <a href="#" class="item-content item-link">
+                          <div class="item-inner">
+                            <div class="item-title">{{todo.assign_start_shift_date}} </div>
+                            <div class="item-after"><span class="badge color-blue">{{todo.assign_start_shift_time}}</span></div>
+                          </div>
+                      </a>
+                      <div class="accordion-item-content">
+                        <div class="content-block">
+                            <h3> <strong><em>{{todo.assign_site}}</em></strong></h3>
+                            <p><span v-bind:class="{ alert: showAlert}"><strong><em>Début: </em></strong>{{todo.assign_start_shift}}</span></p>
+                            <p> <span v-bind:class="{ alert: showAlert}"><strong><em>Fin : </em></strong>{{todo.assign_end_shift}}</span></p>
+                            <p>{{todo.assign_site_address}} &nbsp; {{todo.assign_site_locality}} &nbsp; {{todo.assign_site_postal_code}}</p>
+                            <p>{{todo.assign_locality}} </p>
+                            <p>{{todo.assign_postal_code}} </p>
+                            <section aria-labelledby="obs-label">
+                              <h4 id="obs-label">Observations</h4>
+                              <p>{{todo.assign_observations}}</p>
+                            </section>                                      
+                            
+                        </div>
+                      </div>
+                  </li>
+                </ul>
             </div>
-         </div>
-      </div> -->
+      </div>
   </f7-page>
 </template>
 <script>
@@ -69,7 +47,9 @@
       // console.log(this.$device)
       // debugger
       // this.onRefresh()
-      this.displayData()
+      if (!Array.isArray(this.todos) || !this.todos.length) {
+        this.displayData()
+      }
       this.todos = JSON.parse(window.sessionStorage.getItem('todos'))
     },
     components: {

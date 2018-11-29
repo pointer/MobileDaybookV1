@@ -1,7 +1,7 @@
 {
     "name": "f7",
     "version": "1.0.0",
-    "description": "A Vue.js project",
+    "description": "Mobile Daybook",
     "author": "kateb <katebg@yahoo.com>",
     "private": true,
     "scripts": {
@@ -30,6 +30,7 @@
         "cordova-plugin-statusbar": "^2.4.2",
         "cordova-plugin-vibration": "^3.1.0",
         "cordova-plugin-whitelist": "1",
+        "dom7": "^2.1.2",
         "es6-promise": "^4.2.4",
         "filereader": "^0.10.3",
         "form-data": "^2.3.3",
@@ -44,7 +45,8 @@
         "vue-popperjs": "^1.6.1",
         "vue-pull-refresh": "^0.2.7",
         "vue-upload-image": "^1.1.0",
-        "vue-upload-multiple-image": "^1.1.2"
+        "vue-upload-multiple-image": "^1.1.2",
+        "vue2-hammer": "^2.1.2"
     },
     "devDependencies": {
         "autoprefixer": "^6.4.0",
