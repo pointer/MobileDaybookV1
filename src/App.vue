@@ -29,7 +29,9 @@
           <f7-page>
             <f7-block-title>Navigation</f7-block-title>
             <f7-list>
+              <f7-list-item link="/login/" title="Connect/Deconnect"></f7-list-item>
               <f7-list-item link="/activities/" title="Affectations"></f7-list-item>
+              <f7-list-item link="/instructions/" title="Instructions"></f7-list-item>
               <f7-list-item link="/punchclock/" title="Badge"></f7-list-item>
               <f7-list-item link="/daybook/" title="Main courante"></f7-list-item>              
               <f7-list-item link="/incident/" title="Incident"></f7-list-item>
@@ -43,18 +45,18 @@
                 </f7-list>
             <f7-block> 
             -->
-              <f7-grid>
+              <!-- <f7-grid>
                 <f7-col width="50">
                     <f7-button  open-login-screen="#login-screen" :class="[ isLoggedIn ? 'col button color-red' : 'col button color-green' ]" v-model="loginTitle" v-bind:title="loginTitle">{{loginTitle}}</f7-button>
                 </f7-col>
-              </f7-grid>
+              </f7-grid> -->
            <!-- </f7-block> -->
           </f7-page>
         </f7-pages>
       </f7-view>
     <!-- </f7-views> -->
     <!-- Login Screen -->
-    <f7-login-screen id="login-screen">
+    <!-- <f7-login-screen id="login-screen">
       <f7-view>
         <f7-pages>
           <f7-page login-screen>
@@ -75,8 +77,8 @@
           </f7-page>
         </f7-pages>
       </f7-view>
-    </f7-login-screen>
-        </f7-views>
+    </f7-login-screen> -->
+    </f7-views>
   </div>
 </template>
 
@@ -183,6 +185,7 @@ export default {
       let fetchData = {
         method: 'POST',
         dataType: 'json',
+        credentials: 'include',
         headers: {
           'Content-Type': 'application/json',
           'csrf_token': csrfToken,

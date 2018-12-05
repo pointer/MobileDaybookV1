@@ -1,279 +1,231 @@
 <template>
-  <f7-page>
-    <f7-navbar title="" back-link=""></f7-navbar>
-                 <div class="page-content">
-                    <div class="content-block-title">Main courante</div>
-                        <ul >
-                          <li class="swipeout deleted-callback" v-for="(node,index) in tasks" :key="index" v-hammer:swipe.left="(event)=> onSwipeLeft(event, node, index)" >
-                            <!--  -->
-                            <div class="item-content swipeout-content">
-                            <div class = "item-inner">
-                              <div class="item-title" > {{index + 1}}
-                                <div class="item-after" >{{node.instruction}}</div>
-                              </div>
-                            </div> 
-                            </div>
-                            <div class="swipeout-actions-right" >
-                              <a href="#" class="swipeout-delete"></a>
-                            </div>
-                          </li> 
-                        </ul>
-                </div>
-  </f7-page>
+    <f7-page name="daybook">
+    <f7-navbar  v-bind:title="navTitle"  back-link="" sliding>   </f7-navbar>
+        <f7-list form>
+            <f7-list-item>
+                <!-- <f7-label></f7-label> -->
+                <!-- <f7-input type="text" :value="item" @input="item = $event.target.value" placeholder="Main courante item" clear-button></f7-input> 
+                    <span> :</span> -->
+                    <!-- <p style="white-space: pre-line;">{{ message }}</p> -->
+                    <br>
+                    <textarea v-text="message" v-model="message" placeholder="Details main courante"></textarea>
+            <span class="input-clear-button"></span>
+            </f7-list-item>
+            <f7-list-button @click= "sendDaybook()">Envoyer</f7-list-button>
+            <!-- <f7-block-footer>Some text about login information.<br>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</f7-block-footer> -->
+        </f7-list>
+    </f7-page>
 </template>
-<!-- <li  v-for="(node,index) in tasks" :key="index"  >
-  <div class = "item-inner">
-    <div class="item-title" > {{index + 1}}
-      <div class="item-after" v-hammer:swipe.left="(event)=> onSwipeLeft(event, item, i)">{{node.instruction}}</div>
-    </div>
-  </div> 
-</li> -->
-  <!-- <div v-hammer:swipe.left="(event)=> onSwipeLeft(event, item, i)">Complete</div> -->
-    <!-- <label class = "label-switch">
-    <input type="checkbox" v-on:input="onChecked(node, index,$event)" name="media-checkbox" :value="node.checked"/>
-    <div class="checkbox"></div>
-    </label> -->  
-  <!-- <div id="app">
-    <SwipeButton
-      ref="swipeButton"
-      class="swipe-button"
-      @actionConfirmed="onActionConfirmed"
-    /> -->
+<!-- 
+<template>
+   <f7-list-item>
+     <f7-label>Item</f7-label>
+     <f7-input type="text" :value="item" @input="item = $event.target.value" placeholder="Your name" clear-button></f7-input>
+   </f7-list-item>
+ </template>
+-->
 <script>
-  // import moment from 'moment'
-  // import SwipeButton from './SwipeButton.vue';
-  import VuePullRefresh from 'vue-pull-refresh'
-  import { VueHammer } from 'vue2-hammer'
-  // this.Vue.use(VueHammer)
-  // this.$$(.deleted-callback).on('swipeout:deleted', function () {
-  //   window.alert('Thanks, item removed!')
-  // })
   export default {
     data () {
       return {
-        tasks: [{
-          title: '',
-          task: {
-            instruction: '',
-            checked: ''
-          }
-        }],
-        hasOwnProperty: Object.prototype.hasOwnProperty
+        message: '',
+        navTitle: '',
+        daybookCreated: false
       }
-    },
-    swipeout: {
-      noFollow: true,
-      removeElements: true
-    },
-    computed: {
-    },
-    created () {
-      // console.log(this.$device)
-      // this.displayData()
-      // this.tasks = JSON.parse(this.sessionStorage.getItem('tasks'))
-      // debugger
-      // if (!Array.isArray(this.tasks) || !this.tasks.length) {
-      if (!this.isEmpty(this.tasks)) {
-        this.tasks = JSON.parse(window.localStorage.getItem('tasks'))
-      } else {
-        this.onRefresh()
-      }
-    },
-    mounted () {
-      // debugger
-      if (!this.isEmpty(this.tasks)) {
-        this.tasks = JSON.parse(window.localStorage.getItem('tasks'))
-      } else {
-        this.onRefresh()
-      }
-    },
-    components: {
-      // f7Navbar,
-      // f7Page,
-      // f7BlockTitle
-      'vue-pull-refresh': VuePullRefresh,
-      'vueHammer': VueHammer
-      // SwipeButton,
     },
     methods: {
-      // saveChange: function (){
-      //   alert()
-      // },
-      displayData: function () {
-        if (this.tasks === null || this.tasks.length === 0) {
-          this.onRefresh()
-        }
-        this.tasks = JSON.parse(window.localStorage.getItem('tasks'))
-      },
-      onRefresh: function () {
-        const self = this
-        let baseUrl = window.localStorage.getItem('baseUrl')
-        let username = window.localStorage.getItem('username')
-        let uid = window.localStorage.getItem('uid')
-        let password = window.sessionStorage.getItem('password')
-        let enc = window.btoa(username + ':' + password)
-        let encString = 'Basic ' + enc
-        let token = window.localStorage.getItem('csrfToken')
-        let urlTasks = baseUrl + '/api/tasks/' + uid + '?_format=hal_json'
-        let fetchTasks = {
-          method: 'GET',
-          headers: {
-            'Authorization': encString,
-            'X-CSRF-Token': token,
-            'Accept': 'application/hal+json',
-            'Content-Type': 'application/hal+json'
-          }
-        }
-        window.fetch(urlTasks, fetchTasks)
-          .then(response => response.json())
-          .then(data => {
-            return self.saveDaybookData(data)
-          .then(err => Promise.reject(err))
-          }).catch(function (error) {
-            console.debug(error)
-          })
-      },
-      saveDaybookData (tasks) {
-        // const self = this
-        // this.localStorage.setItem('tempTasks', tasks)
-        // console.log(JSON.stringify(tasks))
-        let i = 0
-        // let taskChecked = false
-        // let taskItem = ''
-        let matches = []
-        // let taskMap = new Map()
+      sendDaybook: function () {
         debugger
-        let taskTitle = []
-        let tempTasks = []
-        try {
-          for (let item in tasks) {
-            if (tasks.hasOwnProperty(item)) {
-              taskTitle[item] = tasks[item].title[0]
-              tasks[item].list = tasks[item].list.replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&')
-              matches[i] = tasks[i].list.split('<li>')
-                .filter(function (v) { return v.indexOf('</li>') > -1 })
-                  .map(function (value) {
-                    return value.split('</li>')[0]
-                  })
-              i++
-            }
-          }
-          for (let j = 0; j < matches.length; j++) {
-            tempTasks['title'] = taskTitle[j]
-            for (let k = 0; k < matches[j].length; k++) {
-              let task = {}
-              // debugger
-              task['instruction'] = matches[j][k].replace(/(<|&lt;)br\s*\/*(>|&gt;)/g, ' ')
-              task['checked'] = false
-              tempTasks.push(task)
-              // console.log(self.tasks)
-            }
-          }
-          debugger
-          // console.log(JSON.stringify(tempTasks))
-          // JSON.stringify(tasks)
-          window.localStorage.setItem('tasks', JSON.stringify(tempTasks))
-        } catch (error) {
-          console.debug(error.message)
-        }
-      },
-      // Speed up calls to hasOwnProperty
-      isEmpty (obj) {
-        // null and undefined are "empty"
-        if (obj == null) {
-          return true
-        }
-        // Assume if it has a length property with a non-zero value
-        // that that property is correct.
-        if (obj.length > 0) {
-          return false
-        }
-        if (obj.length === 0) {
-          return true
-        }
-        // If it isn't an object at this point
-        // it is empty, but it can't be anything *but* empty
-        // Is it empty?  Depends on your application.
-        if (typeof obj !== 'object') {
-          return true
-        }
-        // Otherwise, does it have any properties of its own?
-        // Note that this doesn't handle
-        // toString and valueOf enumeration bugs in IE < 9
-        for (var key in obj) {
-          if (hasOwnProperty.call(obj, key)) {
-            return false
-          }
-        }
-        return true
-      },
-      // onSwipeoutDeleted (item, value, $event) {
-      onSwipeLeft (event, item, value) {
         const self = this
         // console.log(value)
-        debugger
-        // console.log(item)
         // console.log($event.target.checked)
         // self.$emit('input', event.target.checked)
-        // self.tasks = self.updateJSON(item, value)
-        // console.log(tasks)
-        // for (var i = 0; i < self.tasks.length; i++) {
-        // if (i === value) {
-        delete self.tasks[value]
-        self.tasks = Object.values(self.tasks)
-         // debugger
-        window.localStorage.setItem('tasks', JSON.stringify(self.tasks))
-        // }
+        let daybookCreated = window.localStorage.getItem('daybookCreated')
+        daybookCreated === true ? self.updateDaybook(this.message) : self.createDaybook(this.message)
+        // `this` inside methods points to the Vue instance
+        // window.alert('Hello ' + this.item + '!')
+        // // `event` is the native DOM event
+        // if (event) {
+        //   event.preventDefault()
+        //   window.alert(item)
+        //   window.alert(event.target.tagName)
         // }
       },
-      updateDaybook (item, value) {
-        debugger
+      createDaybook (message) {
+        // debugger
         const self = this
-        // self.getCsrfToken()
-        let token = window.localStorage.getItem('csrfToken')
-        // let baseUrl + '/rest/session/token'
         let baseUrl = window.localStorage.getItem('baseUrl')
+        let token = window.localStorage.getItem('csrfToken')
+        // let urlToken = baseUrl + '/rest/session/token'
+        debugger
         let pass = window.sessionStorage.getItem('password')
         let name = window.localStorage.getItem('username')
+        let uid = window.localStorage.getItem('uid')
         let enc = window.btoa(name + ':' + pass)
         let encString = 'Basic ' + enc
+        // let nid = window.sessionStorage.getItem('nidDaybook')
         // console.log(encString)
-        let urlPunchIn = baseUrl + '/jsonapi/node/daybook_daybook_node?_format=api_json'
-        let punchInData = {
+        // let daybookUrl = self.baseUrl + '/jsonapi/node/daybook_daybook_node/' + uuidDaybook + '?_format=api_json'
+        // let daybookUrl = baseUrl + '/entity/comment?_format=hal_json'
+        let daybookUrl = baseUrl + '/jsonapi/node/daybook_daybook_node?_format=api_json'
+        let daybookData = {
           'data': {
             'type': 'node--daybook_daybook_node',
             'attributes': {
               'status': true,
               'title': name,
-              'body': ''
+              'body': message
             },
             'relationships': {
               'uid': {
                 'data': {
                   'type': 'user--user',
-                  'id': self.uid
+                  'id': uid
                 }
               }
             }
           }
         }
-        let fetchPunchIn = {
+        let daybookFetch = {
           method: 'POST',
+          // credentials: 'include',
           headers: {
             'Authorization': encString,
             'Content-Type': 'application/vnd.api+json',
             'Accept': 'application/vnd.api+json',
             'X-CSRF-Token': token
           },
-          body: JSON.stringify(punchInData)
+          body: JSON.stringify(daybookData)
         }
-        window.fetch(urlPunchIn, fetchPunchIn)
+        window.fetch(daybookUrl, daybookFetch)
           .then((response) => response.json())
           .then((data) => {
-            window.localStorage.setItem('hasPunchedIn', true)
-            window.sessionStorage.setItem('id', data.data.id)
-            window.sessionStorage.setItem('uuid', data.data.attributes.uuid)
-            window.sessionStorage.setItem('nid', data.data.attributes.nid)
+            debugger
+            window.localStorage.setItem('daybookCreated', true)
+            window.localStorage.setItem('idDaybook', data.data.id)
+            window.localStorage.setItem('uuidDaybook', data.data.attributes.uuid)
+            window.localStorage.setItem('nidDaybook', data.data.attributes.nid)
+            console.log(data)
+            self.$router.back()
+          })
+      .catch(function (error) {
+        console.debug(error)
+      })
+        // window.fetch(urlToken)
+        //   .then((response) => response.text())
+        //   .then((token) => {
+        //     debugger
+        //     let pass = window.sessionStorage.getItem('password')
+        //     let name = window.localStorage.getItem('username')
+        //     let uid = window.localStorage.getItem('uid')
+        //     let enc = window.btoa(name + ':' + pass)
+        //     let encString = 'Basic ' + enc
+        //     // let nid = window.sessionStorage.getItem('nidDaybook')
+        //     // console.log(encString)
+        //     // let daybookUrl = self.baseUrl + '/jsonapi/node/daybook_daybook_node/' + uuidDaybook + '?_format=api_json'
+        //     // let daybookUrl = baseUrl + '/entity/comment?_format=hal_json'
+        //     let daybookUrl = baseUrl + '/jsonapi/node/daybook_daybook_node?_format=api_json'
+        //     let daybookData = {
+        //       'data': {
+        //         'type': 'node--daybook_daybook_node',
+        //         'attributes': {
+        //           'status': true,
+        //           'title': name,
+        //           'body': message
+        //         },
+        //         'relationships': {
+        //           'uid': {
+        //             'data': {
+        //               'type': 'user--user',
+        //               'id': uid
+        //             }
+        //           }
+        //         }
+        //       }
+        //     }
+        //     let daybookFetch = {
+        //       method: 'POST',
+        //       // credentials: 'include',
+        //       headers: {
+        //         'Authorization': encString,
+        //         'Content-Type': 'application/vnd.api+json',
+        //         'Accept': 'application/vnd.api+json',
+        //         'X-CSRF-Token': token
+        //       },
+        //       body: JSON.stringify(daybookData)
+        //     }
+        //     window.fetch(daybookUrl, daybookFetch)
+        //       .then((response) => response.json())
+        //       .then((data) => {
+        //         debugger
+        //         window.localStorage.setItem('daybookCreated', true)
+        //         window.localStorage.setItem('idDaybook', data.data.id)
+        //         window.localStorage.setItem('uuidDaybook', data.data.attributes.uuid)
+        //         window.localStorage.setItem('nidDaybook', data.data.attributes.nid)
+        //         console.log(data)
+        //         self.$router.back()
+        //       })
+        //   .catch(function (error) {
+        //     console.debug(error)
+        //   })
+        //   })
+        //   .catch(function (error) {
+        //     console.debug(error)
+        //   })
+      },
+      updateDaybook (message) {
+        debugger
+        const self = this
+        // let token = self.getCsrfToken()
+        // let baseUrl + '/rest/session/token'
+        let baseUrl = window.localStorage.getItem('baseUrl')
+        let token = window.localStorage.getItem('csrfToken')
+        // let urlToken = baseUrl + '/rest/session/token'
+        debugger
+        let pass = window.sessionStorage.getItem('password')
+        let name = window.localStorage.getItem('username')
+        let enc = window.btoa(name + ':' + pass)
+        let encString = 'Basic ' + enc
+        let nid = window.sessionStorage.getItem('nidDaybook')
+        // console.log(encString)
+      // let daybookUrl = self.baseUrl + '/jsonapi/node/daybook_daybook_node/' + uuidDaybook + '?_format=api_json'
+        let daybookUrl = baseUrl + '/entity/comment?_format=hal_json'
+        let daybookUrlRelation = JSON.stringify(baseUrl + '/rest/relation/comment/comment/entity_id')
+        let daybookData = {
+          'data': {
+            '_links': {
+              'type': {'href': baseUrl + '/rest/type/comment/comment'},
+              [daybookUrlRelation]: {'href': baseUrl + '/rest/type/comment/comment/node/' + nid}
+            },
+            'entity_id': [{'target_id': nid}],
+            'entity_type': [{'value': 'node'}],
+            'comment_type': [{'target_id': 'comment'}],
+            'subject': [{'value': 'Goodbye World'}],
+            'name': [{'value': name}],
+            'comment_body': [
+              {'value': message}
+            ]
+          }
+        }
+        let daybookFetch = {
+          method: 'PATCH',
+          body: JSON.stringify(daybookData),
+          credentials: 'include',
+          header: {
+            'Authorization': encString,
+            'Content-Type': 'application/hal+json',
+            'Accept': 'application/json',
+            'X-CSRF-Token': token,
+            'Access-Control-Allow-Credentials': 'http://localhost:8080'
+          }
+        }
+        window.fetch(daybookUrl, daybookFetch)
+          .then((response) => response.json())
+          .then((data) => {
+            window.localStorage.setItem('daybookCreated', true)
+            // window.localStorage.setItem('idDaybook', data.data.id)
+            // window.localStorage.setItem('uuidDaybook', data.data.attributes.uuid)
+            // window.localStorage.setItem('nidDaybook', data.data.attributes.nid)
             debugger
             console.log(data)
             self.$router.back()
@@ -281,62 +233,80 @@
       .catch(function (error) {
         console.debug(error)
       })
+// window.fetch(urlToken)
+        //   .then((response) => response.text())
+        //   .then((token) => {
+        //     debugger
+        //     let pass = window.sessionStorage.getItem('password')
+        //     let name = window.localStorage.getItem('username')
+        //     let enc = window.btoa(name + ':' + pass)
+        //     let encString = 'Basic ' + enc
+        //     let nid = window.sessionStorage.getItem('nidDaybook')
+        //     // console.log(encString)
+        //   // let daybookUrl = self.baseUrl + '/jsonapi/node/daybook_daybook_node/' + uuidDaybook + '?_format=api_json'
+        //     let daybookUrl = baseUrl + '/entity/comment?_format=hal_json'
+        //     let daybookUrlRelation = JSON.stringify(baseUrl + '/rest/relation/comment/comment/entity_id')
+        //     let daybookData = {
+        //       'data': {
+        //         '_links': {
+        //           'type': {'href': baseUrl + '/rest/type/comment/comment'},
+        //           [daybookUrlRelation]: {'href': baseUrl + '/rest/type/comment/comment/node/' + nid}
+        //         },
+        //         'entity_id': [{'target_id': nid}],
+        //         'entity_type': [{'value': 'node'}],
+        //         'comment_type': [{'target_id': 'comment'}],
+        //         'subject': [{'value': 'Goodbye World'}],
+        //         'name': [{'value': name}],
+        //         'comment_body': [
+        //           {'value': message}
+        //         ]
+        //       }
+        //     }
+        //     let daybookFetch = {
+        //       method: 'PATCH',
+        //       body: JSON.stringify(daybookData),
+        //       credentials: 'include',
+        //       header: {
+        //         'Authorization': encString,
+        //         'Content-Type': 'application/hal+json',
+        //         'Accept': 'application/json',
+        //         'X-CSRF-Token': token,
+        //         'Access-Control-Allow-Credentials': 'http://localhost:8080'
+        //       }
+        //     }
+        //     window.fetch(daybookUrl, daybookFetch)
+        //       .then((response) => response.json())
+        //       .then((data) => {
+        //         window.localStorage.setItem('daybookCreated', true)
+        //         window.localStorage.setItem('idDaybook', data.data.id)
+        //         window.localStorage.setItem('uuidDaybook', data.data.attributes.uuid)
+        //         window.localStorage.setItem('nidDaybook', data.data.attributes.nid)
+        //         debugger
+        //         console.log(data)
+        //         self.$router.back()
+        //       })
+        //   .catch(function (error) {
+        //     console.debug(error)
+        //   })
+        //   })
+        //  .catch(function (error) {
+        //    console.debug(error)
+        //  })
+      },
+      getCsrfToken: function () {
+        // const self = this
+        let baseUrl = window.localStorage.getItem('baseUrl')
+        let urlToken = baseUrl + '/rest/session/token'
+        window.fetch(urlToken)
+           .then((response) => response.json())
+           .then((data) => {
+             return data
+             // window.sessionStorage.setItem('csrfToken', data)
+           })
+       .catch(function (error) {
+         console.debug(error)
+       })
       }
-    //   onActionConfirmed() {
-    //     setTimeout(() => {
-    //       this.$refs.swipeButton.reset();
-    //     }, 1000)
-    // },
-      // var mySwiper = new Swiper('.swiper-container');
-      // mySwiper.on('slideChangeEnd',function(){ alert('sample alert');})
-      // var coldDrinks = drinks.map(function(drink) {
-      //   return ‘iced ’ + drink;
-      // });
     }
   }
 </script>
-<style scoped>
-  .alert {
-    background-color: lightgreen;
-    width:100%;
-    height: 30px;
-  }
-  .site-block {
-    color: red;
-  }
-  li {
-  margin: 8px 0;
-}
-
-  .odd {
-   color:white;
-   background:blue;
-  }
-
-  .even {
-   color:blue;
-   background: white;
-  }
-
-  .container {
-  margin-top:20px;
-  font-size: 20px;
-  font-family: 'Source Sans Pro', 'Helvetica Neue', Arial, sans-serif;
-  }
-  .row {
-    margin-bottom: 10px;
-  }  
-  #app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  margin-top: 60px;
-}
-.swipe-button {
-  width: 400px;
-  margin: 0 auto;
-  background-color: #17255A;
-  border: 1px solid #17255A;
-}
-</style>

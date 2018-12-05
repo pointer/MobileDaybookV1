@@ -233,6 +233,7 @@ export default {
       const incidentConfig = {
         method: 'POST',
         body: JSON.stringify(incidentData),
+        credentials: 'include',
         headers: {
           'Authorization': encString,
           'Content-Type': 'application/vnd.api+json',

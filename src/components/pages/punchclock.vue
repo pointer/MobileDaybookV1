@@ -146,13 +146,13 @@
      punchOut: function () {
        const self = this
        // let urlToken = self.baseUrl + '/rest/session/token'
-       self.getCsrfToken()
-       let token = window.localStorage.getItem('csrfToken')
+       let token = self.getCsrfToken()
+       // let token = window.localStorage.getItem('csrfToken')
        let enc = window.btoa(this.username + ':' + this.password)
        let encString = 'Basic ' + enc
        let uuid = window.sessionStorage.getItem('uuid')
-       let nid = window.sessionStorage.getItem('nid')
-       if (nid === null) nid = 881
+       // let nid = window.sessionStorage.getItem('nid')
+       // if (nid === null) nid = 881
        let urlPunchOut = self.baseUrl + '/jsonapi/node/daybook_punch_card_node/' + uuid + '?_format=api_json'
        let punchOutData = {
          'data': {
@@ -170,7 +170,7 @@
        let fetchPunchOut = {
          method: 'PATCH',
          body: JSON.stringify(punchOutData),
-         // credentials: 'include',
+         credentials: 'include',
          header: {
            'Authorization': encString,
            'Content-Type': 'application/vnd.api+json',
@@ -208,8 +208,8 @@
      punchIn: function () {
        debugger
        const self = this
-       // self.getCsrfToken()
-       let token = window.localStorage.getItem('csrfToken')
+       let token = self.getCsrfToken()
+       // let token = window.localStorage.getItem('csrfToken')
        // let baseUrl + '/rest/session/token'
        let baseUrl = window.localStorage.getItem('baseUrl')
        let pass = window.sessionStorage.getItem('password')
@@ -244,6 +244,7 @@
        }
        let fetchPunchIn = {
          method: 'POST',
+         credentials: 'include',
          headers: {
            'Authorization': encString,
            'Content-Type': 'application/vnd.api+json',
@@ -306,7 +307,8 @@
        window.fetch(urlToken)
           .then((response) => response.json())
           .then((data) => {
-            window.sessionStorage.setItem('csrfToken', data)
+            return data
+            // window.sessionStorage.setItem('csrfToken', data)
           })
       .catch(function (error) {
         console.debug(error)

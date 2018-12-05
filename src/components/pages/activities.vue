@@ -1,7 +1,7 @@
 <template>
   <f7-page>
     <!-- <vue-pull-refresh :on-refresh="onRefresh"></vue-pull-refresh> -->
-    <f7-navbar title="Activités" back-link="Back"></f7-navbar>
+    <f7-navbar title="" back-link=""></f7-navbar>
       <div class="page-content">
           <div class="content-block-title">Liste des Affectations</div>
             <div class="list-block accordion-list" >
@@ -83,6 +83,7 @@
           method: 'GET',
           dataType: 'json',
           // mode: 'no-cors',
+          credentials: 'include',
           headers: {
             // 'Authorization': JSON.stringify(encString),
             'Authorization': encString,

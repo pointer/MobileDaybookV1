@@ -4,9 +4,19 @@ export default [{
   name: 'about'
 },
 {
+  path: '/login/',
+  component: require('./components/pages/login.vue'),
+  name: 'login'
+},
+{
   path: '/activities/',
   component: require('./components/pages/activities.vue'),
   name: 'activities'
+},
+{
+  path: '/instructions/',
+  component: require('./components/pages/instructions.vue'),
+  name: 'instructions'
 },
 {
   path: '/punchclock/',
