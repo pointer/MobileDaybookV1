@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:versionCode="10000"
+    android:versionName="1.0.0"
+    android:hardwareAccelerated="true"
+    package="io.mobile.daybook">
+
+    <uses-sdk
+        android:minSdkVersion="19"
+        android:targetSdkVersion="27" />
+
+    <supports-screens
+        android:anyDensity="true"
+        android:smallScreens="true"
+        android:normalScreens="true"
+        android:largeScreens="true"
+        android:resizeable="true"
+        android:xlargeScreens="true" />
+
+    <uses-permission
+        android:name="android.permission.INTERNET" />
+
+    <uses-permission
+        android:name="android.permission.ACCESS_COARSE_LOCATION" />
+
+    <uses-permission
+        android:name="android.permission.ACCESS_FINE_LOCATION" />
+
+    <uses-feature
+        android:name="android.hardware.location.gps" />
+
+    <uses-permission
+        android:name="android.permission.VIBRATE" />
+
+    <application
+        android:label="@ref/0x7f030001"
+        android:icon="@ref/0x7f020000"
+        android:debuggable="true"
+        android:hardwareAccelerated="true"
+        android:supportsRtl="true">
+
+        <activity
+            android:theme="@ref/0x01030129"
+            android:label="@ref/0x7f030000"
+            android:name="io.mobile.daybook"
+            android:launchMode="1"
+            android:configChanges="0x4b4"
+            android:windowSoftInputMode="0x10">
+
+            <intent-filter
+                android:label="@ref/0x7f030002">
+
+                <action
+                    android:name="android.intent.action.MAIN" />
+
+                <category
+                    android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+    </application>
+</manifest>

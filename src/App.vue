@@ -216,7 +216,7 @@ export default {
     },
     formatTodos: function (todos) {
       const self = this
-      debugger
+      // debugger
       // let todoList = JSON.parse(todos)
       // console.log(todos)
       for (let todo in todos) {

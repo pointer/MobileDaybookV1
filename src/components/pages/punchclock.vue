@@ -1,6 +1,6 @@
 <template>
 <f7-page name="punchclock">
-  <f7-navbar  v-bind:title="navTitle"  back-link="Retour" sliding>
+  <f7-navbar  v-bind:title="navTitle"  back-link="" sliding>
 <!-- <f7-nav-right>
   </f7-nav-right> -->
   </f7-navbar>
@@ -59,7 +59,7 @@
        lng: '',
        punchDate: '',
        site: '',
-       hasPunchedIn: false,
+       hasPunchedIn: Boolean(),
        navTitle: 'Prise de service',
        baseUrl: '',
        token: '',
@@ -146,70 +146,80 @@
      punchOut: function () {
        const self = this
        // let urlToken = self.baseUrl + '/rest/session/token'
-       let token = self.getCsrfToken()
+       // let token = self.getCsrfToken()
+       let baseUrl = window.localStorage.getItem('baseUrl')
+       let urlToken = baseUrl + '/rest/session/token'
        // let token = window.localStorage.getItem('csrfToken')
-       let enc = window.btoa(this.username + ':' + this.password)
-       let encString = 'Basic ' + enc
-       let uuid = window.sessionStorage.getItem('uuid')
-       // let nid = window.sessionStorage.getItem('nid')
-       // if (nid === null) nid = 881
-       let urlPunchOut = self.baseUrl + '/jsonapi/node/daybook_punch_card_node/' + uuid + '?_format=api_json'
-       let punchOutData = {
-         'data': {
-           'type': 'node--daybook_punch_card_node',
-           'id': uuid,
-           'attributes': {
-             'field_dbk_punch_end': self.punchDate,
-             'field_dbk_punch_geo_end': {
-               'lat': self.lat,
-               'lng': self.lng
-             }
-           }
-         }
-       }
-       let fetchPunchOut = {
-         method: 'PATCH',
-         body: JSON.stringify(punchOutData),
-         credentials: 'include',
-         header: {
-           'Authorization': encString,
-           'Content-Type': 'application/vnd.api+json',
-           'Accept': 'application/vnd.api+json',
-           'X-CSRF-Token': token,
-           'Access-Control-Allow-Credentials': 'http://localhost:8080'
-         }
-       }
-        // 'Cache-Control': 'no-cache, no-store',
-       debugger
-       return new Promise((resolve, reject) => {
-         window.fetch(urlPunchOut, fetchPunchOut)
-           .then(response => response.json())
-           .then(responseText => {
-             debugger
-             let resp = typeof responseText === 'string' ? JSON.parse(responseText) : responseText
-             console.log(resp)
-             window.localStorage.setItem('hasPunchedIn', false)
-             window.sessionStorage.setItem('id', '')
-             window.sessionStorage.setItem('uuid', '')
-             window.sessionStorage.setItem('nid', '')
-             self.$router.back()
-             resolve(resp)
-           })
-           .catch(function (error) {
-             debugger
-             console.debug(error)
-             reject(error)
-           })
-       }).catch(error => {
-         debugger
+       window.fetch(urlToken)
+        .then((response) => response.text())
+        .then((token) => {
+          console.log(token)
+          let enc = window.btoa(this.username + ':' + this.password)
+          let encString = 'Basic ' + enc
+          let uuid = window.sessionStorage.getItem('uuid')
+          let uid = window.localStorage.getItem('uid')
+          let urlPunchOut = self.baseUrl + '/jsonapi/node/daybook_punch_card_node/' + uuid + '?_format=api_json'
+          let punchOutData = {
+            'data': {
+              'type': 'node--daybook_punch_card_node',
+              'id': uuid,
+              'attributes': {
+                'status': true,
+                'title': self.username,
+                'field_dbk_punch_end': self.punchDate,
+                'field_dbk_punch_geo_end': {
+                  'lat': self.lat,
+                  'lng': self.lng
+                }
+              },
+              'relationships': {
+                'uid': {
+                  'data': {
+                    'type': 'user--user',
+                    'id': uid
+                  }
+                }
+              }
+            }
+          }
+          let fetchPunchOut = {
+            method: 'PATCH',
+            body: JSON.stringify(punchOutData),
+            header: {
+              'X-CSRF-Token': JSON.stringify(token),
+              'Authorization': encString,
+              'Content-Type': 'application/vnd.api+json',
+              'Accept': 'application/vnd.api+json'
+            }
+          }
+          window.fetch(urlPunchOut, fetchPunchOut)
+            .then(function (response) {
+              if (!response.ok) {
+                throw Error(response.statusText)
+              }
+              return response.json()
+            }).then(function (data) {
+              window.localStorage.setItem('hasPunchedIn', false)
+              window.sessionStorage.setItem('id', '')
+              window.sessionStorage.setItem('uuid', '')
+              window.sessionStorage.setItem('nid', '')
+              // debugger
+              // console.log(data)
+              self.$router.back()
+            }).catch(function (error) {
+              console.log(error)
+            })
+        })
+       .catch(function (error) {
          console.debug(error)
        })
      },
      punchIn: function () {
-       debugger
+       // debugger
        const self = this
-       let token = self.getCsrfToken()
-       // let token = window.localStorage.getItem('csrfToken')
+       // let token = self.getCsrfToken()
+       let token = window.localStorage.getItem('csrfToken')
+       let uid = window.localStorage.getItem('uid')
        // let baseUrl + '/rest/session/token'
        let baseUrl = window.localStorage.getItem('baseUrl')
        let pass = window.sessionStorage.getItem('password')
@@ -220,7 +230,7 @@
        let urlPunchIn = baseUrl + '/jsonapi/node/daybook_punch_card_node?_format=api_json'
        let punchInData = {
          'data': {
-           'type': 'daybook_punch_card_node',
+           'type': 'node--daybook_punch_card_node',
            'attributes': {
              'status': true,
              'title': self.username,
@@ -236,15 +246,19 @@
              'uid': {
                'data': {
                  'type': 'user--user',
-                 'id': self.uid
+                 'id': uid
                }
              }
            }
          }
        }
+          //  'relationships': {
+          //    'author': {
+          //      'data': { 'type': 'people', 'id': uid }
+          //    }
+          //  }
        let fetchPunchIn = {
          method: 'POST',
-         credentials: 'include',
          headers: {
            'Authorization': encString,
            'Content-Type': 'application/vnd.api+json',
@@ -254,19 +268,36 @@
          body: JSON.stringify(punchInData)
        }
        window.fetch(urlPunchIn, fetchPunchIn)
-          .then((response) => response.json())
-          .then((data) => {
-            window.localStorage.setItem('hasPunchedIn', true)
-            window.sessionStorage.setItem('id', data.data.id)
-            window.sessionStorage.setItem('uuid', data.data.attributes.uuid)
-            window.sessionStorage.setItem('nid', data.data.attributes.nid)
-            debugger
-            console.log(data)
-            self.$router.back()
-          })
-      .catch(function (error) {
-        console.debug(error)
-      })
+        .then(function (response) {
+          if (!response.ok) {
+            throw Error(response.statusText)
+          }
+          return response.json()
+        }).then(function (data) {
+          window.localStorage.setItem('hasPunchedIn', true)
+          window.sessionStorage.setItem('id', data.data.id)
+          window.sessionStorage.setItem('uuid', data.data.attributes.uuid)
+          window.sessionStorage.setItem('nid', data.data.attributes.nid)
+          // debugger
+          console.log(data)
+          self.$router.back()
+        }).catch(function (error) {
+          console.log(error)
+        })
+      //  window.fetch(urlPunchIn, fetchPunchIn)
+      //     .then((response) => response.json())
+      //     .then((data) => {
+      //       window.localStorage.setItem('hasPunchedIn', true)
+      //       window.sessionStorage.setItem('id', data.data.id)
+      //       window.sessionStorage.setItem('uuid', data.data.attributes.uuid)
+      //       window.sessionStorage.setItem('nid', data.data.attributes.nid)
+      //       // debugger
+      //       console.log(data)
+      //       self.$router.back()
+      //     })
+      // .catch(function (error) {
+      //   console.debug(error)
+      // })
      },
      showData: function (coords) {
        // debugger

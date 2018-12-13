@@ -59,7 +59,7 @@
           }
         }],
         hasOwnProperty: Object.prototype.hasOwnProperty,
-        daybookCreated: false
+        daybookCreated: Boolean()
       }
     },
     swipeout: {
@@ -74,19 +74,20 @@
       // this.tasks = JSON.parse(this.sessionStorage.getItem('tasks'))
       // debugger
       // if (!Array.isArray(this.tasks) || !this.tasks.length) {
-      if (!this.isEmpty(this.tasks)) {
-        this.tasks = JSON.parse(window.localStorage.getItem('tasks'))
-      } else {
+      // if (!this.isEmpty(this.tasks)) {
+      this.tasks = JSON.parse(window.localStorage.getItem('tasks'))
+      // } else {
+      if (this.isEmpty(this.tasks)) {
         this.onRefresh()
       }
     },
     mounted () {
       // debugger
-      if (!this.isEmpty(this.tasks)) {
-        this.tasks = JSON.parse(window.localStorage.getItem('tasks'))
-      } else {
-        this.onRefresh()
-      }
+      // if (!this.isEmpty(this.tasks)) {
+      //   this.tasks = JSON.parse(window.localStorage.getItem('tasks'))
+      // } else {
+      //   this.onRefresh()
+      // }
     },
     components: {
       // f7Navbar,
@@ -109,31 +110,61 @@
       onRefresh: function () {
         const self = this
         let baseUrl = window.localStorage.getItem('baseUrl')
-        let username = window.localStorage.getItem('username')
-        let uid = window.localStorage.getItem('uid')
-        let password = window.sessionStorage.getItem('password')
-        let enc = window.btoa(username + ':' + password)
-        let encString = 'Basic ' + enc
-        let token = window.localStorage.getItem('csrfToken')
-        let urlTasks = baseUrl + '/api/tasks/' + uid + '?_format=hal_json'
-        let fetchTasks = {
-          method: 'GET',
-          credentials: 'include',
-          headers: {
-            'Authorization': encString,
-            'X-CSRF-Token': token,
-            'Accept': 'application/hal+json',
-            'Content-Type': 'application/hal+json'
+        // let username = window.localStorage.getItem('username')
+        // let uid = window.localStorage.getItem('uid')
+        // let password = window.sessionStorage.getItem('password')
+        // let enc = window.btoa(username + ':' + password)
+        // let encString = 'Basic ' + enc
+        // let token = window.localStorage.getItem('csrfToken')
+        // let urlTasks = baseUrl + '/api/tasks/' + uid + '?_format=hal_json'
+        // let fetchTasks = {
+        //   method: 'GET',
+        //   headers: {
+        //     'Authorization': encString,
+        //     'X-CSRF-Token': token,
+        //     'Accept': 'application/hal+json',
+        //     'Content-Type': 'application/hal+json'
+        //   }
+        // }
+        let urlToken = baseUrl + '/rest/session/token'
+        window.fetch(urlToken)
+        .then(function (response) {
+          if (!response.ok) {
+            throw Error(response.statusText)
           }
-        }
-        window.fetch(urlTasks, fetchTasks)
-          .then(response => response.json())
-          .then(data => {
+          return response.text()
+        }).then(function (token) {
+          // return self.saveDaybookData(data)
+          let username = window.localStorage.getItem('username')
+          let uid = window.localStorage.getItem('uid')
+          let password = window.sessionStorage.getItem('password')
+          let enc = window.btoa(username + ':' + password)
+          let encString = 'Basic ' + enc
+          // let token = window.localStorage.getItem('csrfToken')
+          let urlTasks = baseUrl + '/api/tasks/' + uid + '?_format=hal_json'
+          let fetchTasks = {
+            method: 'GET',
+            headers: {
+              'Authorization': encString,
+              'X-CSRF-Token': token,
+              'Accept': 'application/hal+json',
+              'Content-Type': 'application/hal+json'
+            }
+          }
+          window.fetch(urlTasks, fetchTasks)
+          .then(function (response) {
+            if (!response.ok) {
+              throw Error(response.statusText)
+            }
+            return response.json()
+          }).then(function (data) {
             return self.saveDaybookData(data)
-          .then(err => Promise.reject(err))
           }).catch(function (error) {
-            console.debug(error)
+            console.log(error)
           })
+        }).catch(function (error) {
+          console.log(error)
+        })
       },
       saveDaybookData (tasks) {
         // const self = this
@@ -144,7 +175,7 @@
         // let taskItem = ''
         let matches = []
         // let taskMap = new Map()
-        debugger
+        // debugger
         let taskTitle = []
         let tempTasks = []
         try {
@@ -171,7 +202,7 @@
               // console.log(self.tasks)
             }
           }
-          debugger
+          // debugger
           // console.log(JSON.stringify(tempTasks))
           // JSON.stringify(tasks)
           window.localStorage.setItem('tasks', JSON.stringify(tempTasks))

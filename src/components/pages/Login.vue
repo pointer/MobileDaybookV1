@@ -79,14 +79,14 @@
         self.loginScreenTitle = (this.isLoggedIn === true) ? 'Deconnection' : 'Connection'
       },
       signInOut: function () {
-        debugger
+        // debugger
         const self = this
         // const app = self.$f7
         // const router = self.$f7router
         // app.dialog.alert(`Username: ${self.username}<br>Password: ${self.password}`, () => {
         //   router.back()
         // })
-        if (self.isLoggedIn === true) {
+        if (self.isLoggedIn === 'true') {
           return self.signOut()
         }
         return self.signIn()
@@ -95,18 +95,33 @@
         // debugger
         const self = this
         // const app = self.$f7
-        // const router = self.$f7router
+          // const router = self.$f7router
+        self.baseUrl = window.localStorage.getItem('baseUrl')
+        if (self.baseUrl === '') {
+          self.baseUrl = 'http://smartstreamzryubnfhac.devcloud.acquia-sites.com'
+        }
+        // self.username = window.localStorage.getItem('username')
+        // self.uid = window.localStorage.getItem('uid')
+        // self.isLoggedIn = window.sessionStorage.getItem('isLoggedIn')
+        // self.password = window.sessionStorage.getItem('password')
         let urlLogin = self.baseUrl + '/user/login?_format=json'
         let fetchData = {
           method: 'POST',
           body: JSON.stringify({name: self.username, pass: self.password}),
-          form_id: 'user_login_form',
-          // crossdomain: true,
+          // form_id: 'user_login_form',
+          crossdomain: true,
           dataType: 'json',
           headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
           }
         }
+// if (response.status === 302) {
+//       this.$router.push(`/teachers/${id}`);
+//     }
+        // window.alert(urlLogin)
+        // window.alert(fetchData)
+        // console.log(fetchData)
         window.fetch(urlLogin, fetchData)
         .then((response) => response.json())
         .then((data) => {
@@ -114,7 +129,7 @@
           // let uid = data.current_user.uid
           window.localStorage.setItem('uid', data.current_user.uid)
           window.localStorage.setItem('username', data.current_user.name)
-          window.sessionStorage.setItem('password', this.password)
+          window.sessionStorage.setItem('password', self.password)
           window.localStorage.setItem('csrfToken', data.csrf_token)
           window.localStorage.setItem('logoutToken', data.logout_token)
           window.sessionStorage.setItem('isLoggedIn', true)
@@ -122,6 +137,7 @@
           self.loginScreenTitle = 'Deconnection'
           self.setTitles(true)
           self.$router.back()
+          console.log(urlLogin)
         })
           .catch(function (error) {
             console.debug(error)
@@ -136,11 +152,12 @@
         let name = window.localStorage.getItem('username')
         let enc = window.btoa(name + ':' + pass)
         let encString = 'Basic ' + enc
-        let logout = window.localStorage.getItem('logoutToken')
+        let logoutToken = window.localStorage.getItem('logoutToken')
         let csrfToken = window.localStorage.getItem('csrfToken')
         // debugger
         // let urlLogout = 'http://localhost/user/logout?_format=json'
-        let urlLogout = self.baseUrl + '/user/logout?csrf_token=' + csrfToken
+        let urlLogout = self.baseUrl + '/user/logout'
+        // ?csrf_token=' + csrfToken
         // &
         let fetchData = {
           method: 'POST',
@@ -148,8 +165,9 @@
           headers: {
             'Content-Type': 'application/json',
             'csrf_token': csrfToken,
-            'logout_token': logout,
-            'Authorization': encString
+            'logout_token': logoutToken,
+            'Authorization': encString,
+            'Accept': 'application/json, application/hal_json'
           }
         }
         window.fetch(urlLogout, fetchData)
@@ -176,7 +194,7 @@
       },
       formatTodos: function (todos) {
         const self = this
-        debugger
+        // debugger
         // let todoList = JSON.parse(todos)
         // console.log(todos)
         for (let todo in todos) {

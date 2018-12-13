@@ -229,7 +229,7 @@ export default {
       }
       let bodyToPost = JSON.stringify(incidentData)
       console.log(bodyToPost)
-      debugger
+      // debugger
       const incidentConfig = {
         method: 'POST',
         body: JSON.stringify(incidentData),
@@ -258,14 +258,14 @@ export default {
         img.addEventListener('error', () => {
           reject(new Error(`Failed to load image's URL: ${url}`))
         })
-        debugger
+        // debugger
         img.src = url
       })
     },
     previewImage: function (event) {
       // Reference to the DOM input element
       let input = event.target
-      debugger
+      // debugger
       // Ensure that you have a file before attempting to read it
       if (input.files && input.files[0]) {
            // create a new FileReader to read this image and convert to base64 format
@@ -274,7 +274,7 @@ export default {
         reader.onload = (event) => {
             // Note: arrow function used here, so that "this.imageData" refers to the imageData of Vue component
             // Read image as base64 and set to imageData
-          debugger
+          // debugger
           this.imageData = event.target.result
         }
         // Start the reader job - read file as a data url (base64 format)
@@ -284,7 +284,7 @@ export default {
     },
     getImageDataURL (url, success, error) {
       let data, canvas, ctx
-      debugger
+      // debugger
       let img = new window.Image()
       // img.onload = function () {
       // Create the canvas element.
@@ -305,14 +305,14 @@ export default {
       // }
       // Load image URL.
       try {
-        debugger
+        // debugger
         img.src = url
       } catch (e) {
         error(e)
       }
     },
     onSuccess (e) {
-      debugger
+      // debugger
       document.body.appendChild(e.image)
       window.alert(e.data)
     },

@@ -2,7 +2,7 @@
       <!-- <f7-view>
         <f7-pages> -->
   <f7-page parameters-screen>
-    <f7-navbar title="Parametres" back-link="Retour" sliding></f7-navbar>
+    <f7-navbar title="" back-link="" sliding></f7-navbar>
     <!-- <f7-parameters-screen id="parameters-screen"> -->
 <div class="block-title"><h4>Parametres de connexion</h4></div>
 <f7-list form id="parameters-screen-form">
@@ -55,6 +55,43 @@
         </div>
       <!-- </div> -->
     </f7-list-item>   
+    <f7-list-item class="item-content item-input item-input-with-info">
+        <div class="item-input-wrap">
+          <f7-label>isLoggedIn</f7-label>
+          <input type="text" v-model="isLoggedIn" placeholder="is logged in">
+          {{isLoggedIn}}
+          <span class="input-clear-button"></span>
+          <div class="item-input-info"></div>
+        </div>
+    </f7-list-item>   
+    <f7-list-item class="item-content item-input item-input-with-info">
+        <div class="item-input-wrap">
+          <f7-label>hasPunchedIn</f7-label>
+          <input type="text" v-model="hasPunchedIn" placeholder="has Punched In">
+          {{hasPunchedIn}}
+          <span class="input-clear-button"></span>
+          <div class="item-input-info"></div>
+        </div>
+    </f7-list-item>       
+    <f7-list-item class="item-content item-input item-input-with-info">
+        <div class="item-input-wrap">
+          <f7-label>daybookCreated</f7-label>
+          <input type="text" v-model="daybookCreated" placeholder="daybookCreated">
+          {{daybookCreated}}
+          <span class="input-clear-button"></span>
+          <div class="item-input-info"></div>
+        </div>
+    </f7-list-item>
+ 
+    <f7-list-item class="item-content item-input item-input-with-info">
+        <div class="item-input-wrap">
+          <f7-label>User</f7-label>
+          <input type="text" v-model="username" placeholder="username">
+          {{username}} &nbsp; {{uid}}
+          <span class="input-clear-button"></span>
+          <div class="item-input-info"></div>
+        </div>
+    </f7-list-item>       
  
 <!-- </div>  -->
             <!-- <f7-list-item>
@@ -84,7 +121,12 @@ export default {
       userEmail: null,
       baseUrl: null,
       incident: null,
-      dayBook: null
+      dayBook: null,
+      isLoggedIn: null,
+      hasPunchedIn: null,
+      daybookCreated: null,
+      username: '',
+      uid: ''
     }
   },
   created () {
@@ -94,6 +136,12 @@ export default {
     this.userEmail = window.localStorage.getItem('userEmail')
     this.incident = window.localStorage.getItem('incident')
     this.dayBook = window.localStorage.getItem('dayBook')
+    this.isLoggedIn = window.localStorage.getItem('isLoggedIn')
+    this.hasPunchedIn = window.localStorage.getItem('hasPunchedIn')
+    this.daybookCreated = window.localStorage.getItem('daybookCreated')
+    this.username = window.localStorage.getItem('username')
+    this.uid = window.localStorage.getItem('uid')
+
     // this.setTitles()
   },
   methods: {
@@ -105,6 +153,11 @@ export default {
       window.localStorage.setItem('userEmail', self.userEmail)
       window.localStorage.setItem('incident', self.incident)
       window.localStorage.setItem('dayBook', self.dayBook)
+      window.sessionStorage.setItem('isLoggedIn', self.isLoggedIn)
+      window.localStorage.setItem('hasPunchedIn', self.hasPunchedIn)
+      window.localStorage.setItem('daybookCreated', self.daybookCreated)
+      window.localStorage.setItem('username', self.username)
+      window.localStorage.setItem('uid', self.uid)
       // ProgressIndicator.*
       // window.plugins.ProgressIndicator.showSimple(true)
       // console.log(self.baseUrl)

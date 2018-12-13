@@ -25,7 +25,6 @@
                               <h4 id="obs-label">Observations</h4>
                               <p>{{todo.assign_observations}}</p>
                             </section>                                      
-                            
                         </div>
                       </div>
                   </li>
@@ -72,24 +71,27 @@
         let username = window.localStorage.getItem('username')
         let uid = window.localStorage.getItem('uid')
         let password = window.sessionStorage.getItem('password')
+        if (password === '') {
+          password = 'agent'
+        }
         let enc = window.btoa(username + ':' + password)
         let encString = 'Basic ' + enc
         let token = window.sessionStorage.getItem('csrfToken')
         // let urlActivities = 'http://localhost/api/todos/9?_format=json'
         // console.log(self.baseUrl)
-        let urlActivities = baseUrl + '/api/assign/' + uid + '?_format=json'
-        // console.log(urlActivities)
+        let urlActivities = baseUrl + '/api/assign/' + uid + '?_format=hal_json'
+        console.log(urlActivities)
         let fetchActivities = {
           method: 'GET',
           dataType: 'json',
           // mode: 'no-cors',
-          credentials: 'include',
+          // credentials: 'include',
           headers: {
             // 'Authorization': JSON.stringify(encString),
             'Authorization': encString,
             'X-CSRF-Token': token,
-            'Accept': 'application/json',
-            'Content-Type': 'application/json'
+            'Accept': 'application/hal+json',
+            'Content-Type': 'application/hal+json'
           }
         }
         window.fetch(urlActivities, fetchActivities)
@@ -107,7 +109,7 @@
       },
       formatTodos: function (todos) {
         const self = this
-        debugger
+        // debugger
         todos = self.removeDuplicates(todos, 'assign_title')
         for (let todo in todos) {
           if (todos.hasOwnProperty(todo)) {
@@ -125,16 +127,16 @@
             todos[todo].assign_end_shift_time = endTime
             todos[todo].assign_end_shift = todos[todo].assign_end_shift_date + '-' + endTime
             // todos[todo].assign_tasks = todos[todo].assign_tasks_description.replace(/\\r\\n\\t/g, '')
-            let tasks = todos[todo].assign_tasks_description.split('\n\t')
-            // console.log(tasks)
-            for (let task in tasks) {
-              if (tasks.hasOwnProperty(task)) {
-                tasks[task] = tasks[task].replace(/[^\x20-\x7E]/gmi, '')
-                tasks[task] = tasks[task].replace(/<\/?[^>]+(>|$)/g, '')
-                tasks[task] = tasks[task].replace(/&nbsp;/gi, '')
-              }
-            }
-            todos[todo].assign_tasks_description = tasks
+            // let tasks = todos[todo].assign_tasks_description.split('\n\t')
+            // // console.log(tasks)
+            // for (let task in tasks) {
+            //   if (tasks.hasOwnProperty(task)) {
+            //     tasks[task] = tasks[task].replace(/[^\x20-\x7E]/gmi, '')
+            //     tasks[task] = tasks[task].replace(/<\/?[^>]+(>|$)/g, '')
+            //     tasks[task] = tasks[task].replace(/&nbsp;/gi, '')
+            //   }
+            // }
+            // todos[todo].assign_tasks_description = tasks
             self.shiftStart = todos[todo].assign_start_shift
             self.site = todos[todo].assign_site
             self.title = todos[todo].assign_title
@@ -142,7 +144,7 @@
         }
         self.todos = JSON.stringify(todos)
         window.sessionStorage.setItem('todos', self.todos)
-        // console.log(self.todos)
+        console.log(self.todos)
       },
     /*
     beep: function () {
@@ -169,6 +171,25 @@
         return newArray
       }
     }
+    // function addEvent()
+    //   {
+    //   // var cal = new calendarPlugin();
+    //   let cal = window.plugins.calendarPlugin
+    //   console.log("creating event");
+    //   let title= "My Sample Appt";
+    //   let location = "Los Angeles";
+    //   let notes = "This is a sample note";
+    //   let startDate = "2012-04-16 09:30:00";
+    //   let endDate = "2012-04-16 12:30:00";
+    //   let errCall = function(theerror) {
+    //   console.log("Error occurred - " + theerror);
+    //   }
+    //   let succCall = function(themessage) {
+    //   console.log("Success - " + themessage);
+    //   }
+    //   cal.createEvent(title,location,notes,startDate,endDate, succCall, errCall);
+    //   return false;
+    //   }
   }
 </script>
 <style scoped>
