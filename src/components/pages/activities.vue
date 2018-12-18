@@ -1,9 +1,15 @@
 <template>
   <f7-page>
     <!-- <vue-pull-refresh :on-refresh="onRefresh"></vue-pull-refresh> -->
-    <f7-navbar title="" back-link=""></f7-navbar>
-      <div class="page-content">
-          <div class="content-block-title">Liste des Affectations</div>
+    <f7-navbar  back-link="" sliding>
+      <f7-nav-center sliding style="text-align:center">Mobile Daybook</f7-nav-center>
+      <!-- &nbsp; &nbsp; &nbsp;  -->
+      <f7-nav-right>
+      <f7-link icon="icon-bars" open-panel="right"></f7-link>
+      </f7-nav-right>
+    </f7-navbar>
+      <!-- <div class="page-content"> -->
+          <div class="block-title" style="text-align:center"><h4>Liste des Affectations</h4></div>
             <div class="list-block accordion-list" >
                 <ul>
                   <li class="accordion-item" v-for="todo in todos" :key="todo.assign_title">

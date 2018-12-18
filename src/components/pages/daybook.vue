@@ -1,9 +1,19 @@
 <template>
     <f7-page name="daybook">
-    <f7-navbar  v-bind:title="navTitle"  back-link="" sliding>   </f7-navbar>
+    <!-- <f7-navbar   back-link="" sliding>   </f7-navbar> -->
+    <f7-navbar  back-link="" sliding>
+      <f7-nav-center sliding style="text-align:center">Mobile Daybook</f7-nav-center>
+      <!-- &nbsp; &nbsp; &nbsp;  -->
+      <f7-nav-right>
+      <f7-link icon="icon-bars" open-panel="right"></f7-link>
+      </f7-nav-right>
+    </f7-navbar>
+  <!-- <div class="page-content"> -->
+    <div class="block-title" style="text-align:center"><h4>Main courante</h4></div>    
         <f7-list form>
           <f7-list-item>
-          <f7-input type="text" :value="subject" @input="subject = $event.target.value" placeholder="sujet du message" clear-button></f7-input>
+          <!-- <f7-input type="text" v-model="subject" placeholder="sujet du message" clear-button></f7-input> -->
+          <input type="text" :value="subject" @input="subject = $event.target.value" placeholder="sujet du message" clear-button>
           </f7-list-item>
             <f7-list-item>
                     <textarea v-text="message" v-model="message" placeholder="message main courante"></textarea>
@@ -12,6 +22,7 @@
             <f7-list-button @click= "sendDaybook()">Envoyer</f7-list-button>
             <!-- <f7-block-footer>Some text about login information.<br>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</f7-block-footer> -->
         </f7-list>
+        <!-- </div> -->
     </f7-page>
 </template>
 
@@ -27,7 +38,7 @@
     },
     methods: {
       sendDaybook: function () {
-        // debugger
+        debugger
         const self = this
         // console.log(value)
         // console.log($event.target.checked)
@@ -44,7 +55,7 @@
         // }
       },
       createDaybook (subject, message) {
-        // debugger
+        debugger
         const self = this
         let baseUrl = window.localStorage.getItem('baseUrl')
         let token = window.localStorage.getItem('csrfToken')
@@ -65,7 +76,7 @@
             'type': 'node--daybook_daybook_node',
             'attributes': {
               'status': true,
-              'title': name,
+              'title': subject,
               'body': message
             },
             'relationships': {
@@ -90,25 +101,29 @@
           body: JSON.stringify(daybookData)
         }
         window.fetch(daybookUrl, daybookFetch)
-          .then((response) => response.json())
-          .then((data) => {
+         .then(function (response) {
+           if (!response.ok) {
+             throw Error(response.statusText)
+           }
+           return response.json()
+         }).then(function (data) {
             // debugger
-            window.localStorage.setItem('daybookCreated', true)
-            window.localStorage.setItem('idDaybook', data.data.id)
-            window.localStorage.setItem('uuidDaybook', data.data.attributes.uuid)
-            window.localStorage.setItem('nidDaybook', data.data.attributes.nid)
-            console.log(data)
-            self.$router.back()
-          })
+           window.localStorage.setItem('daybookCreated', true)
+           window.localStorage.setItem('idDaybook', data.data.id)
+           window.localStorage.setItem('uuidDaybook', data.data.attributes.uuid)
+           window.localStorage.setItem('nidDaybook', data.data.attributes.nid)
+           console.log(data)
+           self.$router.back()
+         })
       .catch(function (error) {
         console.debug(error)
       })
       },
       createDaybookComment (subject, message) {
-        // debugger
+        debugger
         const self = this
         let baseUrl = window.localStorage.getItem('baseUrl')
-        let urlToken = baseUrl + '/rest/session/token'
+        // let urlToken = baseUrl + '/rest/session/token'
         // let pass = window.sessionStorage.getItem('password')
         // let name = window.localStorage.getItem('username')
         // let uid = window.localStorage.getItem('uid')
@@ -121,65 +136,93 @@
         // let daybookUrl = baseUrl + '/entity/comment?_format=hal_json'
         // articles/1/relationships/comments
         // let daybookUrlRelation = baseUrl + '/rest/relation/comment/comment/entity_id'
-        window.fetch(urlToken)
-          .then((response) => response.text())
-          .then((token) => {
-            let pass = window.sessionStorage.getItem('password')
-            let name = window.localStorage.getItem('username')
-            let enc = window.btoa(name + ':' + pass)
-            let encString = 'Basic ' + enc
-            let nid = window.sessionStorage.getItem('nidDaybook')
-            let uid = window.localStorage.getItem('uid')
-            // console.log(encString)
-          // let daybookUrl = self.baseUrl + '/jsonapi/node/daybook_daybook_node/' + uuidDaybook + '?_format=api_json'
-            let daybookUrl = baseUrl + '/entity/comment?_format=hal_json'
-            let daybookUrlRelation = JSON.stringify(baseUrl + '/rest/relation/comment/comment/entity_id')
-            let daybookData = {
-              '_links': {
-                'type': {'href': baseUrl + '/rest/type/comment/comment'},
-                [daybookUrlRelation]: {'href': baseUrl + '/rest/type/comment/comment/node/' + nid}
+        // window.fetch(urlToken)
+        //   .then((response) => response.text())
+        //   .then((token) => {
+        let token = window.localStorage.getItem('csrfToken')
+        let pass = window.sessionStorage.getItem('password')
+        let name = window.localStorage.getItem('username')
+        let enc = window.btoa(name + ':' + pass)
+        let encString = 'Basic ' + enc
+        let nid = window.localStorage.getItem('nidDaybook')
+        let uid = window.localStorage.getItem('uid')
+        let uuid = window.localStorage.getItem('uuidDaybook')
+        // console.log(encString)
+        // let daybookUrl = self.baseUrl + '/jsonapi/node/daybook_daybook_node/' + uuidDaybook + '?_format=api_json'
+        // let daybookUrl = baseUrl + '/entity/comment?_format=hal_json'
+        let daybookUrl = baseUrl + '/jsonapi/comment/comment?_format=api_json'
+        // let daybookUrlRelation = JSON.stringify(baseUrl + '/rest/relation/comment/comment/entity_id')
+        let daybookData = {
+          'data': {
+            'type': 'comment--comment',
+            'attributes': {
+              'subject': subject,
+              // 'name': name,
+              'uuid': uuid,
+              'entity_type': 'comment',
+              'field_name': 'comment',
+              'comment_body': {
+                'value': message,
+                'format': 'basic_html'
               },
-              'entity_id': [{'target_id': nid}],
-              'entity_type': [{'value': 'node--daybook_daybook_node'}],
-              'comment_type': [{'target_id': 'comment'}],
-              'status': [{'value': '1'}],
-              'field_name': [{'value': 'comment'}],
-              'subject': [{'value': subject}],
-              'uid': [{'target_id': uid}],
-              'name': [{'value': name}],
-              'comment_body': [{'value': message}]
+              'entity_id': {'target_id': nid},
+              'uid': [{'target_id': uid}]
             }
-            let daybookFetch = {
-              method: 'POST',
-              body: JSON.stringify(daybookData),
-              mode: 'no-cors',
-              header: {
-                'Authorization': encString,
-                'Content-Type': 'application/hal+json',
-                'Accept': 'application/hal+json',
-                'X-CSRF-Token': token,
-                'Access-Control-Allow-Credentials': 'http://localhost:8080'
-              }
-            }
-            // debugger
-            window.fetch(daybookUrl, daybookFetch)
-              .then((response) => response.json())
-              .then((data) => {
-                window.localStorage.setItem('daybookCreated', true)
-                window.localStorage.setItem('idDaybook', data.data.id)
-                window.localStorage.setItem('uuidDaybook', data.data.attributes.uuid)
-                window.localStorage.setItem('nidDaybook', data.data.attributes.nid)
-                // debugger
-                console.log(data)
-                self.$router.back()
-              })
-          .catch(function (error) {
-            console.debug(error)
-          })
-          })
-         .catch(function (error) {
-           console.debug(error)
+          }
+        }
+                //         'data': {
+                //   'type': 'node--daybook_daybook_node',
+                //   'id': uuid
+                // },
+        // 'entity_id': [{'target_id': nid}],
+        // let daybookData = {
+        //   '_links': {
+        //     'type': {'href': baseUrl + '/rest/type/comment/comment'},
+        //     [daybookUrlRelation]: {'href': baseUrl + '/rest/type/comment/comment/node/' + nid}
+        //   },
+        //   'entity_id': [{'target_id': nid}],
+        //   'entity_type': [{'value': 'node--daybook_daybook_node'}],
+        //   'comment_type': [{'target_id': 'comment'}],
+        //   'status': [{'value': '1'}],
+        //   'field_name': [{'value': 'comment'}],
+        //   'subject': [{'value': subject}],
+        //   'uid': [{'target_id': uid}],
+        //   'name': [{'value': name}],
+        //   'comment_body': [{'value': message}]
+        // }
+        let daybookFetch = {
+          method: 'POST',
+          body: JSON.stringify(daybookData),
+          headers: {
+            'Authorization': encString,
+            'Content-Type': 'application/hal+json',
+            'Accept': 'application/hal+json',
+            'X-CSRF-Token': token
+          }
+        }
+        // debugger
+        window.fetch(daybookUrl, daybookFetch)
+         .then(function (response) {
+           if (!response.ok) {
+             throw Error(response.statusText)
+           }
+           return response.json()
+         }).then(function (data) {
+           window.localStorage.setItem('daybookCreated', true)
+          //  window.localStorage.setItem('idDaybook', data.data.id)
+          //  window.localStorage.setItem('uuidDaybook', data.data.attributes.uuid)
+          //  window.localStorage.setItem('nidDaybook', data.data.attributes.nid)
+           // debugger
+           console.log(data)
+           self.$router.back()
          })
+      .catch(function (error) {
+        console.debug(error)
+      })
+        //   })
+        //  .catch(function (error) {
+        //    console.debug(error)
+        //  })
       },
       getCsrfToken: function () {
         // const self = this
@@ -308,7 +351,7 @@
           method: 'POST',
           body: JSON.stringify(daybookData),
           mode: 'no-cors',
-          header: {
+          headers: {
             'Authorization': encString,
             'Content-Type': 'application/hal+json',
             'Accept': 'application/hal+json',
@@ -333,8 +376,3 @@
       })
 
 */
-
-<style>
-
-</style>
-        

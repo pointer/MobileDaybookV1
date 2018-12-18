@@ -1,10 +1,15 @@
 <template>
 <f7-page name="punchclock">
-  <f7-navbar  v-bind:title="navTitle"  back-link="" sliding>
-<!-- <f7-nav-right>
-  </f7-nav-right> -->
-  </f7-navbar>
-    <f7-block>
+    <f7-navbar  back-link="" sliding>
+      <f7-nav-center sliding style="text-align:center">Mobile Daybook</f7-nav-center>
+      <!-- &nbsp; &nbsp; &nbsp;  -->
+      <f7-nav-right>
+      <f7-link icon="icon-bars" open-panel="right"></f7-link>
+      </f7-nav-right>
+    </f7-navbar>
+  <!-- <div class="page-content"> -->
+    <div class="block-title" style="text-align:center"><h4>{{navTitle}}</h4></div>
+     <f7-block>
         <div class="card">
           <div class="card-header">{{site}}</div>
           <div class="card-content">
@@ -46,6 +51,7 @@
           </div>
         </div>
     </f7-block>
+  <!-- </div>  -->
        </f7-page>
 
 </template>
@@ -72,7 +78,7 @@
      // console.log(this.$device)
      this.getPunchData()
      let punchStatus = window.localStorage.getItem('hasPunchedIn')
-     this.navTitle = (punchStatus === true) ? 'Fin de service' : 'Prise de service'
+     this.navTitle = (punchStatus === 'true') ? 'Fin de service' : 'Prise de service'
      this.baseUrl = window.localStorage.getItem('baseUrl')
      this.username = window.localStorage.getItem('username')
      this.token = window.localStorage.getItem('csrfToken')
@@ -148,71 +154,144 @@
        // let urlToken = self.baseUrl + '/rest/session/token'
        // let token = self.getCsrfToken()
        let baseUrl = window.localStorage.getItem('baseUrl')
-       let urlToken = baseUrl + '/rest/session/token'
-       // let token = window.localStorage.getItem('csrfToken')
-       window.fetch(urlToken)
-        .then((response) => response.text())
-        .then((token) => {
-          console.log(token)
-          let enc = window.btoa(this.username + ':' + this.password)
-          let encString = 'Basic ' + enc
-          let uuid = window.sessionStorage.getItem('uuid')
-          let uid = window.localStorage.getItem('uid')
-          let urlPunchOut = self.baseUrl + '/jsonapi/node/daybook_punch_card_node/' + uuid + '?_format=api_json'
-          let punchOutData = {
-            'data': {
-              'type': 'node--daybook_punch_card_node',
-              'id': uuid,
-              'attributes': {
-                'status': true,
-                'title': self.username,
-                'field_dbk_punch_end': self.punchDate,
-                'field_dbk_punch_geo_end': {
-                  'lat': self.lat,
-                  'lng': self.lng
-                }
-              },
-              'relationships': {
-                'uid': {
-                  'data': {
-                    'type': 'user--user',
-                    'id': uid
-                  }
-                }
-              }
-            }
-          }
-          let fetchPunchOut = {
-            method: 'PATCH',
-            body: JSON.stringify(punchOutData),
-            header: {
-              'X-CSRF-Token': JSON.stringify(token),
-              'Authorization': encString,
-              'Content-Type': 'application/vnd.api+json',
-              'Accept': 'application/vnd.api+json'
-            }
-          }
-          window.fetch(urlPunchOut, fetchPunchOut)
-            .then(function (response) {
-              if (!response.ok) {
-                throw Error(response.statusText)
-              }
-              return response.json()
-            }).then(function (data) {
-              window.localStorage.setItem('hasPunchedIn', false)
-              window.sessionStorage.setItem('id', '')
-              window.sessionStorage.setItem('uuid', '')
-              window.sessionStorage.setItem('nid', '')
-              // debugger
-              // console.log(data)
-              self.$router.back()
-            }).catch(function (error) {
-              console.log(error)
-            })
-        })
-       .catch(function (error) {
-         console.debug(error)
-       })
+       // let urlToken = baseUrl + '/rest/session/token'
+       let token = window.localStorage.getItem('csrfToken')
+       // console.log(token)
+       let enc = window.btoa(this.username + ':' + this.password)
+       let encString = 'Basic ' + enc
+       let uuid = window.sessionStorage.getItem('uuid')
+       let uid = window.localStorage.getItem('uid')
+       // let sessionName = window.localStorage.getItem('session_name')
+       // let sessId = window.localStorage.getItem('sessid')
+       // let cookie = sessionName + '=' + sessId
+       let urlPunchOut = baseUrl + '/jsonapi/node/daybook_punch_card_node/' + uuid + '?_format=api_json'
+       let punchOutData = {
+         'data': {
+           'type': 'node--daybook_punch_card_node',
+           'id': uuid,
+           'attributes': {
+             'status': true,
+             'title': self.username,
+             'field_dbk_punch_end': self.punchDate,
+             'field_dbk_punch_geo_end': {
+               'lat': self.lat,
+               'lng': self.lng
+             }
+           },
+           'relationships': {
+             'uid': {
+               'data': {
+                 'type': 'user--user',
+                 'id': uid
+               }
+             }
+           }
+         }
+       }
+       let fetchPunchOut = {
+         method: 'PATCH',
+         body: JSON.stringify(punchOutData),
+         headers: {
+           'X-CSRF-Token': token,
+           'Authorization': encString,
+           'Content-Type': 'application/vnd.api+json',
+           'Accept': 'application/vnd.api+json'
+         }
+        //  mode: 'cors', // no-cors, cors, *same-origin
+         // cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+         // redirect: 'follow', // manual, *follow, error
+         // referrer: 'no-referrer' // no-referrer, *client
+       }
+       // 'Set-Cookie': JSON.stringify(cookie)
+       window.fetch(urlPunchOut, fetchPunchOut)
+         .then(function (response) {
+           if (!response.ok) {
+             throw Error(response.statusText)
+           }
+           return response.json()
+         }).then(function (data) {
+           window.localStorage.setItem('hasPunchedIn', false)
+           window.sessionStorage.setItem('id', '')
+           window.sessionStorage.setItem('uuid', '')
+           window.sessionStorage.setItem('nid', '')
+           // debugger
+           // console.log(data)
+           self.$router.back()
+         }).catch(function (error) {
+           console.log(error)
+         })
+      //  window.fetch(urlToken)
+      //   .then((response) => response.text())
+      //   .then((token) => {
+      //     console.log(token)
+      //     let enc = window.btoa(this.username + ':' + this.password)
+      //     let encString = 'Basic ' + enc
+      //     let uuid = window.sessionStorage.getItem('uuid')
+      //     let uid = window.localStorage.getItem('uid')
+      //     let sessionName = window.localStorage.getItem('session_name')
+      //     let sessId = window.localStorage.getItem('sessid')
+      //     let cookie = sessionName + '=' + sessId
+      //     let urlPunchOut = self.baseUrl + '/jsonapi/node/daybook_punch_card_node/' + uuid
+      //     // + '?_format=api_json'
+      //     let punchOutData = {
+      //       'data': {
+      //         'type': 'node--daybook_punch_card_node',
+      //         'id': uuid,
+      //         'attributes': {
+      //           'status': true,
+      //           'title': self.username,
+      //           'field_dbk_punch_end': self.punchDate,
+      //           'field_dbk_punch_geo_end': {
+      //             'lat': self.lat,
+      //             'lng': self.lng
+      //           }
+      //         },
+      //         'relationships': {
+      //           'uid': {
+      //             'data': {
+      //               'type': 'user--user',
+      //               'id': uid
+      //             }
+      //           }
+      //         }
+      //       }
+      //     }
+      //     let fetchPunchOut = {
+      //       method: 'PATCH',
+      //       body: punchOutData,
+      //       mode: 'cors', // no-cors, cors, *same-origin
+      //       cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+      //       headers: {
+      //         'X-CSRF-Token': token,
+      //         'Authorization': encString,
+      //         'Content-Type': 'application/vnd.api+json',
+      //         'Accept': 'application/vnd.api+json'
+      //       }
+      //       // redirect: 'follow', // manual, *follow, error
+      //       // referrer: 'no-referrer' // no-referrer, *client
+      //     }
+      //     //'Set-Cookie': JSON.stringify(cookie)
+      //     window.fetch(urlPunchOut, fetchPunchOut)
+      //       .then(function (response) {
+      //         if (!response.ok) {
+      //           throw Error(response.statusText)
+      //         }
+      //         return response.json()
+      //       }).then(function (data) {
+      //         window.localStorage.setItem('hasPunchedIn', false)
+      //         window.sessionStorage.setItem('id', '')
+      //         window.sessionStorage.setItem('uuid', '')
+      //         window.sessionStorage.setItem('nid', '')
+      //         // debugger
+      //         // console.log(data)
+      //         self.$router.back()
+      //       }).catch(function (error) {
+      //         console.log(error)
+      //       })
+      //   })
+      //  .catch(function (error) {
+      //    console.debug(error)
+      //  })
      },
      punchIn: function () {
        // debugger

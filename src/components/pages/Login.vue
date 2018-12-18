@@ -3,11 +3,13 @@
     <f7-login-screen-title></f7-login-screen-title>
     <f7-list form>
               <f7-list-item>
-                  <f7-input name="name" placeholder="Username" type="text" v-model="username"></f7-input>
+                  <!-- <f7-input name="name" placeholder="Username" type="text" v-model="username"></f7-input> -->
+                  <input type="text" :value="username" @input="username = $event.target.value" placeholder="Utilsateur" clear-button>
                   <span class="input-clear-button"></span>
                 </f7-list-item>
                 <f7-list-item>
-                  <f7-input name="pass" type="password" placeholder="Password" v-model="password"></f7-input>
+                  <input type="text" :value="password" @input="password = $event.target.value" placeholder="pass" clear-button>
+                  <!-- <input name="pass" type="password" placeholder="Password" v-model="password"></input> -->
                   <span class="input-clear-button"></span>
                 </f7-list-item>      
       <!-- <f7-list-input
@@ -133,11 +135,13 @@
           window.localStorage.setItem('csrfToken', data.csrf_token)
           window.localStorage.setItem('logoutToken', data.logout_token)
           window.sessionStorage.setItem('isLoggedIn', true)
+          window.localStorage.setItem('session_name', data.session_name)
+          window.localStorage.setItem('sessid', data.sessid)
           self.signInOutTitle = 'Sign Out'
           self.loginScreenTitle = 'Deconnection'
           self.setTitles(true)
           self.$router.back()
-          console.log(urlLogin)
+          // console.log(urlLogin)
         })
           .catch(function (error) {
             console.debug(error)
@@ -185,6 +189,8 @@
           window.localStorage.setItem('csrfToken', '')
           window.localStorage.setItem('logoutToken', '')
           window.sessionStorage.setItem('isLoggedIn', false)
+          window.localStorage.setItem('session_name', '')
+          window.localStorage.setItem('sessid', '')
           this.setTitles(false)
           self.$router.back()
         })

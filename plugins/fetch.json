@@ -2,7 +2,7 @@
   "cordova-plugin-dialogs": {
     "source": {
       "type": "registry",
-      "id": "cordova-plugin-dialogs"
+      "id": "cordova-plugin-dialogs@^2.0.1"
     },
     "is_top_level": true,
     "variables": {}

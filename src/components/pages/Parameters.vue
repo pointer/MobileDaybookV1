@@ -2,9 +2,15 @@
       <!-- <f7-view>
         <f7-pages> -->
   <f7-page parameters-screen>
-    <f7-navbar title="" back-link="" sliding></f7-navbar>
+    <f7-navbar  back-link="" sliding>
+      <f7-nav-center sliding style="text-align:center">Mobile Daybook</f7-nav-center>
+      <!-- &nbsp; &nbsp; &nbsp;  -->
+      <f7-nav-right>
+      <f7-link icon="icon-bars" open-panel="right"></f7-link>
+      </f7-nav-right>
+    </f7-navbar>
     <!-- <f7-parameters-screen id="parameters-screen"> -->
-<div class="block-title"><h4>Parametres de connexion</h4></div>
+<div class="block-title" style="text-align:center"><h4>Parametres de connexion</h4></div>
 <f7-list form id="parameters-screen-form">
     <f7-list-item class="item-content item-input item-input-with-info">
       <!-- <div class="item-inner"> -->

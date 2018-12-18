@@ -1,49 +1,38 @@
 <template>
   <f7-page>
-    <f7-navbar title="" back-link=""></f7-navbar>
-                 <div class="page-content">
-                    <div class="content-block-title">Main courante</div>
-                        <ul >
-                          <li class="swipeout deleted-callback" v-for="(node,index) in tasks" :key="index" v-hammer:swipe.left="(event)=> onSwipeLeft(event, node, index)" >
-                            <!--  -->
-                            <div class="item-content swipeout-content">
-                            <div class = "item-inner">
-                              <div class="item-title" > {{index + 1}}
-                                <div class="item-after" >{{node.instruction}}</div>
-                              </div>
-                            </div> 
-                            </div>
-                            <div class="swipeout-actions-right" >
-                              <a href="#" class="swipeout-delete"></a>
-                            </div>
-                          </li> 
-                        </ul>
+    <f7-navbar  back-link="" sliding>
+      <f7-nav-center sliding style="text-align:center">Mobile Daybook</f7-nav-center>
+      <!-- &nbsp; &nbsp; &nbsp;  -->
+      <f7-nav-right>
+      <f7-link icon="icon-bars" open-panel="right"></f7-link>
+      </f7-nav-right>
+    </f7-navbar>
+                 <!-- <div class="page-content"> -->
+        <div class="block-title" style="text-align:center"><h4>Instructions/Consignes/Taches</h4></div>
+            <ul >
+              <li v-for="(node,index) in tasks" :key="index"  >
+              <!-- <li class="swipeout deleted-callback" v-for="(node,index) in tasks" :key="index" v-hammer:swipe.left="(event)=> onSwipeLeft(event, node, index)" > -->
+                <!--  -->
+                <div class="item-content swipeout-content">
+                <div class = "item-inner">
+                  <div class="item-title" > {{index + 1}}
+                    <div class="item-after" >{{node.instruction}}</div>
+                  </div>
+                </div> 
                 </div>
+                <div class="swipeout-actions-right" >
+                  <a href="#" class="swipeout-delete"></a>
+                </div>
+              </li> 
+            </ul>
+                <!-- </div> -->
   </f7-page>
 </template>
-<!-- <li  v-for="(node,index) in tasks" :key="index"  >
-  <div class = "item-inner">
-    <div class="item-title" > {{index + 1}}
-      <div class="item-after" v-hammer:swipe.left="(event)=> onSwipeLeft(event, item, i)">{{node.instruction}}</div>
-    </div>
-  </div> 
-</li> -->
-  <!-- <div v-hammer:swipe.left="(event)=> onSwipeLeft(event, item, i)">Complete</div> -->
-    <!-- <label class = "label-switch">
-    <input type="checkbox" v-on:input="onChecked(node, index,$event)" name="media-checkbox" :value="node.checked"/>
-    <div class="checkbox"></div>
-    </label> -->  
-  <!-- <div id="app">
-    <SwipeButton
-      ref="swipeButton"
-      class="swipe-button"
-      @actionConfirmed="onActionConfirmed"
-    /> -->
 <script>
   // import moment from 'moment'
   // import SwipeButton from './SwipeButton.vue';
-  import VuePullRefresh from 'vue-pull-refresh'
-  import { VueHammer } from 'vue2-hammer'
+  // import VuePullRefresh from 'vue-pull-refresh'
+  // import { VueHammer } from 'vue2-hammer'
   // this.Vue.use(VueHammer)
   // this.$$(.deleted-callback).on('swipeout:deleted', function () {
   //   window.alert('Thanks, item removed!')
@@ -93,8 +82,8 @@
       // f7Navbar,
       // f7Page,
       // f7BlockTitle
-      'vue-pull-refresh': VuePullRefresh,
-      'vueHammer': VueHammer
+      // 'vue-pull-refresh': VuePullRefresh,
+      // 'vueHammer': VueHammer
       // SwipeButton,
     },
     methods: {
@@ -110,22 +99,6 @@
       onRefresh: function () {
         const self = this
         let baseUrl = window.localStorage.getItem('baseUrl')
-        // let username = window.localStorage.getItem('username')
-        // let uid = window.localStorage.getItem('uid')
-        // let password = window.sessionStorage.getItem('password')
-        // let enc = window.btoa(username + ':' + password)
-        // let encString = 'Basic ' + enc
-        // let token = window.localStorage.getItem('csrfToken')
-        // let urlTasks = baseUrl + '/api/tasks/' + uid + '?_format=hal_json'
-        // let fetchTasks = {
-        //   method: 'GET',
-        //   headers: {
-        //     'Authorization': encString,
-        //     'X-CSRF-Token': token,
-        //     'Accept': 'application/hal+json',
-        //     'Content-Type': 'application/hal+json'
-        //   }
-        // }
         let urlToken = baseUrl + '/rest/session/token'
         window.fetch(urlToken)
         .then(function (response) {
@@ -240,23 +213,8 @@
         }
         return true
       }
-      // onSwipeoutDeleted (item, value, $event) {
-      // onSwipeLeft (event, item, value) {
-      // },
     }
   }
-  
-    //   onActionConfirmed() {
-    //     setTimeout(() => {
-    //       this.$refs.swipeButton.reset();
-    //     }, 1000)
-    // },
-      // var mySwiper = new Swiper('.swiper-container');
-      // mySwiper.on('slideChangeEnd',function(){ alert('sample alert');})
-      // var coldDrinks = drinks.map(function(drink) {
-      //   return ‘iced ’ + drink;
-      // });
-    // }
 </script>
 <style scoped>
   .alert {

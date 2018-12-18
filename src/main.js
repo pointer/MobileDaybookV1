@@ -1,5 +1,6 @@
 // The Vue build version to load with the `import` command
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
+
 import Vue from 'vue'
 // Import F7
 /* eslint-disable no-unused-vars */
@@ -9,29 +10,28 @@ import Framework7Vue from 'framework7-vue'
 // Import Routes
 import Routes from './routes.js'
 import App from './App'
-import { VueHammer } from 'vue2-hammer'
+// import { VueHammer } from 'vue2-hammer'
 
 // Import App Custom Styles
 // import AppStyles from './css/app.css'
 // Import F7 iOS Theme Styles
 /* eslint-disable no-unused-vars */
-// import Framework7Theme from 'framework7/dist/css/framework7.ios.min.css'
-// import Framework7ThemeColors from 'framework7/dist/css/framework7.ios.colors.min.css'
+import Framework7Theme from 'framework7/dist/css/framework7.ios.min.css'
+import Framework7ThemeColors from 'framework7/dist/css/framework7.ios.colors.min.css'
 /* OR for Material Theme: */
 
-import Framework7Theme from 'framework7/dist/css/framework7.material.min.css'
-import Framework7ThemeColors from 'framework7/dist/css/framework7.material.colors.min.css'
-
+// import Framework7Theme from 'framework7/dist/css/framework7.material.min.css'
+// import Framework7ThemeColors from 'framework7/dist/css/framework7.material.colors.min.css'
 Vue.config.productionTip = false
 
 // Init F7 Vue Plugin
 Vue.use(Framework7Vue)
-Vue.use(VueHammer)
-let $$ = window.Dom7
-Vue.prototype.Dom7 = $$
-Vue.prototype.$$ = $$
-Vue.prototype.Template7 = window.Template7
-Vue.prototype.$t7 = window.Template7
+// Vue.use(VueHammer)
+// let $$ = window.Dom7
+// Vue.prototype.Dom7 = $$
+// Vue.prototype.$$ = $$
+// Vue.prototype.Template7 = window.Template7
+// Vue.prototype.$t7 = window.Template7
 /* eslint-disable no-new */
 // Init App
 const baseApp = new Vue({
