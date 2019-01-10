@@ -4,38 +4,32 @@
 
     <!-- Statusbar -->
     <f7-statusbar></f7-statusbar>
+    <left-panel-view />   
     <!-- Main Views -->
     <f7-views>
-      <f7-view id="main-view"  url="/" navbar-through :dynamic-navbar="true" main>
-        <!-- Navbar -->
-    <!-- <f7-navbar>
-      <f7-nav-left>
-        <f7-link icon-if-ios="f7:menu" icon-if-md="material:menu" panel-open="left"></f7-link>
-      </f7-nav-left>
-      <f7-nav-title>Mobile Daybook</f7-nav-title>
+      <f7-view id="main-view"  url="/" navbar-through :dynamic-navbar="false" main>
+      <f7-navbar>
+        <f7-nav-left>
+            <f7-link icon="icon-bars" open-panel="left"></f7-link>
+        </f7-nav-left>
+       <f7-nav-center sliding style="text-align:center">&nbsp; &nbsp; &nbsp; Mobile Daybook</f7-nav-center>
+      <!-- &nbsp; &nbsp; &nbsp;  -->
       <f7-nav-right>
-        <f7-link icon-if-ios="f7:menu" icon-if-md="material:menu" panel-open="right"></f7-link>
+        <!-- <f7-link icon="icon-bars" open-panel="right"></f7-link> -->
       </f7-nav-right>
-    </f7-navbar>         -->
-        <f7-navbar>
-          <f7-nav-center sliding style="text-align:center">Mobile Daybook</f7-nav-center>
-          <!-- &nbsp; &nbsp; &nbsp;  -->
-          <f7-nav-right>
-            <f7-link icon="icon-bars" open-panel="right"></f7-link>
-          </f7-nav-right>
-        </f7-navbar>
+      </f7-navbar>
         <!-- Pages -->
         <f7-pages>
           <f7-page>
             <f7-block-title>Navigation</f7-block-title>
             <f7-list>
-              <f7-list-item link="/login/" title="Connect/Deconnect"></f7-list-item>
+              <!-- <f7-list-item link="/login/" title="Connect/Deconnect"></f7-list-item> -->
               <f7-list-item link="/activities/" title="Affectations"></f7-list-item>
               <f7-list-item link="/instructions/" title="Instructions"></f7-list-item>
               <f7-list-item link="/punchclock/" title="Badge"></f7-list-item>
               <f7-list-item link="/daybook/" title="Main courante"></f7-list-item>              
               <f7-list-item link="/incident/" title="Incident"></f7-list-item>
-              <f7-list-item link="/parameters/" title="Parametres"></f7-list-item>
+              <!-- <f7-list-item link="/parameters/" title="Parametres"></f7-list-item> -->
             </f7-list>
           </f7-page>
         </f7-pages>
@@ -45,6 +39,7 @@
 </template>
 
 <script>
+import LeftPanel from './components/leftpanel'
 export default {
   name: 'App',
   data () {
@@ -69,6 +64,7 @@ export default {
       // 'vue-pull-refresh': VuePullRefresh,
       // 'vueHammer': VueHammer
       // SwipeButton,
+    'left-panel-view': LeftPanel
   },
   created () {
     this.baseUrl = window.localStorage.getItem('baseUrl')
@@ -79,15 +75,25 @@ export default {
     this.loginTitle = (this.isLoggedIn === 'true') ? 'Deconnecter' : 'Connecter'
     this.signInOutTitle = (this.isLoggedIn === 'true') ? 'Sign Out' : 'Sign In'
     this.loginScreenTitle = (this.isLoggedIn === 'true') ? 'Deconnection' : 'Connection'
+    // debugger
+    document.addEventListener('backbutton', this.handleBackButton)
   },
   mounted () {
   },
   computed: {
     // debugger
-    // isiOS () {
-    //   return window.isiOS
-    // }
-
+    isiOS () {
+      return this.$theme.ios
+    },
+    isMaterial () {
+      return this.$theme.md
+    },
+    pageStyle () {
+      return this.isiOS ? 'background-color: white;' : ''
+    },
+    panelEffect () {
+      return this.isiOS ? 'reveal' : 'cover'
+    }
   },
   methods: {
     setTitles: function (isLoggedIn) {
@@ -254,6 +260,25 @@ export default {
         todoList = todos[i]
       }
       self.formatTodos(todos)
+    },
+    handleBackButton () {
+      // NOTE: The back button will behave differently depending on circumstance
+      // If the side panel is open, close it
+      if (document.querySelector('.panel-left.panel-active')) {
+        // This will do nothing when the split-view is open
+        return this.$f7.panel.close()
+      }
+      // Close modals
+      // @TODO How to handle modals we shouldn't close like a login-screen?
+      if (document.querySelector('.modal-in')) {
+        return this.$f7.popover.close()
+      }
+      // If we have a back button, we want it to go back
+      if (this.$f7.views.main.router.history.length > 1) {
+        return this.$f7.views.main.router.back()
+      }
+      // Default to closing the app
+      return window.navigator.app.exitApp()
     }
   }
 }

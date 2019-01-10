@@ -1,13 +1,14 @@
 <template>
       <!-- <f7-view>
         <f7-pages> -->
+  <!-- <f7-view id="main-view"  navbar-through :dynamic-navbar="false" main> -->
   <f7-page parameters-screen>
-    <f7-navbar  back-link="" sliding>
-      <f7-nav-center sliding style="text-align:center">Mobile Daybook</f7-nav-center>
+     <f7-navbar  back-link=" &nbsp; &nbsp; &nbsp; <" sliding>
+     <!-- <f7-nav-center sliding style="text-align:center"></f7-nav-center> -->
       <!-- &nbsp; &nbsp; &nbsp;  -->
-      <f7-nav-right>
+      <!-- <f7-nav-right>
       <f7-link icon="icon-bars" open-panel="right"></f7-link>
-      </f7-nav-right>
+      </f7-nav-right> -->
     </f7-navbar>
     <!-- <f7-parameters-screen id="parameters-screen"> -->
 <div class="block-title" style="text-align:center"><h4>Parametres de connexion</h4></div>
@@ -108,14 +109,14 @@
  <div class="block">
   <div class="row">
     <span>&nbsp;</span>
-    <button class="button col" @click="saveParameters" v-model="saveTitle" close-parameters-screen>{{saveTitle}}</button>
+    <button class="button col" @click="saveParameters" close-parameters-screen>{{saveTitle}}</button>
     <span>&nbsp;</span>
   </div>
 </div> 
  <!-- </f7-parameters-screen>     -->
 </f7-page>
-        <!-- </f7-pages>
-      </f7-view> -->
+        <!-- </f7-pages>-->
+      </f7-view> 
 </template>
 
 <script>
@@ -136,7 +137,6 @@ export default {
     }
   },
   created () {
-    // debugger
     this.baseUrl = window.localStorage.getItem('baseUrl')
     this.punchCard = window.localStorage.getItem('punchCard')
     this.userEmail = window.localStorage.getItem('userEmail')
@@ -147,7 +147,6 @@ export default {
     this.daybookCreated = window.localStorage.getItem('daybookCreated')
     this.username = window.localStorage.getItem('username')
     this.uid = window.localStorage.getItem('uid')
-
     // this.setTitles()
   },
   methods: {
@@ -164,6 +163,7 @@ export default {
       window.localStorage.setItem('daybookCreated', self.daybookCreated)
       window.localStorage.setItem('username', self.username)
       window.localStorage.setItem('uid', self.uid)
+      self.$router.back()
       // ProgressIndicator.*
       // window.plugins.ProgressIndicator.showSimple(true)
       // console.log(self.baseUrl)

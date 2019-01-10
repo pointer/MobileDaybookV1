@@ -8,8 +8,8 @@
             "type": "android",
             "request": "launch",
             "name": "Launch App",
-            "appSrcRoot": "${workspaceRoot}/app/src/main",
-            "apkFile": "${workspaceRoot}/app/build/outputs/apk/debug/app-debug.apk",
+            "appSrcRoot": "${workspaceRoot}/src",
+            "apkFile": "${workspaceRoot}/platforms/android/app/build/outputs/apk/debug/mobiledaybook.apk",
             "adbPort": 5037
         },
         {

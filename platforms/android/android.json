@@ -9,19 +9,15 @@
         "parents": {
           "/*": [
             {
+              "xml": "<feature name=\"Device\"><param name=\"android-package\" value=\"org.apache.cordova.device.Device\" /></feature>",
+              "count": 1
+            },
+            {
               "xml": "<feature name=\"Notification\"><param name=\"android-package\" value=\"org.apache.cordova.dialogs.Notification\" /></feature>",
               "count": 1
             },
             {
-              "xml": "<feature name=\"Whitelist\"><param name=\"android-package\" value=\"org.apache.cordova.whitelist.WhitelistPlugin\" /><param name=\"onload\" value=\"true\" /></feature>",
-              "count": 1
-            },
-            {
               "xml": "<feature name=\"Geolocation\"><param name=\"android-package\" value=\"org.apache.cordova.geolocation.Geolocation\" /></feature>",
-              "count": 1
-            },
-            {
-              "xml": "<feature name=\"Device\"><param name=\"android-package\" value=\"org.apache.cordova.device.Device\" /></feature>",
               "count": 1
             },
             {
@@ -30,6 +26,10 @@
             },
             {
               "xml": "<feature name=\"StatusBar\"><param name=\"android-package\" value=\"org.apache.cordova.statusbar.StatusBar\" /><param name=\"onload\" value=\"true\" /></feature>",
+              "count": 1
+            },
+            {
+              "xml": "<feature name=\"Whitelist\"><param name=\"android-package\" value=\"org.apache.cordova.whitelist.WhitelistPlugin\" /><param name=\"onload\" value=\"true\" /></feature>",
               "count": 1
             }
           ]
@@ -62,30 +62,42 @@
     }
   },
   "installed_plugins": {
-    "cordova-plugin-dialogs": {
+    "cordova-plugin-device": {
       "PACKAGE_NAME": "io.mobile.daybook"
     },
-    "cordova-plugin-whitelist": {
+    "cordova-plugin-dialogs": {
       "PACKAGE_NAME": "io.mobile.daybook"
     },
     "cordova-plugin-geolocation": {
       "PACKAGE_NAME": "io.mobile.daybook"
     },
-    "cordova-plugin-device": {
+    "cordova-plugin-inappbrowser": {
       "PACKAGE_NAME": "io.mobile.daybook"
     },
-    "cordova-plugin-inappbrowser": {
+    "cordova-plugin-statusbar": {
       "PACKAGE_NAME": "io.mobile.daybook"
     },
     "cordova-plugin-vibration": {
       "PACKAGE_NAME": "io.mobile.daybook"
     },
-    "cordova-plugin-statusbar": {
+    "cordova-plugin-whitelist": {
+      "PACKAGE_NAME": "io.mobile.daybook"
+    },
+    "cordova-android-support-gradle-release": {
+      "ANDROID_SUPPORT_VERSION": "27.+",
       "PACKAGE_NAME": "io.mobile.daybook"
     }
   },
   "dependent_plugins": {},
   "modules": [
+    {
+      "id": "cordova-plugin-device.device",
+      "file": "plugins/cordova-plugin-device/www/device.js",
+      "pluginId": "cordova-plugin-device",
+      "clobbers": [
+        "device"
+      ]
+    },
     {
       "id": "cordova-plugin-dialogs.notification",
       "file": "plugins/cordova-plugin-dialogs/www/notification.js",
@@ -117,14 +129,6 @@
       "runs": true
     },
     {
-      "id": "cordova-plugin-device.device",
-      "file": "plugins/cordova-plugin-device/www/device.js",
-      "pluginId": "cordova-plugin-device",
-      "clobbers": [
-        "device"
-      ]
-    },
-    {
       "id": "cordova-plugin-inappbrowser.inappbrowser",
       "file": "plugins/cordova-plugin-inappbrowser/www/inappbrowser.js",
       "pluginId": "cordova-plugin-inappbrowser",
@@ -143,12 +147,13 @@
     }
   ],
   "plugin_metadata": {
-    "cordova-plugin-dialogs": "2.0.1",
-    "cordova-plugin-whitelist": "1.3.3",
-    "cordova-plugin-geolocation": "4.0.1",
     "cordova-plugin-device": "2.0.2",
+    "cordova-plugin-dialogs": "2.0.1",
+    "cordova-plugin-geolocation": "4.0.1",
     "cordova-plugin-inappbrowser": "3.0.0",
+    "cordova-plugin-statusbar": "2.4.2",
     "cordova-plugin-vibration": "3.1.0",
-    "cordova-plugin-statusbar": "2.4.2"
+    "cordova-plugin-whitelist": "1.3.3",
+    "cordova-android-support-gradle-release": "2.0.1"
   }
 }

@@ -1,5 +1,5 @@
 {
-    "name": "f7",
+    "name": "MobileDaybook",
     "version": "1.0.0",
     "description": "Mobile Daybook",
     "author": "kateb <katebg@yahoo.com>",
@@ -18,11 +18,16 @@
         "cordova-run-android-dev": "npm run dev && cordova run android",
         "compile": "webpack --config webpack.dev.conf.js",
         "debug": "node build/dev-server.js --inspect",
-        "start_server": "webpack-dev-server"
+        "start_server": "webpack-dev-server",
+        "android-release": "cordova build android —prod —release —buildConfig = build.json",
+        "build:dev": "webpack --env dev --progress --profile --colors",
+        "build:prod": "webpack -p"
     },
     "dependencies": {
+        
         "base-64": "^0.1.0",
         "cordova-android": "^7.1.4",
+        "cordova-android-support-gradle-release": "^2.0.1",
         "cordova-browser": "^5.0.3",
         "cordova-plugin-device": "^2.0.2",
         "cordova-plugin-dialogs": "^2.0.1",
@@ -36,6 +41,7 @@
         "filereader": "^0.10.3",
         "form-data": "^2.3.3",
         "framework7": "^1.5.2",
+        "framework7-icons": "^2.1.1",
         "framework7-vue": "^0.7.6",
         "fs": "0.0.1-security",
         "moment": "^2.22.2",
@@ -127,7 +133,10 @@
             "cordova-plugin-device": {},
             "cordova-plugin-inappbrowser": {},
             "cordova-plugin-vibration": {},
-            "cordova-plugin-statusbar": {}
+            "cordova-plugin-statusbar": {},
+            "cordova-android-support-gradle-release": {
+                "ANDROID_SUPPORT_VERSION": "27.+"
+            }
         },
         "platforms": [
             "browser",

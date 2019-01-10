@@ -38,7 +38,7 @@
     },
     methods: {
       sendDaybook: function () {
-        debugger
+        // debugger
         const self = this
         // console.log(value)
         // console.log($event.target.checked)
@@ -55,7 +55,7 @@
         // }
       },
       createDaybook (subject, message) {
-        debugger
+        // debugger
         const self = this
         let baseUrl = window.localStorage.getItem('baseUrl')
         let token = window.localStorage.getItem('csrfToken')
@@ -120,7 +120,7 @@
       })
       },
       createDaybookComment (subject, message) {
-        debugger
+        // debugger
         const self = this
         let baseUrl = window.localStorage.getItem('baseUrl')
         // let urlToken = baseUrl + '/rest/session/token'

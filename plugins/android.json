@@ -7,25 +7,29 @@
     "files": {}
   },
   "installed_plugins": {
-    "cordova-plugin-dialogs": {
+    "cordova-plugin-device": {
       "PACKAGE_NAME": "io.mobile.daybook"
     },
-    "cordova-plugin-whitelist": {
+    "cordova-plugin-dialogs": {
       "PACKAGE_NAME": "io.mobile.daybook"
     },
     "cordova-plugin-geolocation": {
       "PACKAGE_NAME": "io.mobile.daybook"
     },
-    "cordova-plugin-device": {
+    "cordova-plugin-inappbrowser": {
       "PACKAGE_NAME": "io.mobile.daybook"
     },
-    "cordova-plugin-inappbrowser": {
+    "cordova-plugin-statusbar": {
       "PACKAGE_NAME": "io.mobile.daybook"
     },
     "cordova-plugin-vibration": {
       "PACKAGE_NAME": "io.mobile.daybook"
     },
-    "cordova-plugin-statusbar": {
+    "cordova-plugin-whitelist": {
+      "PACKAGE_NAME": "io.mobile.daybook"
+    },
+    "cordova-android-support-gradle-release": {
+      "ANDROID_SUPPORT_VERSION": "27.+",
       "PACKAGE_NAME": "io.mobile.daybook"
     }
   },

@@ -26,6 +26,7 @@ buildscript {
             url "https://maven.google.com"
         }
         jcenter()
+        google()
     }
 
     dependencies {
@@ -38,6 +39,7 @@ allprojects {
     repositories {
         mavenCentral();
         jcenter()
+        google()
     }
 }
 
@@ -91,6 +93,7 @@ ext {
 }
 
 // PLUGIN GRADLE EXTENSIONS START
+apply from: "../cordova-android-support-gradle-release/daybook-cordova-android-support-gradle-release.gradle"
 // PLUGIN GRADLE EXTENSIONS END
 
 def hasBuildExtras1 = file('build-extras.gradle').exists()

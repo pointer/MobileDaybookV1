@@ -2,8 +2,9 @@
 <widget id="io.mobile.daybook" version="1.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>mobiledaybook</name>
     <description>
-        A Vue.js project
+       Mobile Daybook
     </description>
+    <icon src="src/assets/logo-small.png" />
     <author email="katebg@yahoo.com" href="http://cordova.io">
         kateb
     </author>
@@ -18,6 +19,7 @@
     <allow-intent href="sms:*" />
     <allow-intent href="mailto:*" />
     <allow-intent href="geo:*" />
+    <preference name="loadUrlTimeoutValue" value="60000" />
     <platform name="android">
         <allow-intent href="market:*" />
     </platform>
@@ -32,4 +34,7 @@
     <plugin name="cordova-plugin-statusbar" spec="^2.4.2" />
     <engine name="browser" spec="^5.0.3" />
     <engine name="android" spec="^7.1.4" />
+    <plugin name="cordova-android-support-gradle-release" spec="^2.0.1">
+        <variable name="ANDROID_SUPPORT_VERSION" value="27.+" />
+    </plugin>
 </widget>

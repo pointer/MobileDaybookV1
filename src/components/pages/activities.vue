@@ -12,7 +12,7 @@
           <div class="block-title" style="text-align:center"><h4>Liste des Affectations</h4></div>
             <div class="list-block accordion-list" >
                 <ul>
-                  <li class="accordion-item" v-for="todo in todos" :key="todo.assign_title">
+                  <li class="accordion-item" v-for="(todo, key)  in todos" :key=key>
                       <a href="#" class="item-content item-link">
                           <div class="item-inner">
                             <div class="item-title">{{todo.assign_start_shift_date}} </div>
@@ -36,11 +36,11 @@
                   </li>
                 </ul>
             </div>
-      </div>
   </f7-page>
 </template>
 <script>
   import VuePullRefresh from 'vue-pull-refresh'
+  import moment from 'moment'
   export default {
     data () {
       return {
@@ -51,24 +51,21 @@
     mounted () {
       // console.log(this.$device)
       // debugger
-      // this.onRefresh()
-      if (!Array.isArray(this.todos) || !this.todos.length) {
-        this.displayData()
-      }
-      this.todos = JSON.parse(window.sessionStorage.getItem('todos'))
+      this.displayData()
     },
     components: {
       // f7Navbar,
       // f7Page,
       // f7BlockTitle
+      'moment': moment,
       'vue-pull-refresh': VuePullRefresh
     },
     methods: {
       displayData: function () {
-        this.todos = JSON.parse(window.sessionStorage.getItem('todos'))
-        // if (this.todos.length === 0) {
-        if (this.todos === null) {
-          this.onRefresh()
+        const self = this
+        self.todos = JSON.parse(window.localStorage.getItem('todos'))
+        if (self.isEmpty(self.todos)) {
+          self.onRefresh()
         }
       },
       onRefresh: function () {
@@ -101,55 +98,54 @@
           }
         }
         window.fetch(urlActivities, fetchActivities)
-         .then((response) => {
-           return response.json()
-         })
-       .then((todos) => {
+        .then(function (response) {
+          if (!response.ok) {
+            throw Error(response.statusText)
+          }
+          return response.json()
+        }).then(function (todos) {
          // self.removeDuplicate(todos)
-         self.formatTodos(todos)
+          self.populateTodos(todos)
          // return todos
-       })
+        })
         .catch(function (error) {
           console.debug(error)
         })
       },
-      formatTodos: function (todos) {
+      populateTodos: function (todos) {
         const self = this
         // debugger
+        let currentDate = moment().startOf('day')
         todos = self.removeDuplicates(todos, 'assign_title')
         for (let todo in todos) {
           if (todos.hasOwnProperty(todo)) {
             let startDateTime = todos[todo].assign_start_shift.split('T')
             let startDate = startDateTime[0]
-            let startTime = startDateTime[1]
-            todos[todo].assign_start_shift_date = startDate.substring(8, 10) + '/' + startDate.substring(5, 7) + '/' + startDate.substring(0, 4)
-            todos[todo].assign_start_shift_time = startTime
-            // todos[todo].assign_start_time = startDateTime[1].replace(/,/g, '')
-            todos[todo].assign_start_shift = todos[todo].assign_start_shift_date + '-' + startTime
-            let endDateTime = todos[todo].assign_end_shift.split('T')
-            let endDate = endDateTime[0]
-            let endTime = endDateTime[1]
-            todos[todo].assign_end_shift_date = endDate.substring(8, 10) + '/' + endDate.substring(5, 7) + '/' + endDate.substring(0, 4)
-            todos[todo].assign_end_shift_time = endTime
-            todos[todo].assign_end_shift = todos[todo].assign_end_shift_date + '-' + endTime
-            // todos[todo].assign_tasks = todos[todo].assign_tasks_description.replace(/\\r\\n\\t/g, '')
-            // let tasks = todos[todo].assign_tasks_description.split('\n\t')
-            // // console.log(tasks)
-            // for (let task in tasks) {
-            //   if (tasks.hasOwnProperty(task)) {
-            //     tasks[task] = tasks[task].replace(/[^\x20-\x7E]/gmi, '')
-            //     tasks[task] = tasks[task].replace(/<\/?[^>]+(>|$)/g, '')
-            //     tasks[task] = tasks[task].replace(/&nbsp;/gi, '')
-            //   }
-            // }
-            // todos[todo].assign_tasks_description = tasks
-            self.shiftStart = todos[todo].assign_start_shift
-            self.site = todos[todo].assign_site
-            self.title = todos[todo].assign_title
+            let beginDate = moment(startDate, 'YYYY-MM-DD')
+            // console.log('startDate: ', startDate)
+            let duration = moment.duration(beginDate.diff(currentDate)).asDays()
+            // console.log('duration: ', duration)
+            // debugger
+            if (duration >= 0) {
+              let startTime = startDateTime[1]
+              todos[todo].assign_start_shift_date = startDate.substring(8, 10) + '/' + startDate.substring(5, 7) + '/' + startDate.substring(0, 4)
+              todos[todo].assign_start_shift_time = startTime
+              // todos[todo].assign_start_time = startDateTime[1].replace(/,/g, '')
+              todos[todo].assign_start_shift = todos[todo].assign_start_shift_date + '-' + startTime
+              let endDateTime = todos[todo].assign_end_shift.split('T')
+              let endDate = endDateTime[0]
+              let endTime = endDateTime[1]
+              todos[todo].assign_end_shift_date = endDate.substring(8, 10) + '/' + endDate.substring(5, 7) + '/' + endDate.substring(0, 4)
+              todos[todo].assign_end_shift_time = endTime
+              todos[todo].assign_end_shift = todos[todo].assign_end_shift_date + '-' + endTime
+              // self.shiftStart = todos[todo].assign_start_shift
+              // self.site = todos[todo].assign_site
+              // self.title = todos[todo].assign_title
+            }
           }
         }
         self.todos = JSON.stringify(todos)
-        window.sessionStorage.setItem('todos', self.todos)
+        window.localStorage.setItem('todos', self.todos)
         console.log(self.todos)
       },
     /*
@@ -175,8 +171,36 @@
           // console.log(newArray)
         }
         return newArray
+      },
+      isEmpty (obj) {
+        // null and undefined are "empty"
+        if (obj == null) {
+          return true
+        }
+        // Assume if it has a length property with a non-zero value
+        // that that property is correct.
+        if (obj.length > 0) {
+          return false
+        }
+        if (obj.length === 0) {
+          return true
+        }
+        // If it isn't an object at this point
+        // it is empty, but it can't be anything *but* empty
+        // Is it empty?  Depends on your application.
+        if (typeof obj !== 'object') {
+          return true
+        }
+        // Otherwise, does it have any properties of its own?
+        // Note that this doesn't handle
+        // toString and valueOf enumeration bugs in IE < 9
+        for (var key in obj) {
+          if (hasOwnProperty.call(obj, key)) {
+            return false
+          }
+        }
+        return true
       }
-    }
     // function addEvent()
     //   {
     //   // var cal = new calendarPlugin();
@@ -196,6 +220,7 @@
     //   cal.createEvent(title,location,notes,startDate,endDate, succCall, errCall);
     //   return false;
     //   }
+    }
   }
 </script>
 <style scoped>

@@ -1,6 +1,14 @@
 cordova.define('cordova/plugin_list', function(require, exports, module) {
 module.exports = [
   {
+    "id": "cordova-plugin-device.device",
+    "file": "plugins/cordova-plugin-device/www/device.js",
+    "pluginId": "cordova-plugin-device",
+    "clobbers": [
+      "device"
+    ]
+  },
+  {
     "id": "cordova-plugin-dialogs.notification",
     "file": "plugins/cordova-plugin-dialogs/www/notification.js",
     "pluginId": "cordova-plugin-dialogs",
@@ -31,14 +39,6 @@ module.exports = [
     "runs": true
   },
   {
-    "id": "cordova-plugin-device.device",
-    "file": "plugins/cordova-plugin-device/www/device.js",
-    "pluginId": "cordova-plugin-device",
-    "clobbers": [
-      "device"
-    ]
-  },
-  {
     "id": "cordova-plugin-inappbrowser.inappbrowser",
     "file": "plugins/cordova-plugin-inappbrowser/www/inappbrowser.js",
     "pluginId": "cordova-plugin-inappbrowser",
@@ -59,13 +59,13 @@ module.exports = [
 module.exports.metadata = 
 // TOP OF METADATA
 {
-  "cordova-plugin-dialogs": "2.0.1",
-  "cordova-plugin-whitelist": "1.3.3",
-  "cordova-plugin-geolocation": "4.0.1",
   "cordova-plugin-device": "2.0.2",
+  "cordova-plugin-dialogs": "2.0.1",
+  "cordova-plugin-geolocation": "4.0.1",
   "cordova-plugin-inappbrowser": "3.0.0",
+  "cordova-plugin-statusbar": "2.4.2",
   "cordova-plugin-vibration": "3.1.0",
-  "cordova-plugin-statusbar": "2.4.2"
+  "cordova-plugin-whitelist": "1.3.3"
 };
 // BOTTOM OF METADATA
 });

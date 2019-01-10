@@ -8,7 +8,7 @@
                   <span class="input-clear-button"></span>
                 </f7-list-item>
                 <f7-list-item>
-                  <input type="text" :value="password" @input="password = $event.target.value" placeholder="pass" clear-button>
+                  <input type="password" :value="password" @input="password = $event.target.value" placeholder="pass" clear-button>
                   <!-- <input name="pass" type="password" placeholder="Password" v-model="password"></input> -->
                   <span class="input-clear-button"></span>
                 </f7-list-item>      
@@ -99,50 +99,40 @@
         // const app = self.$f7
           // const router = self.$f7router
         self.baseUrl = window.localStorage.getItem('baseUrl')
-        if (self.baseUrl === '') {
-          self.baseUrl = 'http://smartstreamzryubnfhac.devcloud.acquia-sites.com'
-        }
-        // self.username = window.localStorage.getItem('username')
-        // self.uid = window.localStorage.getItem('uid')
-        // self.isLoggedIn = window.sessionStorage.getItem('isLoggedIn')
-        // self.password = window.sessionStorage.getItem('password')
         let urlLogin = self.baseUrl + '/user/login?_format=json'
         let fetchData = {
           method: 'POST',
           body: JSON.stringify({name: self.username, pass: self.password}),
           // form_id: 'user_login_form',
-          crossdomain: true,
           dataType: 'json',
           headers: {
             'Content-Type': 'application/json',
             'Accept': 'application/json'
           }
         }
-// if (response.status === 302) {
-//       this.$router.push(`/teachers/${id}`);
-//     }
-        // window.alert(urlLogin)
-        // window.alert(fetchData)
-        // console.log(fetchData)
         window.fetch(urlLogin, fetchData)
-        .then((response) => response.json())
-        .then((data) => {
-          self.isLoggedIn = true
+         .then(function (response) {
+           if (!response.ok) {
+             throw Error(response.statusText)
+           }
+           return response.json()
+         }).then(function (data) {
+           self.isLoggedIn = true
           // let uid = data.current_user.uid
-          window.localStorage.setItem('uid', data.current_user.uid)
-          window.localStorage.setItem('username', data.current_user.name)
-          window.sessionStorage.setItem('password', self.password)
-          window.localStorage.setItem('csrfToken', data.csrf_token)
-          window.localStorage.setItem('logoutToken', data.logout_token)
-          window.sessionStorage.setItem('isLoggedIn', true)
-          window.localStorage.setItem('session_name', data.session_name)
-          window.localStorage.setItem('sessid', data.sessid)
-          self.signInOutTitle = 'Sign Out'
-          self.loginScreenTitle = 'Deconnection'
-          self.setTitles(true)
-          self.$router.back()
-          // console.log(urlLogin)
-        })
+           window.localStorage.setItem('uid', data.current_user.uid)
+           window.localStorage.setItem('username', data.current_user.name)
+           window.sessionStorage.setItem('password', self.password)
+           window.localStorage.setItem('csrfToken', data.csrf_token)
+           window.localStorage.setItem('logoutToken', data.logout_token)
+           window.sessionStorage.setItem('isLoggedIn', true)
+           window.localStorage.setItem('session_name', data.session_name)
+           window.localStorage.setItem('sessid', data.sessid)
+           self.signInOutTitle = 'Sign Out'
+           self.loginScreenTitle = 'Deconnection'
+           self.setTitles(true)
+           self.$router.back()
+           // console.log(urlLogin)
+         })
           .catch(function (error) {
             console.debug(error)
           })
@@ -152,51 +142,82 @@
         const self = this
         // const app = self.$f7
         // const router = self.$f7router
-        let pass = window.sessionStorage.getItem('password')
-        let name = window.localStorage.getItem('username')
-        let enc = window.btoa(name + ':' + pass)
-        let encString = 'Basic ' + enc
+        // let pass = window.sessionStorage.getItem('password')
+        // let name = window.localStorage.getItem('username')
+        // let enc = window.btoa(name + ':' + pass)
+        // let encString = 'Basic ' + enc
         let logoutToken = window.localStorage.getItem('logoutToken')
         let csrfToken = window.localStorage.getItem('csrfToken')
-        // debugger
         // let urlLogout = 'http://localhost/user/logout?_format=json'
-        let urlLogout = self.baseUrl + '/user/logout'
+        //  GET "http://drupal.d8/user/login_status?_format=json"
+        // login status
+        let endpoint = self.baseUrl + '/user/logout?_format=json&token=' + logoutToken
         // ?csrf_token=' + csrfToken
         // &
-        let fetchData = {
+        let loginStatusData = {
           method: 'POST',
           dataType: 'json',
+          credentials: true,
           headers: {
-            'Content-Type': 'application/json',
+            'Content-Type': 'application/x-www-form-urlencoded',
             'csrf_token': csrfToken,
             'logout_token': logoutToken,
-            'Authorization': encString,
-            'Accept': 'application/json, application/hal_json'
+            'Accept': 'application/json'
           }
         }
-        window.fetch(urlLogout, fetchData)
-        .then((response) => response.json())
-        .then((data) => {
-          return data
-        })
-        .then((data) => {
-          console.log(data)
-          window.sessionStorage.setItem('isLoggedIn', 'false')
-          self.signInOutTitle = 'Sign in'
-          self.loginScreenTitle = 'Connection'
-          self.isLoggedIn = false
-          window.sessionStorage.setItem('password', '')
-          window.localStorage.setItem('csrfToken', '')
-          window.localStorage.setItem('logoutToken', '')
-          window.sessionStorage.setItem('isLoggedIn', false)
-          window.localStorage.setItem('session_name', '')
-          window.localStorage.setItem('sessid', '')
-          this.setTitles(false)
-          self.$router.back()
-        })
+        // debugger
+        window.fetch(endpoint, loginStatusData)
+         .then(function (response) {
+           if (!response.ok) {
+             throw Error(response.statusText)
+           }
+           return response.json()
+         }).then(function (data) {
+           console.log(data)
+         })
         .catch(function (error) {
           console.debug(error)
         })
+        // end
+        // endpoint = self.baseUrl + '/user/logout?_format=json'
+        // // ?csrf_token=' + csrfToken
+        // // &
+        // let fetchData = {
+        //   method: 'POST',
+        //   dataType: 'json',
+        //   credentials: true,
+        //   headers: {
+        //     'Content-Type': 'application/x-www-form-urlencoded',
+        //     'csrf_token': csrfToken,
+        //     'logout_token': logoutToken,
+        //     'Authorization': encString,
+        //     'Accept': 'application/json, application/hal_json'
+        //   }
+        // }
+        // window.fetch(endpoint, fetchData)
+        //  .then(function (response) {
+        //    if (!response.ok) {
+        //      throw Error(response.statusText)
+        //    }
+        //    return response.json()
+        //  }).then(function (data) {
+        //    console.log(data)
+        //    window.sessionStorage.setItem('isLoggedIn', 'false')
+        //    self.signInOutTitle = 'Sign in'
+        //    self.loginScreenTitle = 'Connection'
+        //    self.isLoggedIn = false
+        //    window.sessionStorage.setItem('password', '')
+        //    window.localStorage.setItem('csrfToken', '')
+        //    window.localStorage.setItem('logoutToken', '')
+        //    window.sessionStorage.setItem('isLoggedIn', false)
+        //    window.localStorage.setItem('session_name', '')
+        //    window.localStorage.setItem('sessid', '')
+        //    this.setTitles(false)
+        //    self.$router.back()
+        //  })
+        // .catch(function (error) {
+        //   console.debug(error)
+        // })
       },
       formatTodos: function (todos) {
         const self = this
