@@ -1,7 +1,4 @@
 special-vendored-path/* linguist-vendored
 * linguist-vendored
 *.js linguist-vendored=false
-*.js linguist-detectable=true
-*.vue linguist-detectable=true
-*.js linguist-language=Javascript
-*.vue linguist-language=vuejs
+*.vue linguist-vendored=false
