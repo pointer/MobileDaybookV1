@@ -1,4 +1,4 @@
 special-vendored-path/* linguist-vendored
 java linguist-vendored=false
-javascript linguist-language=true
-vue linguist-language=true
+javascript linguist-vendored=true
+vue linguist-vendored=true
