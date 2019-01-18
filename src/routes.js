@@ -32,6 +32,16 @@ export default [{
   path: '/daybook/',
   component: require('./components/pages/daybook.vue'),
   name: 'daybook'
+},
+{
+  path: '/mydocuments/',
+  component: require('./components/pages/mydocuments.vue'),
+  name: 'mydocuments'
+},
+{
+  path: '/operations/',
+  component: require('./components/pages/operations.vue'),
+  name: 'operations'
 }
 ]
 

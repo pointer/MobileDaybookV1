@@ -24,7 +24,6 @@
         "build:prod": "webpack -p"
     },
     "dependencies": {
-        
         "base-64": "^0.1.0",
         "cordova-android": "^7.1.4",
         "cordova-android-support-gradle-release": "^2.0.1",
@@ -51,6 +50,7 @@
         "vue-image-lightbox-carousel": "^1.0.7",
         "vue-popperjs": "^1.6.1",
         "vue-pull-refresh": "^0.2.7",
+        "vue-router": "^3.0.2",
         "vue-upload-image": "^1.1.0",
         "vue-upload-multiple-image": "^1.1.2",
         "vue2-hammer": "^2.1.2"

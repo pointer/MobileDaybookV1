@@ -24,11 +24,13 @@
             <f7-block-title>Navigation</f7-block-title>
             <f7-list>
               <!-- <f7-list-item link="/login/" title="Connect/Deconnect"></f7-list-item> -->
-              <f7-list-item link="/activities/" title="Affectations"></f7-list-item>
-              <f7-list-item link="/instructions/" title="Instructions"></f7-list-item>
-              <f7-list-item link="/punchclock/" title="Badge"></f7-list-item>
-              <f7-list-item link="/daybook/" title="Main courante"></f7-list-item>              
-              <f7-list-item link="/incident/" title="Incident"></f7-list-item>
+              <f7-list-item link="/activities/" title="Vacations"></f7-list-item>
+              <f7-list-item link="/instructions/" title="Consignes"></f7-list-item>
+              <f7-list-item link="/punchclock/" title="Prise/Fin de service"></f7-list-item>
+              <f7-list-item link="/daybook/" title="Main courante"></f7-list-item>
+              <f7-list-item link="/incident/" title="Rapport"></f7-list-item>
+              <f7-list-item link="/mydocuments/" title="Mes documents"></f7-list-item>
+              <f7-list-item link="/operations/" title="Exploitations"></f7-list-item>
               <!-- <f7-list-item link="/parameters/" title="Parametres"></f7-list-item> -->
             </f7-list>
           </f7-page>

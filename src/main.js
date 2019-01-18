@@ -1,6 +1,7 @@
 // The Vue build version to load with the `import` command
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import Vue from 'vue'
+// import VueRouter from 'vue-router'
 // Import F7
 /* eslint-disable no-unused-vars */
 import Framework7 from 'framework7'
@@ -23,6 +24,7 @@ import App from './App'
 Vue.config.productionTip = false
 // Init F7 Vue Plugin
 Vue.use(Framework7Vue)
+// Vue.use(VueRouter)
 // Vue.use(VueHammer)
 // let $$ = window.Dom7
 // Vue.prototype.Dom7 = $$
