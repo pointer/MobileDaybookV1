@@ -136,7 +136,7 @@ export default {
     // download/upload
     downloadFile: function (event) {
       const self = this
-      debugger
+      // debugger
       // if (event) {
       //  // window.alert(event.target.href)
       //   return window.fetch(event.target.href)

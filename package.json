@@ -16,7 +16,7 @@
         "cordova-run-ios": "npm run build && cordova run ios",
         "cordova-run-android": "npm run build && cordova run android",
         "cordova-run-android-dev": "npm run dev && cordova run android",
-        "compile": "webpack --config webpack.dev.conf.js",
+        "compile": "webpack --config build/webpack.dev.conf.js",
         "debug": "node build/dev-server.js --inspect",
         "start_server": "webpack-dev-server",
         "android-release": "cordova build android —prod —release —buildConfig = build.json",
@@ -28,6 +28,8 @@
         "cordova-android": "^7.1.4",
         "cordova-android-support-gradle-release": "^2.0.1",
         "cordova-browser": "^5.0.3",
+        "cordova-plugin-calendar": "^5.1.4",
+        "cordova-plugin-camera": "^4.0.3",
         "cordova-plugin-device": "^2.0.2",
         "cordova-plugin-dialogs": "^2.0.1",
         "cordova-plugin-geolocation": "^4.0.1",
@@ -134,9 +136,11 @@
             "cordova-plugin-inappbrowser": {},
             "cordova-plugin-vibration": {},
             "cordova-plugin-statusbar": {},
+            "cordova-plugin-calendar": {},
             "cordova-android-support-gradle-release": {
                 "ANDROID_SUPPORT_VERSION": "27.+"
-            }
+            },
+            "cordova-plugin-dialogs": {}
         },
         "platforms": [
             "browser",

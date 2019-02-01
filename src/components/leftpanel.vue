@@ -19,6 +19,13 @@
           panel-close
           reload-all
         />
+        <f7-list-item
+          link="/activities/"
+          title="Vacations"
+          link-view="#main-view"
+          panel-close
+          reload-all
+        /> 
       </f7-list>
     </f7-page>
   </f7-panel>

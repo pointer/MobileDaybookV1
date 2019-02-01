@@ -1,13 +1,13 @@
 -- Merging decision tree log ---
 manifest
-ADDED from C:\Daybook\MobileDaybook\platforms\android\app\src\main\AndroidManifest.xml:2:1-18:12
-INJECTED from C:\Daybook\MobileDaybook\platforms\android\app\src\main\AndroidManifest.xml:2:1-18:12
-INJECTED from C:\Daybook\MobileDaybook\platforms\android\app\src\main\AndroidManifest.xml:2:1-18:12
-INJECTED from C:\Daybook\MobileDaybook\platforms\android\app\src\main\AndroidManifest.xml:2:1-18:12
+ADDED from C:\Daybook\MobileDaybook\platforms\android\app\src\main\AndroidManifest.xml:2:1-20:12
+INJECTED from C:\Daybook\MobileDaybook\platforms\android\app\src\main\AndroidManifest.xml:2:1-20:12
+INJECTED from C:\Daybook\MobileDaybook\platforms\android\app\src\main\AndroidManifest.xml:2:1-20:12
+INJECTED from C:\Daybook\MobileDaybook\platforms\android\app\src\main\AndroidManifest.xml:2:1-20:12
 MERGED from [:CordovaLib] C:\Daybook\MobileDaybook\platforms\android\CordovaLib\build\intermediates\manifests\full\debug\AndroidManifest.xml:20:1-27:12
-INJECTED from C:\Daybook\MobileDaybook\platforms\android\app\src\main\AndroidManifest.xml:2:1-18:12
-INJECTED from C:\Daybook\MobileDaybook\platforms\android\app\src\main\AndroidManifest.xml:2:1-18:12
-INJECTED from C:\Daybook\MobileDaybook\platforms\android\app\src\main\AndroidManifest.xml:2:1-18:12
+INJECTED from C:\Daybook\MobileDaybook\platforms\android\app\src\main\AndroidManifest.xml:2:1-20:12
+INJECTED from C:\Daybook\MobileDaybook\platforms\android\app\src\main\AndroidManifest.xml:2:1-20:12
+INJECTED from C:\Daybook\MobileDaybook\platforms\android\app\src\main\AndroidManifest.xml:2:1-20:12
 	package
 		ADDED from C:\Daybook\MobileDaybook\platforms\android\app\src\main\AndroidManifest.xml:2:102-129
 		INJECTED from C:\Daybook\MobileDaybook\platforms\android\app\src\main\AndroidManifest.xml
@@ -90,19 +90,27 @@ INJECTED from C:\Daybook\MobileDaybook\platforms\android\app\src\main\AndroidMan
 		ADDED from C:\Daybook\MobileDaybook\platforms\android\app\src\main\AndroidManifest.xml:13:15-41
 		INJECTED from C:\Daybook\MobileDaybook\platforms\android\app\src\main\AndroidManifest.xml
 		INJECTED from C:\Daybook\MobileDaybook\platforms\android\app\src\main\AndroidManifest.xml
+uses-permission#android.permission.READ_CALENDAR
+ADDED from C:\Daybook\MobileDaybook\platforms\android\app\src\main\AndroidManifest.xml:14:5-72
+	android:name
+		ADDED from C:\Daybook\MobileDaybook\platforms\android\app\src\main\AndroidManifest.xml:14:22-69
+uses-permission#android.permission.WRITE_CALENDAR
+ADDED from C:\Daybook\MobileDaybook\platforms\android\app\src\main\AndroidManifest.xml:15:5-73
+	android:name
+		ADDED from C:\Daybook\MobileDaybook\platforms\android\app\src\main\AndroidManifest.xml:15:22-70
 uses-permission#android.permission.ACCESS_COARSE_LOCATION
-ADDED from C:\Daybook\MobileDaybook\platforms\android\app\src\main\AndroidManifest.xml:14:5-81
+ADDED from C:\Daybook\MobileDaybook\platforms\android\app\src\main\AndroidManifest.xml:16:5-81
 	android:name
-		ADDED from C:\Daybook\MobileDaybook\platforms\android\app\src\main\AndroidManifest.xml:14:22-78
+		ADDED from C:\Daybook\MobileDaybook\platforms\android\app\src\main\AndroidManifest.xml:16:22-78
 uses-permission#android.permission.ACCESS_FINE_LOCATION
-ADDED from C:\Daybook\MobileDaybook\platforms\android\app\src\main\AndroidManifest.xml:15:5-79
+ADDED from C:\Daybook\MobileDaybook\platforms\android\app\src\main\AndroidManifest.xml:17:5-79
 	android:name
-		ADDED from C:\Daybook\MobileDaybook\platforms\android\app\src\main\AndroidManifest.xml:15:22-76
+		ADDED from C:\Daybook\MobileDaybook\platforms\android\app\src\main\AndroidManifest.xml:17:22-76
 uses-feature#android.hardware.location.gps
-ADDED from C:\Daybook\MobileDaybook\platforms\android\app\src\main\AndroidManifest.xml:16:5-66
+ADDED from C:\Daybook\MobileDaybook\platforms\android\app\src\main\AndroidManifest.xml:18:5-66
 	android:name
-		ADDED from C:\Daybook\MobileDaybook\platforms\android\app\src\main\AndroidManifest.xml:16:19-63
+		ADDED from C:\Daybook\MobileDaybook\platforms\android\app\src\main\AndroidManifest.xml:18:19-63
 uses-permission#android.permission.VIBRATE
-ADDED from C:\Daybook\MobileDaybook\platforms\android\app\src\main\AndroidManifest.xml:17:5-66
+ADDED from C:\Daybook\MobileDaybook\platforms\android\app\src\main\AndroidManifest.xml:19:5-66
 	android:name
-		ADDED from C:\Daybook\MobileDaybook\platforms\android\app\src\main\AndroidManifest.xml:17:22-63
+		ADDED from C:\Daybook\MobileDaybook\platforms\android\app\src\main\AndroidManifest.xml:19:22-63

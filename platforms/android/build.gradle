@@ -23,14 +23,13 @@ buildscript {
         maven {
             url "https://maven.google.com"
         }
-        google()
         jcenter()
     }
     dependencies {
 
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
-        classpath 'com.android.tools.build:gradle:3.3.0'
+        classpath 'com.android.tools.build:gradle:3.0.1'
     }
 }
 
@@ -40,7 +39,6 @@ allprojects {
             url "https://maven.google.com"
         }
         jcenter()
-        google()
     }
     //This replaces project.properties w.r.t. build settings
     project.ext {

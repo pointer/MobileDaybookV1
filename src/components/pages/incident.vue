@@ -1,37 +1,28 @@
 <template>
-      <!-- <f7-view>
-        <f7-pages> -->
-  <f7-page parameters-screen>
+  <f7-page incident-view>
   <f7-navbar  back-link="" sliding>
     <f7-nav-center sliding style="text-align:center">Mobile Daybook</f7-nav-center>
-    <!-- &nbsp; &nbsp; &nbsp;  -->
     <f7-nav-right>
     <f7-link icon="icon-bars" open-panel="right"></f7-link>
     </f7-nav-right>
   </f7-navbar>
     <div class="block-title" style="text-align:center" ><h4>Report Incident</h4></div>
-    <!-- <f7-parameters-screen id="parameters-screen"> -->
-<!-- <div class="block-title"><h4>Incident</h4></div> -->
 <f7-list form id="parameters-screen-form">
     <f7-list-item class="item-content item-input item-input-with-info">
-      <!-- <div class="item-inner"> -->
         <div class="item-input-wrap">
           <input type="text" v-model="incidentTitle" placeholder="Titre incident">
           {{incidentTitle}}
           <span class="input-clear-button"></span>
           <div class="item-input-info">e-mail</div>
         </div>
-      <!-- </div> -->
     </f7-list-item>
     <f7-list-item class="item-content item-input item-input-with-info">
-      <!-- <div class="item-inner"> -->
         <div class="item-input-wrap">
           <input type="text" v-model="incidentDescr" placeholder="Description incident">
           {{incidentDescr}}
           <span class="input-clear-button"></span>
           <div class="item-input-info"></div>
         </div>
-      <!-- </div> -->
     </f7-list-item>
      <f7-list-item class="item-content item-input item-input-with-info">
         <div class="item-input-wrap">
@@ -39,20 +30,7 @@
           <span class="input-clear-button"></span>
           <div class="item-input-info"></div>
         </div>
-    </f7-list-item>
-<!--        <div>
-            <div class="file-upload-form">
-                Upload an image file:
-                <input type="file" @change="previewImage" accept="image/*">
-            </div>
-            <div class="image-preview" v-if="imageData.length > 0">
-                <img class="preview" :src="imageData">
-            </div>
-        </div> -->
-<!-- </div>  -->
-            <!-- <f7-list-item>
-              <f7-list-button @click="Save" v-model="saveTitle" close-parameters-screen>{{saveTitle}}</f7-list-button>
-</f7-list-item> -->
+    </f7-list-item> 
  </f7-list>
 
  <div class="block">
@@ -61,11 +39,8 @@
     <button class="button col" @click="onUpload" close-parameters-screen>{{uploadTitle}}</button>
     <span>&nbsp;</span>
   </div>
-</div> 
- <!-- </f7-parameters-screen>     -->
+</div>
 </f7-page>
-        <!-- </f7-pages>
-      </f7-view> -->
 </template>
 
 <script>
@@ -87,6 +62,7 @@ export default {
   components: {
   },
   created () {
+    // cordova.InAppBrowser.open('http://smartstreamzryubnfhac.devcloud.acquia-sites.com/node/add/daybook_incident_node', '_blank', 'location=no,toolbar=no')
   },
   methods: {
     onFileChanged (event) {

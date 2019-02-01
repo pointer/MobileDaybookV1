@@ -90,8 +90,11 @@
         // })
         if (self.isLoggedIn === 'true') {
           return self.signOut()
+        } else {
+          self.signIn()
         }
-        return self.signIn()
+        // window.dispatchEvent(new window.Event('pleaseRefresh'))
+        // self.$eventHub.$emit('pleaseRefresh')
       },
       signIn: function () {
         // debugger
@@ -130,7 +133,7 @@
            self.signInOutTitle = 'Sign Out'
            self.loginScreenTitle = 'Deconnection'
            self.setTitles(true)
-           self.$router.back()
+           // self.$router.back()
            // console.log(urlLogin)
          })
           .catch(function (error) {

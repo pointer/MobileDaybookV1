@@ -7,6 +7,13 @@
     "files": {}
   },
   "installed_plugins": {
+    "cordova-android-support-gradle-release": {
+      "ANDROID_SUPPORT_VERSION": "27.+",
+      "PACKAGE_NAME": "io.mobile.daybook"
+    },
+    "cordova-plugin-calendar": {
+      "PACKAGE_NAME": "io.mobile.daybook"
+    },
     "cordova-plugin-device": {
       "PACKAGE_NAME": "io.mobile.daybook"
     },
@@ -26,10 +33,6 @@
       "PACKAGE_NAME": "io.mobile.daybook"
     },
     "cordova-plugin-whitelist": {
-      "PACKAGE_NAME": "io.mobile.daybook"
-    },
-    "cordova-android-support-gradle-release": {
-      "ANDROID_SUPPORT_VERSION": "27.+",
       "PACKAGE_NAME": "io.mobile.daybook"
     }
   },

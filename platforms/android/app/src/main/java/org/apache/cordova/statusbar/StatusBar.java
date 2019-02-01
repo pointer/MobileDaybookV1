@@ -22,7 +22,6 @@ package org.apache.cordova.statusbar;
 import android.app.Activity;
 import android.graphics.Color;
 import android.os.Build;
-import android.os.Build.VERSION_CODES;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -36,9 +35,6 @@ import org.apache.cordova.LOG;
 import org.apache.cordova.PluginResult;
 import org.json.JSONException;
 import java.util.Arrays;
-
-import static android.os.Build.*;
-import static android.view.View.*;
 
 public class StatusBar extends CordovaPlugin {
     private static final String TAG = "StatusBar";
@@ -98,10 +94,10 @@ public class StatusBar extends CordovaPlugin {
                 public void run() {
                     // SYSTEM_UI_FLAG_FULLSCREEN is available since JellyBean, but we
                     // use KitKat here to be aligned with "Fullscreen"  preference
-                    if (VERSION.SDK_INT >= VERSION_CODES.KITKAT) {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
                         int uiOptions = window.getDecorView().getSystemUiVisibility();
-                        uiOptions &= ~SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN;
-                        uiOptions &= ~SYSTEM_UI_FLAG_FULLSCREEN;
+                        uiOptions &= ~View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN;
+                        uiOptions &= ~View.SYSTEM_UI_FLAG_FULLSCREEN;
 
                         window.getDecorView().setSystemUiVisibility(uiOptions);
                     }
@@ -120,10 +116,10 @@ public class StatusBar extends CordovaPlugin {
                 public void run() {
                     // SYSTEM_UI_FLAG_FULLSCREEN is available since JellyBean, but we
                     // use KitKat here to be aligned with "Fullscreen"  preference
-                    if (VERSION.SDK_INT >= VERSION_CODES.KITKAT) {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
                         int uiOptions = window.getDecorView().getSystemUiVisibility()
-                                | SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                                | SYSTEM_UI_FLAG_FULLSCREEN;
+                                | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                                | View.SYSTEM_UI_FLAG_FULLSCREEN;
 
                         window.getDecorView().setSystemUiVisibility(uiOptions);
                     }
@@ -151,7 +147,7 @@ public class StatusBar extends CordovaPlugin {
         }
 
         if ("overlaysWebView".equals(action)) {
-            if (VERSION.SDK_INT >= 21) {
+            if (Build.VERSION.SDK_INT >= 21) {
                 this.cordova.getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -211,7 +207,7 @@ public class StatusBar extends CordovaPlugin {
     }
 
     private void setStatusBarBackgroundColor(final String colorPref) {
-        if (VERSION.SDK_INT >= 21) {
+        if (Build.VERSION.SDK_INT >= 21) {
             if (colorPref != null && !colorPref.isEmpty()) {
                 final Window window = cordova.getActivity().getWindow();
                 // Method and constants not available on all SDKs but we want to be able to compile this code with any SDK
@@ -224,31 +220,31 @@ public class StatusBar extends CordovaPlugin {
                     LOG.e(TAG, "Invalid hexString argument, use f.i. '#999999'");
                 } catch (Exception ignore) {
                     // this should not happen, only in case Android removes this method in a version > 21
-                    LOG.w(TAG, "Method window.setStatusBarColor not found for SDK level " + VERSION.SDK_INT);
+                    LOG.w(TAG, "Method window.setStatusBarColor not found for SDK level " + Build.VERSION.SDK_INT);
                 }
             }
         }
     }
 
     private void setStatusBarTransparent(final boolean transparent) {
-        if (VERSION.SDK_INT >= 21) {
+        if (Build.VERSION.SDK_INT >= 21) {
             final Window window = cordova.getActivity().getWindow();
             if (transparent) {
                 window.getDecorView().setSystemUiVisibility(
-                        SYSTEM_UI_FLAG_LAYOUT_STABLE
-                                | SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
+                        View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                                | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
                 window.setStatusBarColor(Color.TRANSPARENT);
             }
             else {
                 window.getDecorView().setSystemUiVisibility(
-                        SYSTEM_UI_FLAG_LAYOUT_STABLE
-                                | SYSTEM_UI_FLAG_VISIBLE);
+                        View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                                | View.SYSTEM_UI_FLAG_VISIBLE);
             }
         }
     }
 
     private void setStatusBarStyle(final String style) {
-        if (VERSION.SDK_INT >= VERSION_CODES.M) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (style != null && !style.isEmpty()) {
                 View decorView = cordova.getActivity().getWindow().getDecorView();
                 int uiOptions = decorView.getSystemUiVisibility();
@@ -264,17 +260,16 @@ public class StatusBar extends CordovaPlugin {
                 };
 
                 if (Arrays.asList(darkContentStyles).contains(style.toLowerCase())) {
-                    decorView.setSystemUiVisibility(uiOptions | SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
+                    decorView.setSystemUiVisibility(uiOptions | View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
                     return;
                 }
 
-              if (!Arrays.asList(lightContentStyles).contains(style.toLowerCase())) {
+                if (Arrays.asList(lightContentStyles).contains(style.toLowerCase())) {
+                    decorView.setSystemUiVisibility(uiOptions & ~View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
+                    return;
+                }
 
                 LOG.e(TAG, "Invalid style, must be either 'default', 'lightcontent' or the deprecated 'blacktranslucent' and 'blackopaque'");
-              } else {
-                decorView.setSystemUiVisibility(uiOptions & ~SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
-                return;
-              }
             }
         }
     }

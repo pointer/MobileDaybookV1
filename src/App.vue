@@ -24,7 +24,7 @@
             <f7-block-title>Navigation</f7-block-title>
             <f7-list>
               <!-- <f7-list-item link="/login/" title="Connect/Deconnect"></f7-list-item> -->
-              <f7-list-item link="/activities/" title="Vacations"></f7-list-item>
+              <!-- <f7-list-item link="/activities/" title="Vacations"></f7-list-item> -->
               <f7-list-item link="/instructions/" title="Consignes"></f7-list-item>
               <f7-list-item link="/punchclock/" title="Prise/Fin de service"></f7-list-item>
               <f7-list-item link="/daybook/" title="Main courante"></f7-list-item>
@@ -81,6 +81,9 @@ export default {
     document.addEventListener('backbutton', this.handleBackButton)
   },
   mounted () {
+    window.onbeforeunload = function () {
+      return 'Are you sure you want to close the window?'
+    }
   },
   computed: {
     // debugger
@@ -229,7 +232,7 @@ export default {
         }
       }
       todos = JSON.stringify(todos)
-      window.sessionStorage.setItem('todos', todos)
+     // window.sessionStorage.setItem('todos', todos)
       // console.log(todos)
     },
     /*

@@ -26,11 +26,10 @@ buildscript {
             url "https://maven.google.com"
         }
         jcenter()
-        google()
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.3.0'
+        classpath 'com.android.tools.build:gradle:3.0.1'
     }
 }
 
@@ -39,7 +38,6 @@ allprojects {
     repositories {
         mavenCentral();
         jcenter()
-        google()
     }
 }
 
@@ -165,110 +163,96 @@ task cdvPrintProps << {
 }
 
 android {
-  signingConfigs {
-    config {
-      keyAlias 'keyAlias'
-      keyPassword 'mobiledaybook'
-      storeFile file('C:/Users/kateb/keystores/android.jks')
-      storePassword 'mobiledaybook'
-    }
-  }
-  defaultConfig {
-    versionCode 1
-    applicationId 'io.mobile.daybook'
-    minSdkVersion 19
-    targetSdkVersion 27
-    if (cdvMinSdkVersion != null) {
-      minSdkVersion cdvMinSdkVersion
-    }
-    versionName '1.0'
-    signingConfig signingConfigs.config
-    versionNameSuffix '-demo'
-  }
-  lintOptions {
-    abortOnError false;
-  }
-  compileSdkVersion 22
-  // This code exists for Crosswalk and other Native APIs.
-  // By default, we multiply the existing version code in the
-  // Android Manifest by 10 and add a number for each architecture.
-  // If you are not using Crosswalk or SQLite, you can
-  // ignore this chunk of code, and your version codes will be respected.
-  if (Boolean.valueOf(cdvBuildMultipleApks)) {
-    flavorDimensions "default"
 
-    productFlavors {
-      armeabi {
-        versionCode defaultConfig.versionCode * 10 + 1
-        ndk {
-          abiFilters = ["armeabi"]
-        }
-      }
-      armv7 {
-        versionCode defaultConfig.versionCode * 10 + 2
-        ndk {
-          abiFilters = ["armeabi-v7a"]
-        }
-      }
-      arm64 {
-        versionCode defaultConfig.versionCode * 10 + 3
-        ndk {
-          abiFilters = ["arm64-v8a"]
-        }
-      }
-      x86 {
-        versionCode defaultConfig.versionCode * 10 + 4
-        ndk {
-          abiFilters = ["x86"]
-        }
-      }
-      x86_64 {
-        versionCode defaultConfig.versionCode * 10 + 5
-        ndk {
-          abiFilters = ["x86_64"]
-        }
-      }
-    }
-  } else if (Boolean.valueOf(cdvVersionCodeForceAbiDigit)) {
-    // This provides compatibility to the default logic for versionCode before cordova-android 5.2.0
     defaultConfig {
-      versionCode defaultConfig.versionCode * 10
+        versionCode cdvVersionCode ?: new BigInteger("" + privateHelpers.extractIntFromManifest("versionCode"))
+        applicationId privateHelpers.extractStringFromManifest("package")
+
+        if (cdvMinSdkVersion != null) {
+            minSdkVersion cdvMinSdkVersion
+        }
     }
-  }
-  compileOptions {
-    sourceCompatibility JavaVersion.VERSION_1_8
-    targetCompatibility JavaVersion.VERSION_1_8
-  }
-  if (cdvReleaseSigningPropertiesFile) {
-    signingConfigs {
-      release {
-        // These must be set or Gradle will complain (even if they are overridden).
-        keyAlias = ""
-        keyPassword = "__unset"
-        // And these must be set to non-empty in order to have the signing step added to the task graph.
-        storeFile = null
-        storePassword = "__unset"
-      }
+
+    lintOptions {
+      abortOnError false;
     }
-    buildTypes {
-      release {
-        signingConfig signingConfigs.release
-      }
+
+    compileSdkVersion cdvCompileSdkVersion
+    buildToolsVersion cdvBuildToolsVersion
+
+    // This code exists for Crosswalk and other Native APIs.
+    // By default, we multiply the existing version code in the
+    // Android Manifest by 10 and add a number for each architecture.
+    // If you are not using Crosswalk or SQLite, you can
+    // ignore this chunk of code, and your version codes will be respected.
+
+    if (Boolean.valueOf(cdvBuildMultipleApks)) {
+        flavorDimensions "default"
+
+        productFlavors {
+            armeabi {
+                versionCode defaultConfig.versionCode*10 + 1
+                ndk {
+                    abiFilters = ["armeabi"]
+                }
+            }
+            armv7 {
+                versionCode defaultConfig.versionCode*10 + 2
+                ndk {
+                    abiFilters = ["armeabi-v7a"]
+                }
+            }
+            arm64 {
+                versionCode defaultConfig.versionCode*10 + 3
+                ndk {
+                    abiFilters = ["arm64-v8a"]
+                }
+            }
+            x86 {
+                versionCode defaultConfig.versionCode*10 + 4
+                ndk {
+                    abiFilters = ["x86"]
+                }
+            }
+            x86_64 {
+                versionCode defaultConfig.versionCode*10 + 5
+                ndk {
+                    abiFilters = ["x86_64"]
+                }
+            }
+        }
+    } else if (Boolean.valueOf(cdvVersionCodeForceAbiDigit)) {
+        // This provides compatibility to the default logic for versionCode before cordova-android 5.2.0
+        defaultConfig {
+            versionCode defaultConfig.versionCode*10
+        }
     }
-    addSigningProps(cdvReleaseSigningPropertiesFile, signingConfigs.release)
-  }
-  if (cdvDebugSigningPropertiesFile) {
-    addSigningProps(cdvDebugSigningPropertiesFile, signingConfigs.debug)
-  }
-  productFlavors {
-  }
-  buildTypes {
-    release {
-      signingConfig signingConfigs.config
-      minifyEnabled true
-      pseudoLocalesEnabled true
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
     }
-  }
+
+    if (cdvReleaseSigningPropertiesFile) {
+        signingConfigs {
+            release {
+                // These must be set or Gradle will complain (even if they are overridden).
+                keyAlias = ""
+                keyPassword = "__unset" // And these must be set to non-empty in order to have the signing step added to the task graph.
+                storeFile = null
+                storePassword = "__unset"
+            }
+        }
+        buildTypes {
+            release {
+                signingConfig signingConfigs.release
+            }
+        }
+        addSigningProps(cdvReleaseSigningPropertiesFile, signingConfigs.release)
+    }
+    if (cdvDebugSigningPropertiesFile) {
+        addSigningProps(cdvDebugSigningPropertiesFile, signingConfigs.debug)
+    }
 }
 
 /*
@@ -279,10 +263,10 @@ android {
 
 
 dependencies {
-  implementation fileTree(include: '*.jar', dir: 'libs')
-  // SUB-PROJECT DEPENDENCIES START
-  implementation project(path: ':CordovaLib')
-  // SUB-PROJECT DEPENDENCIES END
+    implementation fileTree(dir: 'libs', include: '*.jar')
+    // SUB-PROJECT DEPENDENCIES START
+    implementation(project(path: ":CordovaLib"))
+    // SUB-PROJECT DEPENDENCIES END
 }
 
 def promptForReleaseKeyPassword() {
