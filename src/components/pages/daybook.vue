@@ -1,18 +1,14 @@
 <template>
     <f7-page name="daybook">
-    <!-- <f7-navbar   back-link="" sliding>   </f7-navbar> -->
     <f7-navbar  back-link="" sliding>
       <f7-nav-center sliding style="text-align:center">Mobile Daybook</f7-nav-center>
-      <!-- &nbsp; &nbsp; &nbsp;  -->
       <f7-nav-right>
       <f7-link icon="icon-bars" open-panel="right"></f7-link>
       </f7-nav-right>
     </f7-navbar>
-  <!-- <div class="page-content"> -->
     <div class="block-title" style="text-align:center"><h4>Main courante</h4></div>    
-        <f7-list form>
+        <!-- <f7-list form>
           <f7-list-item>
-          <!-- <f7-input type="text" v-model="subject" placeholder="sujet du message" clear-button></f7-input> -->
           <input type="text" :value="subject" @input="subject = $event.target.value" placeholder="sujet du message" clear-button>
           </f7-list-item>
             <f7-list-item>
@@ -20,9 +16,7 @@
             <span class="input-clear-button"></span>
             </f7-list-item>
             <f7-list-button @click= "sendDaybook()">Envoyer</f7-list-button>
-            <!-- <f7-block-footer>Some text about login information.<br>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</f7-block-footer> -->
-        </f7-list>
-        <!-- </div> -->
+        </f7-list> -->
     </f7-page>
 </template>
 
@@ -36,6 +30,9 @@
         daybookCreated: Boolean()
       }
     },
+    created () {
+      cordova.InAppBrowser.open('http://smartstreamzryubnfhac.devcloud.acquia-sites.com/node/add/daybook_daybook_node', '_blank', 'location=no,toolbar=no')
+    }, 
     methods: {
       sendDaybook: function () {
         // debugger

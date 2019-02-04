@@ -7,7 +7,7 @@
     </f7-nav-right>
   </f7-navbar>
     <div class="block-title" style="text-align:center" ><h4>Report Incident</h4></div>
-<f7-list form id="parameters-screen-form">
+<!-- <f7-list form id="parameters-screen-form">
     <f7-list-item class="item-content item-input item-input-with-info">
         <div class="item-input-wrap">
           <input type="text" v-model="incidentTitle" placeholder="Titre incident">
@@ -31,15 +31,15 @@
           <div class="item-input-info"></div>
         </div>
     </f7-list-item> 
- </f7-list>
-
+ </f7-list> -->
+<!-- 
  <div class="block">
   <div class="row">
     <span>&nbsp;</span>
     <button class="button col" @click="onUpload" close-parameters-screen>{{uploadTitle}}</button>
     <span>&nbsp;</span>
   </div>
-</div>
+</div> -->
 </f7-page>
 </template>
 
@@ -47,7 +47,7 @@
 // import FormData from 'FormData'
 // import FileReader from 'FileReader'
 // import Canvas  from 'Canvas'
-
+// import cordova from './cordova.js'
 export default {
   data () {
     return {
@@ -62,7 +62,7 @@ export default {
   components: {
   },
   created () {
-    // cordova.InAppBrowser.open('http://smartstreamzryubnfhac.devcloud.acquia-sites.com/node/add/daybook_incident_node', '_blank', 'location=no,toolbar=no')
+    cordova.InAppBrowser.open('http://smartstreamzryubnfhac.devcloud.acquia-sites.com/node/add/daybook_incident_node', '_blank', 'location=no,toolbar=no')
   },
   methods: {
     onFileChanged (event) {
